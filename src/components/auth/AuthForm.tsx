@@ -72,11 +72,11 @@ const AuthForm = ({ mode }: AuthFormProps) => {
         
         navigate(role === "buyer" ? "/buyer" : role === "admin" ? "/admin" : "/farmer");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast({
         variant: "destructive",
         title: "Authentication Failed",
-        description: err.message,
+        description: err instanceof Error ? err.message : "An unknown error occurred",
       });
     } finally {
       setLoading(false);
