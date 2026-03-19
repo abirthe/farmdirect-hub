@@ -48,7 +48,14 @@ const AuthForm = ({ mode }: AuthFormProps) => {
         if (error) throw new Error(error.message);
 
         // Success - Route automatically based on user metadata fallback
-        navigate("/farmer");
+        const loggedInRole = data.user?.user_metadata?.role;
+        if (loggedInRole === "admin") {
+          navigate("/admin");
+        } else if (loggedInRole === "buyer") {
+          navigate("/buyer");
+        } else {
+          navigate("/farmer");
+        }
         
       } else {
         // Live Supabase Registration logic
