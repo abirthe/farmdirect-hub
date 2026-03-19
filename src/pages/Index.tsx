@@ -1,12 +1,11 @@
 import { ArrowRight, ChartNoAxesCombined, Leaf, Map, ShieldCheck, Warehouse } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import heroImage from "@/assets/agrodirect-hero.jpg";
 import AgroDirectOverview from "@/components/agrodirect/AgroDirectOverview";
 import MarketplacePanel from "@/components/agrodirect/MarketplacePanel";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-
-const navItems = ["Farmers", "Buyers", "Monitoring", "Escrow"];
 
 const heroStats = [
   { label: "GIS mapped", value: "12.8 ha" },
@@ -40,29 +39,16 @@ const Index = () => {
           src={heroImage}
           alt="Aerial view of cultivated farmland representing GIS-mapped agricultural intelligence"
           className="absolute inset-0 h-full w-full object-cover"
+          loading="eager"
         />
         <div className="absolute inset-0 bg-hero-fade" />
         <div className="absolute inset-0 bg-aurora opacity-70" />
         <div className="field-grid absolute inset-0 opacity-20" />
-        <div className="scan-line pointer-events-none absolute inset-y-0 left-0 hidden w-1/3 motion-safe:animate-sweep md:block" />
+        <div className="scan-line pointer-events-none absolute inset-y-0 left-0 hidden w-1/3 motion-safe:animate-sweep md:block" aria-hidden="true" />
 
-        <div className="section-shell relative flex min-h-screen flex-col py-6 md:py-8">
-          <header className="glass-panel flex items-center justify-between gap-4 px-4 py-3 md:px-6">
-            <div>
-              <p className="text-lg font-black text-primary-foreground md:text-xl">AgroDirect</p>
-              <p className="text-xs uppercase tracking-[0.22em] text-primary-foreground/75">Field intelligence marketplace</p>
-            </div>
-            <nav className="hidden items-center gap-6 md:flex">
-              {navItems.map((item) => (
-                <a key={item} href="#" className="text-sm font-medium text-primary-foreground/90 transition-opacity hover:opacity-70">
-                  {item}
-                </a>
-              ))}
-            </nav>
-            <Button variant="hero" size="sm">Request demo</Button>
-          </header>
-
-          <div className="relative z-10 grid flex-1 items-end gap-10 py-12 md:py-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:py-20">
+        {/* Hero content — extra top padding to clear the sticky Navbar */}
+        <div className="section-shell relative flex min-h-screen flex-col pt-28 pb-12 md:pt-32 md:pb-16">
+          <div className="relative z-10 grid flex-1 items-end gap-10 py-4 md:py-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
             <div className="max-w-3xl space-y-6 md:space-y-8">
               <span className="eyebrow border-primary-foreground/20 bg-primary-foreground/10 text-primary-foreground">Decentralized agriculture platform</span>
               <div className="space-y-4 md:space-y-6">
@@ -74,12 +60,14 @@ const Index = () => {
                 </p>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row">
-                <Button variant="hero" size="xl">
-                  Start mapping farms
-                  <ArrowRight />
+                <Button asChild variant="hero" size="xl">
+                  <Link to="/farmer/register">
+                    Start mapping farms
+                    <ArrowRight />
+                  </Link>
                 </Button>
-                <Button variant="soil" size="xl" className="border-primary-foreground/25 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/16">
-                  View buyer dashboard
+                <Button asChild variant="soil" size="xl" className="border-primary-foreground/25 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/16">
+                  <Link to="/buyer">View buyer dashboard</Link>
                 </Button>
               </div>
               <div className="grid gap-3 sm:grid-cols-3">
@@ -99,7 +87,7 @@ const Index = () => {
                     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Live field board</p>
                     <h2 className="mt-2 text-3xl font-black">Makurdi maize cluster</h2>
                   </div>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-secondary-foreground shadow-soft motion-safe:animate-float">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-secondary-foreground shadow-soft motion-safe:animate-float" aria-hidden="true">
                     <Leaf />
                   </div>
                 </div>
@@ -129,6 +117,13 @@ const Index = () => {
                     <ShieldCheck className="shrink-0" />
                   </div>
                 </div>
+
+                <Button asChild variant="hero" className="w-full gap-2">
+                  <Link to="/marketplace">
+                    View live marketplace
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </Button>
               </CardContent>
             </Card>
           </div>
@@ -156,6 +151,28 @@ const Index = () => {
       </section>
 
       <MarketplacePanel />
+
+      {/* Final CTA Section */}
+      <section className="section-shell">
+        <div className="glass-panel relative overflow-hidden p-10 md:p-16 text-center space-y-6">
+          <div className="field-grid absolute inset-0 opacity-10 pointer-events-none" aria-hidden="true" />
+          <div className="relative z-10 space-y-6">
+            <span className="eyebrow">Join the platform</span>
+            <h2 className="text-4xl md:text-5xl font-black max-w-2xl mx-auto">Ready to trade without the middleman?</h2>
+            <p className="text-muted-foreground max-w-lg mx-auto leading-7">
+              Join 312 farmers and 80+ buyers already using AgroDirect to build fairer, more transparent agricultural trade.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button asChild size="xl" className="rounded-full gap-2">
+                <Link to="/signup">Get started free <ArrowRight className="h-4 w-4" /></Link>
+              </Button>
+              <Button asChild variant="outline" size="xl" className="rounded-full">
+                <Link to="/marketplace">Browse listings</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 };

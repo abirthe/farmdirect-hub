@@ -42,6 +42,13 @@
     --hero-overlay: 116 39% 18%;
     --glow: 46 90% 70%;
 
+    --success: 112 40% 40%;
+    --success-foreground: 48 43% 98%;
+    --warning: 46 86% 50%;
+    --warning-foreground: 126 28% 16%;
+    --info: 210 65% 48%;
+    --info-foreground: 48 43% 98%;
+
     --radius: 1.25rem;
 
     --sidebar-background: 48 43% 98%;
@@ -94,6 +101,13 @@
     --hero-overlay: 126 22% 8%;
     --glow: 46 86% 63%;
 
+    --success: 112 40% 55%;
+    --success-foreground: 126 24% 10%;
+    --warning: 46 86% 63%;
+    --warning-foreground: 126 24% 10%;
+    --info: 210 65% 60%;
+    --info-foreground: 126 24% 10%;
+
     --sidebar-background: 126 24% 12%;
     --sidebar-foreground: 48 43% 96%;
     --sidebar-primary: 46 86% 63%;
@@ -128,6 +142,11 @@
   h4 {
     @apply font-display tracking-tight;
   }
+
+  /* Accessibility: skip-to-content link */
+  .skip-nav {
+    @apply sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:rounded-xl focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary-foreground focus:shadow-lift;
+  }
 }
 
 @layer components {
@@ -160,5 +179,42 @@
 
   .scan-line {
     background: linear-gradient(90deg, transparent, hsl(var(--glow) / 0.48), transparent);
+  }
+
+  /* Page-level fade-up entrance animation */
+  .page-enter {
+    @apply animate-[page-fade-up_0.4s_ease-out];
+  }
+
+  /* Gradient shimmer for loading states */
+  .shimmer {
+    background: linear-gradient(90deg, hsl(var(--muted)), hsl(var(--accent) / 0.6), hsl(var(--muted)));
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+
+  /* Status utility classes */
+  .status-success {
+    @apply bg-green-50 text-green-700 border-green-200 dark:bg-green-950/30 dark:text-green-400 dark:border-green-800;
+  }
+  .status-warning {
+    @apply bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800;
+  }
+  .status-info {
+    @apply bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/30 dark:text-blue-400 dark:border-blue-800;
+  }
+  .status-error {
+    @apply bg-red-50 text-red-700 border-red-200 dark:bg-red-950/30 dark:text-red-400 dark:border-red-800;
+  }
+}
+
+@layer utilities {
+  @keyframes page-fade-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
   }
 }

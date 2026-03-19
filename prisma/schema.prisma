@@ -1,0 +1,203 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  FARMER
+  BUYER
+  ADMIN
+}
+
+enum PlatformStatus {
+  PENDING
+  VERIFIED
+  SUSPENDED
+}
+
+enum DocType {
+  ID
+  LAND_TITLE
+  QUALITY_CERT
+}
+
+enum DocStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum CropCycleStatus {
+  GROWING
+  MATURE
+  HARVESTED
+}
+
+enum ListingStatus {
+  DRAFT
+  ACTIVE
+  SOLD_OUT
+  CANCELLED
+}
+
+enum OrderStatus {
+  INITIATED
+  ESCROW_LOCKED
+  IN_TRANSIT
+  DELIVERED
+  RELEASED
+  DISPUTED
+}
+
+enum DisputeStatus {
+  OPEN
+  INVESTIGATING
+  RESOLVED_REFUND
+  RESOLVED_RELEASE
+}
+
+enum NotifType {
+  INFO
+  SUCCESS
+  ALERT
+  SYSTEM
+}
+
+model User {
+  id             String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email          String         @unique
+  passwordHash   String?
+  fullName       String
+  phoneNumber    String?
+  role           Role
+  platformStatus PlatformStatus @default(PENDING)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  // Relationships
+  farms         Farm[]
+  verifications Verification[] @relation("UserVerifications")
+  reviewsDone   Verification[] @relation("AdminReviews")
+  buyerOrders   Order[]        @relation("BuyerOrders")
+  farmerOrders  Order[]        @relation("FarmerOrders")
+  disputes      Dispute[]
+  notifications Notification[]
+}
+
+model Verification {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String    @db.Uuid
+  documentType DocType
+  documentUrl  String // S3/Cloud Storage link
+  status       DocStatus @default(PENDING)
+  reviewedBy   String?   @db.Uuid
+  createdAt    DateTime  @default(now())
+
+  user  User  @relation("UserVerifications", fields: [userId], references: [id], onDelete: Cascade)
+  admin User? @relation("AdminReviews", fields: [reviewedBy], references: [id], onDelete: SetNull)
+}
+
+model Farm {
+  id           String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String  @db.Uuid
+  farmName     String
+  locationName String?
+
+  // PostGIS native Geometry mapping
+  boundaryGeom Unsupported("geometry(Polygon, 4326)")?
+
+  totalHectares Float?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cropCycles CropCycle[]
+}
+
+model CropCycle {
+  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  farmId         String          @db.Uuid
+  cropType       String // e.g., 'Maize', 'Soybean'
+  status         CropCycleStatus @default(GROWING)
+  sownDate       DateTime?       @db.Date
+  estHarvestDate DateTime?       @db.Date
+  baseYieldTons  Float?
+
+  farm          Farm           @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  telemetryLogs TelemetryLog[]
+  listings      Listing[]
+}
+
+model TelemetryLog {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  cropCycleId String   @db.Uuid
+  dateLogged  DateTime @db.Date
+  ndviScore   Float? // e.g. 1.12
+  weatherRisk Float? // e.g. 0.94
+  insights    String?  @db.Text // JSON or string text
+
+  cropCycle CropCycle @relation(fields: [cropCycleId], references: [id], onDelete: Cascade)
+}
+
+model Listing {
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  cropCycleId   String        @db.Uuid
+  quantityTons  Float
+  floorPriceUsd Float
+  qualityGrade  String? // 'Grade A'
+  status        ListingStatus @default(DRAFT)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  cropCycle CropCycle @relation(fields: [cropCycleId], references: [id], onDelete: Restrict)
+  orders    Order[]
+}
+
+model Order {
+  id             String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  listingId      String      @db.Uuid
+  buyerId        String      @db.Uuid
+  farmerId       String      @db.Uuid
+  qtyPurchased   Float
+  totalPrice     Float
+  escrowFee      Float // Platform cut (e.g. 3%)
+  status         OrderStatus @default(INITIATED)
+  qrDeliveryHash String?     @unique
+  createdAt      DateTime    @default(now())
+  deliveredAt    DateTime?
+
+  listing Listing  @relation(fields: [listingId], references: [id], onDelete: Restrict)
+  buyer   User     @relation("BuyerOrders", fields: [buyerId], references: [id], onDelete: Restrict)
+  farmer  User     @relation("FarmerOrders", fields: [farmerId], references: [id], onDelete: Restrict)
+  dispute Dispute?
+}
+
+model Dispute {
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orderId     String        @unique @db.Uuid
+  raisedBy    String        @db.Uuid
+  issueType   String
+  description String        @db.Text
+  status      DisputeStatus @default(OPEN)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  order  Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  raiser User  @relation(fields: [raisedBy], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId     String    @db.Uuid
+  type       NotifType @default(INFO)
+  title      String
+  body       String    @db.Text
+  actionLink String?
+  isRead     Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
