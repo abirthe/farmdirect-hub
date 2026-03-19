@@ -8,6 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabaseClient";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 import MapView from "@/components/ui/map-view";
 
@@ -36,18 +38,24 @@ const FarmRegister = () => {
   const next = () => setStep((s) => Math.min(s + 1, steps.length - 1));
   const prev = () => setStep((s) => Math.max(s - 1, 0));
 
+  const { user } = useAuth();
+  const { toast } = useToast();
+
   const handleSubmit = async () => {
+    if (!user?.id) {
+      toast({ variant: "destructive", title: "Authentication required", description: "You must be logged in to register a farm." });
+      return;
+    }
+
     setLoading(true);
     try {
-      // 1. Bypass Express entirely and directly push to your Supabase Postgres Node
       const { data, error } = await supabase.from('farms').insert([
         { 
-          // UUID for mock user, this would typically grab the currently authenticated User session ID
-          user_id: "11111111-1111-1111-1111-111111111111", 
+          user_id: user.id, 
           farm_name: form.farmName || "Unnamed Farm Block", 
           location_name: form.location, 
           total_hectares: parseFloat(form.area) || 0,
-          boundary_coordinates: form.boundary // Supabase JS auto-maps JSON arrays perfectly to JSONB without JSON.stringify
+          boundary_coordinates: form.boundary 
         }
       ]);
 
@@ -56,11 +64,15 @@ const FarmRegister = () => {
       }
       
       console.log("Supabase direct transaction successful:", data);
+      toast({ title: "Success", description: "Farm registered successfully!" });
       navigate("/farmer");
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Failed to insert Farm into Supabase:", error);
-      // Fallback transition for demo purposes if RLS limits it currently
-      navigate("/farmer"); 
+      toast({
+        variant: "destructive",
+        title: "Database Error",
+        description: error instanceof Error ? error.message : "Could not register farm. Ensure you are completely authenticated."
+      });
     } finally {
       setLoading(false);
     }
