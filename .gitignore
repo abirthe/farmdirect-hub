@@ -35,3 +35,12 @@ dist-ssr
 # Confidential Documents
 UI_DESIGN_ANALYSIS.md
 PROJECT_SPEC.md
+
+# Proprietary Backend Schemas (Confidential)
+supabase_schema.sql
+supabase/
+
+# Keys and Tokens
+*.pem
+*.key
+certs/
