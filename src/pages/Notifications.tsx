@@ -1,3 +1,4 @@
+import { CurrencyDisplay, CurrencySymbol } from "@/components/ui/currency-display";
 import { Bell, Info, AlertTriangle, ShieldCheck, Mail, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +10,7 @@ const INBOX = [
   {
     id: 1,
     type: "alert",
-    title: "NDVI Health Alert: Benue Cluster",
+    title: "NDVI Health Alert: Rajshahi Cluster",
     body: "Canopy density dropped by 4% in Sector B. Early signs of potential moisture stress detected by satellite imagery.",
     time: "2 hours ago",
     read: false,
@@ -20,7 +21,7 @@ const INBOX = [
     id: 2,
     type: "success",
     title: "Escrow funds locked",
-    body: "FreshMart Ltd has locked $3,816 into escrow for your listed 12t of maize. Prepare harvest for delivery on Mar 19.",
+    body: <>Bengal Agro Ltd has locked <CurrencyDisplay amount={3816} /> into escrow for your listed 12t of maize. Prepare harvest for delivery on Mar 19.</>,
     time: "1 day ago",
     read: false,
     action: "View Transaction",
@@ -30,7 +31,7 @@ const INBOX = [
     id: 3,
     type: "info",
     title: "Market Price Update",
-    body: "The floor price for Grade A Maize in Benue State has risen to $318/t (+2% this week).",
+    body: <>The floor price for Grade A Maize in Rajshahi Division has risen to <CurrencyDisplay amount={318} />/t (+2% this week).</>,
     time: "3 days ago",
     read: true,
   },

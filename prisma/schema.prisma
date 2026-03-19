@@ -146,7 +146,7 @@ model Listing {
   id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   cropCycleId   String        @db.Uuid
   quantityTons  Float
-  floorPriceUsd Float
+  floorPrice Float
   qualityGrade  String? // 'Grade A'
   status        ListingStatus @default(DRAFT)
   createdAt     DateTime      @default(now())

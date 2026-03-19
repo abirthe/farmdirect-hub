@@ -1,3 +1,4 @@
+import { CurrencyDisplay, CurrencySymbol } from "@/components/ui/currency-display";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -16,9 +17,9 @@ const listings = [
     id: "lst-001",
     crop: "Maize",
     emoji: "🌽",
-    farmName: "Makurdi Maize Cluster",
-    farmer: "Adamu Bello",
-    location: "Benue State, Nigeria",
+    farmName: "Bogra Maize Cluster",
+    farmer: "Rafiqul Islam",
+    location: "Rajshahi Division, Bangladesh",
     area: "12.8 ha",
     qty: "18.4 t",
     floorPrice: 318,
@@ -32,11 +33,11 @@ const listings = [
   },
   {
     id: "lst-002",
-    crop: "Sorghum",
+    crop: "Wheat",
     emoji: "🌾",
-    farmName: "Benue Sorghum Block",
-    farmer: "Adamu Bello",
-    location: "Benue State, Nigeria",
+    farmName: "Rajshahi Wheat Block",
+    farmer: "Rafiqul Islam",
+    location: "Rajshahi Division, Bangladesh",
     area: "7.4 ha",
     qty: "11.2 t",
     floorPrice: 245,
@@ -52,9 +53,9 @@ const listings = [
     id: "lst-003",
     crop: "Rice",
     emoji: "🍚",
-    farmName: "Jos Plateau Rice Farm",
-    farmer: "Miriam Dansamu",
-    location: "Plateau State, Nigeria",
+    farmName: "Dinajpur Rice Farm",
+    farmer: "Fatema Begum",
+    location: "Dinajpur District, Bangladesh",
     area: "22.1 ha",
     qty: "34.8 t",
     floorPrice: 415,
@@ -68,11 +69,11 @@ const listings = [
   },
   {
     id: "lst-004",
-    crop: "Cassava",
+    crop: "Potato",
     emoji: "🪴",
-    farmName: "Enugu Cassava Belt",
-    farmer: "Chukwu Okafor",
-    location: "Enugu State, Nigeria",
+    farmName: "Jessore Potato Belt",
+    farmer: "Kamrul Hasan",
+    location: "Jessore District, Bangladesh",
     area: "16.5 ha",
     qty: "62.4 t",
     floorPrice: 175,
@@ -88,9 +89,9 @@ const listings = [
     id: "lst-005",
     crop: "Soybean",
     emoji: "🫘",
-    farmName: "Kaduna Soybean Collective",
-    farmer: "Hassan Musa",
-    location: "Kaduna State, Nigeria",
+    farmName: "Rangpur Soybean Collective",
+    farmer: "Abdul Karim",
+    location: "Rangpur Division, Bangladesh",
     area: "31.2 ha",
     qty: "28.6 t",
     floorPrice: 520,
@@ -106,9 +107,9 @@ const listings = [
     id: "lst-006",
     crop: "Groundnut",
     emoji: "🥜",
-    farmName: "Kano Groundnut Farm",
-    farmer: "Aisha Rabi'u",
-    location: "Kano State, Nigeria",
+    farmName: "Kushtia Groundnut Farm",
+    farmer: "Nasrin Akter",
+    location: "Kushtia District, Bangladesh",
     area: "9.3 ha",
     qty: "9.8 t",
     floorPrice: 610,
@@ -191,7 +192,7 @@ const Marketplace = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All crops</SelectItem>
-              {["Maize", "Sorghum", "Rice", "Cassava", "Soybean", "Groundnut"].map(c => (
+              {["Maize", "Wheat", "Rice", "Potato", "Soybean", "Groundnut"].map(c => (
                 <SelectItem key={c} value={c.toLowerCase()}>{c}</SelectItem>
               ))}
             </SelectContent>
@@ -213,7 +214,7 @@ const Marketplace = () => {
             <CardContent className="p-6">
               <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
                 <div className="space-y-3">
-                  <p className="text-sm font-semibold">Price range ($/ton)</p>
+                  <p className="text-sm font-semibold">Price range (<CurrencySymbol />/ton)</p>
                   <Slider
                     min={0} max={1000} step={10}
                     value={priceRange}
@@ -221,7 +222,7 @@ const Marketplace = () => {
                     className="w-full"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>${priceRange[0]}</span><span>${priceRange[1]}</span>
+                    <span><CurrencyDisplay amount={priceRange[0]} /></span><span><CurrencyDisplay amount={priceRange[1]} /></span>
                   </div>
                 </div>
                 <div className="space-y-3">
@@ -323,7 +324,7 @@ const Marketplace = () => {
                 <div className="flex items-center justify-between gap-3 pt-1">
                   <div>
                     <p className="text-xs text-muted-foreground">Floor price</p>
-                    <p className="text-2xl font-black">${listing.floorPrice}<span className="text-sm font-normal text-muted-foreground">/t</span></p>
+                    <p className="text-2xl font-black"><CurrencyDisplay amount={listing.floorPrice} /><span className="text-sm font-normal text-muted-foreground">/t</span></p>
                     <div className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
                       <TrendingUp className="h-3 w-3 text-green-500" />
                       {listing.buyers} buyers interested

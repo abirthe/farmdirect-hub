@@ -1,3 +1,5 @@
+import { CurrencyDisplay, CurrencySymbol } from "@/components/ui/currency-display";
+import { useCurrency } from "@/contexts/CurrencyContext";
 import { useParams, Link } from "react-router-dom";
 import {
   ArrowLeft, MapPin, ShieldCheck, Star, Clock, TrendingUp, CloudSun,
@@ -18,11 +20,11 @@ const mockListing = {
   id: "lst-001",
   crop: "Maize",
   emoji: "🌽",
-  farmName: "Makurdi Maize Cluster",
-  farmer: "Adamu Bello",
+  farmName: "Bogra Maize Cluster",
+  farmer: "Rafiqul Islam",
   farmerRating: 4.8,
   farmerDeals: 12,
-  location: "Makurdi, Benue State, Nigeria",
+  location: "Bogra, Rajshahi Division, Bangladesh",
   area: "12.8 ha",
   qty: "18.4 t",
   floorPrice: 318,
@@ -38,11 +40,12 @@ const mockListing = {
   verified: true,
   certDocs: ["Quality Certificate", "Land Title", "Pesticide Clearance"],
   escrowReady: true,
-  description: "Premium yellow maize from the fertile Benue River basin. Grown using traditional methods with minimal chemical inputs. Canopy density trending above seasonal average with low weather risk.",
+  description: "Premium yellow maize from the fertile Padma River basin. Grown using traditional methods with minimal chemical inputs. Canopy density trending above seasonal average with low weather risk.",
 };
 
 const ListingDetail = () => {
   const { id } = useParams();
+  const { formatCurrency } = useCurrency();
 
   return (
     <div className="min-h-screen bg-background">
@@ -135,7 +138,7 @@ const ListingDetail = () => {
                     <YAxis tick={{ fontSize: 11 }} domain={[280, 340]} />
                     <Tooltip
                       contentStyle={{ borderRadius: "12px", border: "1px solid hsl(102,20%,79%)", fontSize: "12px" }}
-                      formatter={(v: number) => [`$${v}/t`, "Floor price"]}
+                      formatter={(v: number) => [`${formatCurrency(v)}/t`, "Floor price"]}
                     />
                     <Line type="monotone" dataKey="price" stroke="hsl(112,40%,26%)" strokeWidth={2.5}
                       dot={{ r: 4, fill: "hsl(112,40%,26%)" }} activeDot={{ r: 6 }} />
@@ -171,16 +174,16 @@ const ListingDetail = () => {
               <CardContent className="p-6 space-y-5">
                 <div>
                   <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground font-semibold">Floor price (logistics deducted)</p>
-                  <p className="text-5xl font-black mt-1">${mockListing.floorPrice}<span className="text-lg font-normal text-muted-foreground">/t</span></p>
+                  <p className="text-5xl font-black mt-1"><CurrencyDisplay amount={mockListing.floorPrice} /><span className="text-lg font-normal text-muted-foreground">/t</span></p>
                   <div className="mt-2 space-y-1 text-xs text-muted-foreground">
                     <div className="flex justify-between">
-                      <span>Retail benchmark</span><span>${mockListing.retailPrice}/t</span>
+                      <span>Retail benchmark</span><span><CurrencyDisplay amount={mockListing.retailPrice} />/t</span>
                     </div>
                     <div className="flex justify-between text-destructive">
-                      <span>— Logistics cost</span><span>-${mockListing.logisticsCost}/t</span>
+                      <span>— Logistics cost</span><span>-<CurrencyDisplay amount={mockListing.logisticsCost} />/t</span>
                     </div>
                     <div className="flex justify-between font-bold text-primary border-t border-border/60 pt-1">
-                      <span>Your floor price</span><span>${mockListing.floorPrice}/t</span>
+                      <span>Your floor price</span><span><CurrencyDisplay amount={mockListing.floorPrice} />/t</span>
                     </div>
                   </div>
                 </div>

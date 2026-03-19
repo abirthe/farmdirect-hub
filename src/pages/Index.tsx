@@ -1,3 +1,4 @@
+import { CurrencyDisplay, CurrencySymbol } from "@/components/ui/currency-display";
 import { ArrowRight, ChartNoAxesCombined, Leaf, Map, ShieldCheck, Warehouse } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -10,7 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 const heroStats = [
   { label: "GIS mapped", value: "12.8 ha" },
   { label: "Yield forecast", value: "18.4 t" },
-  { label: "Fair price", value: "$318/t" },
+  { label: "Fair price", value: <><CurrencyDisplay amount={318} />/t</> },
 ];
 
 const proofCards = [
@@ -85,7 +86,7 @@ const Index = () => {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Live field board</p>
-                    <h2 className="mt-2 text-3xl font-black">Makurdi maize cluster</h2>
+                    <h2 className="mt-2 text-3xl font-black">Bogra maize cluster</h2>
                   </div>
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-secondary-foreground shadow-soft motion-safe:animate-float" aria-hidden="true">
                     <Leaf />

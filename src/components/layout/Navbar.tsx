@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "./ThemeToggle";
 import MobileNav from "./MobileNav";
+import { CurrencySwitcher } from "./CurrencySwitcher";
 
 const navLinks = [
   { label: "Farmers", href: "/farmer" },
@@ -89,6 +90,7 @@ const Navbar = () => {
           {/* Right Actions */}
           <div className="flex items-center gap-2">
             <ThemeToggle />
+            <CurrencySwitcher />
             <Button
               asChild
               variant="ghost"

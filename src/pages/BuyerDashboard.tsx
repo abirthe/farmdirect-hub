@@ -1,3 +1,5 @@
+import { CurrencyDisplay, CurrencySymbol } from "@/components/ui/currency-display";
+import { useCurrency } from "@/contexts/CurrencyContext";
 import { Link } from "react-router-dom";
 import {
   ShoppingBag, TrendingUp, Clock, CheckCircle2, ArrowRight,
@@ -16,9 +18,9 @@ const spendData = [
 ];
 
 const orders = [
-  { id: "#ORD-2401", crop: "Maize 🌽", farm: "Makurdi Cluster", qty: "12t", price: "$318/t", total: "$3,816", status: "In transit", statusType: "transit", date: "Mar 18" },
-  { id: "#ORD-2398", crop: "Soybean 🫘", farm: "Kaduna Collective", qty: "8t", price: "$520/t", total: "$4,160", status: "Delivered", statusType: "delivered", date: "Mar 12" },
-  { id: "#ORD-2391", crop: "Rice 🍚", farm: "Jos Plateau Farm", qty: "15t", price: "$415/t", total: "$6,225", status: "Pending escrow", statusType: "pending", date: "Mar 8" },
+  { id: "#ORD-2401", crop: "Maize 🌽", farm: "Bogra Cluster", qty: "12t", price: <><CurrencyDisplay amount={318} />/t</>, total: <CurrencyDisplay amount={3816} />, status: "In transit", statusType: "transit", date: "Mar 18" },
+  { id: "#ORD-2398", crop: "Soybean 🫘", farm: "Rangpur Coll.ctive", qty: "8t", price: <><CurrencyDisplay amount={520} />/t</>, total: <CurrencyDisplay amount={4160} />, status: "Delivered", statusType: "delivered", date: "Mar 12" },
+  { id: "#ORD-2391", crop: "Rice 🍚", farm: "Dinajpur Rice Farm", qty: "15t", price: <><CurrencyDisplay amount={415} />/t</>, total: <CurrencyDisplay amount={6225} />, status: "Pending escrow", statusType: "pending", date: "Mar 8" },
 ];
 
 const statusColor: Record<string, string> = {
@@ -33,6 +35,9 @@ const statusIcon: Record<string, React.ElementType> = {
 };
 
 const BuyerDashboard = () => {
+  const { formatCurrency, currency } = useCurrency();
+  const getSymbol = () => currency === "BDT" ? "৳" : currency === "EUR" ? "€" : "$";
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -46,14 +51,16 @@ const BuyerDashboard = () => {
               <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold">Buyer dashboard</span>
             </div>
             <h1 className="text-3xl font-black">Procurement Centre</h1>
-            <p className="text-muted-foreground text-sm">Welcome back, FreshMart Ltd. Here's your supply overview.</p>
+            <p className="text-muted-foreground text-sm">Welcome back, Bengal Agro Ltd. Here's your supply overview.</p>
           </div>
-          <Button asChild className="rounded-full gap-1.5 w-fit">
-            <Link to="/marketplace">
-              <ShoppingBag className="h-4 w-4" />
-              Browse marketplace
-            </Link>
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button asChild className="rounded-full gap-1.5 w-fit">
+              <Link to="/marketplace">
+                <ShoppingBag className="h-4 w-4" />
+                Browse marketplace
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -62,7 +69,7 @@ const BuyerDashboard = () => {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
             { label: "Active orders", value: "3", sub: "2 in transit", icon: Package, color: "text-blue-500 bg-blue-50" },
-            { label: "Total spend this month", value: "$24,600", sub: "+26% vs last month", icon: BadgeDollarSign, color: "text-primary bg-primary/10" },
+            { label: "Total spend this month", value: <CurrencyDisplay amount={24600} />, sub: "+26% vs last month", icon: BadgeDollarSign, color: "text-primary bg-primary/10" },
             { label: "Avg price below retail", value: "−24%", sub: "vs middleman pricing", icon: TrendingUp, color: "text-green-600 bg-green-50" },
             { label: "Verified suppliers", value: "8", sub: "Avg rating 4.7 ★", icon: Star, color: "text-amber-500 bg-amber-50" },
           ].map(({ label, value, sub, icon: Icon, color }) => (
@@ -89,7 +96,7 @@ const BuyerDashboard = () => {
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground font-semibold">Spend analytics</p>
-                  <CardTitle className="mt-1 text-2xl font-black">Monthly procurement spend ($)</CardTitle>
+                  <CardTitle className="mt-1 text-2xl font-black">Monthly procurement spend ({getSymbol()})</CardTitle>
                 </div>
                 <BarChart3 className="h-5 w-5 text-muted-foreground" />
               </div>
@@ -99,10 +106,10 @@ const BuyerDashboard = () => {
                 <BarChart data={spendData} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(102,20%,79%,0.4)" />
                   <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-                  <YAxis tick={{ fontSize: 11 }} tickFormatter={v => `$${(v/1000).toFixed(0)}k`} />
+                  <YAxis tick={{ fontSize: 11 }} tickFormatter={v => `${formatCurrency(v/1000)}k`} />
                   <Tooltip
                     contentStyle={{ borderRadius: "12px", border: "1px solid hsl(102,20%,79%)", fontSize: "12px" }}
-                    formatter={(v: number) => [`$${v.toLocaleString()}`, "Spend"]}
+                    formatter={(v: number) => [`${formatCurrency(v)}`, "Spend"]}
                   />
                   <Bar dataKey="spend" fill="hsl(112,40%,26%)" radius={[6, 6, 0, 0]} />
                 </BarChart>
@@ -118,9 +125,9 @@ const BuyerDashboard = () => {
             </CardHeader>
             <CardContent className="space-y-3">
               {[
-                { crop: "🌽 Maize", farm: "Makurdi Cluster", price: "$318/t", ready: "10 days", buyers: 26 },
-                { crop: "🍚 Rice", farm: "Jos Plateau", price: "$415/t", ready: "21 days", buyers: 41 },
-                { crop: "🫘 Soybean", farm: "Kaduna Coll.", price: "$520/t", ready: "5 days", buyers: 33 },
+                { crop: "🌽 Maize", farm: "Bogra Cluster", price: <><CurrencyDisplay amount={318} />/t</>, ready: "10 days", buyers: 26 },
+                { crop: "🍚 Rice", farm: "Dinajpur", price: <><CurrencyDisplay amount={415} />/t</>, ready: "21 days", buyers: 41 },
+                { crop: "🫘 Soybean", farm: "Rangpur Coll.", price: <><CurrencyDisplay amount={520} />/t</>, ready: "5 days", buyers: 33 },
               ].map(r => (
                 <div key={r.crop} className="flex items-center gap-3 rounded-xl border border-border/60 bg-background/70 p-3">
                   <div className="text-xl">{r.crop.split(" ")[0]}</div>
@@ -195,9 +202,9 @@ const BuyerDashboard = () => {
           <h2 className="text-2xl font-black mb-5">Supplier performance</h2>
           <div className="grid gap-4 md:grid-cols-3">
             {[
-              { name: "Adamu Bello", crops: "Maize, Sorghum", deals: 12, rating: 4.8, onTime: 100 },
-              { name: "Miriam Dansamu", crops: "Rice", deals: 7, rating: 4.9, onTime: 100 },
-              { name: "Hassan Musa", crops: "Soybean", deals: 4, rating: 4.7, onTime: 75 },
+              { name: "Rafiqul Islam", crops: "Maize, Wheat", deals: 12, rating: 4.8, onTime: 100 },
+              { name: "Fatema Begum", crops: "Rice", deals: 7, rating: 4.9, onTime: 100 },
+              { name: "Abdul Karim", crops: "Soybean", deals: 4, rating: 4.7, onTime: 75 },
             ].map(s => (
               <Card key={s.name} className="soil-card">
                 <CardContent className="p-5 space-y-4">

@@ -4,17 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 const milestones = [
-  { year: "2023", title: "The problem identified", text: "Farmers in Benue State received 35% less than market price for their maize due to middleman chains." },
+  { year: "2023", title: "The problem identified", text: "Farmers in Rajshahi Division received 35% less than market price for their maize due to middleman chains." },
   { year: "2024", title: "Research & prototyping", text: "Partnered with 40 smallholder farms to test GIS boundary mapping and yield prediction models." },
   { year: "2025", title: "Platform launch", text: "Launched AgroDirect with 312 verified farmers and $1.2M in transactions in the first 6 months." },
-  { year: "2026", title: "Scaling across West Africa", text: "Expanding to Ghana, Cameroon, and Senegal. 14,200 hectares now mapped and monitored." },
+  { year: "2026", title: "Scaling across South Asia", text: "Expanding to Nepal, Sri Lanka, and Vietnam. 14,200 hectares now mapped and monitored." },
 ];
 
 const team = [
-  { name: "Aminu Lawal", role: "Co-founder & CEO", bio: "Former agricultural economist at World Bank." },
-  { name: "Dr. Ngozi Obi", role: "Co-founder & CTO", bio: "PhD in Geospatial AI from MIT." },
-  { name: "Fatima Aliyu", role: "Head of Operations", bio: "10 years scaling agri-supply chains in Nigeria." },
-  { name: "Kwame Asante", role: "Head of Product", bio: "Built marketplaces at Jumia and Farmcrowdy." },
+  { 
+    name: "Abir Hossain", 
+    role: "Founder & AI/ML Engineer", 
+    bio: "As a Computer Science & Engineering student specializing in Artificial Intelligence, Abir builds predictive machine learning models to solve real-world agricultural inequalities. His work bridges the gap between deep tech and grassroots farming." 
+  },
 ];
 
 const values = [
@@ -80,7 +81,7 @@ const About = () => {
             <span className="eyebrow">The problem we solve</span>
             <h2 className="text-4xl font-black leading-tight">A farmer earns 35 cents for every dollar of food value they create.</h2>
             <p className="text-muted-foreground leading-7">
-              The average smallholder farmer in sub-Saharan Africa receives just 35% of the final sale price of their crop. The remaining 65% is captured by intermediary chains — aggregators, transporters, and wholesale buyers — who exploit information asymmetry.
+              The average smallholder farmer in Bangladesh receives just 35% of the final sale price of their crop. The remaining 65% is captured by intermediary chains — aggregators, transporters, and wholesale buyers — who exploit information asymmetry.
             </p>
             <p className="text-muted-foreground leading-7">
               AgroDirect eliminates this by giving farmers satellite-grade yield intelligence, fair price discovery, and a direct marketplace where buyers compete for supply before it's even harvested.
@@ -162,9 +163,9 @@ const About = () => {
           <span className="eyebrow">The team</span>
           <h2 className="text-4xl font-black">Built by people who grew up near the problem</h2>
         </div>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="flex flex-wrap justify-center gap-5">
           {team.map(({ name, role, bio }) => (
-            <Card key={name} className="glass-panel">
+            <Card key={name} className="glass-panel w-full max-w-xs text-left">
               <CardContent className="p-6 space-y-4">
                 <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground text-xl font-black">
                   {name.charAt(0)}

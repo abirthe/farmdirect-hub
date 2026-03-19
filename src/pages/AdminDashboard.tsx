@@ -1,3 +1,4 @@
+import { CurrencyDisplay, CurrencySymbol } from "@/components/ui/currency-display";
 import { Link } from "react-router-dom";
 import {
   Users, ShieldCheck, BarChart3, CheckCircle2, Clock,
@@ -10,15 +11,15 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const verificationQueue = [
-  { id: "V-0041", farmer: "Emeka Onuoha", location: "Enugu State", docs: 3, status: "Pending review", type: "Land title" },
-  { id: "V-0039", farmer: "Halima Yusuf", location: "Sokoto State", docs: 2, status: "Under review", type: "Quality cert" },
-  { id: "V-0037", farmer: "Taiwo Adeyemi", location: "Oyo State", docs: 4, status: "Approved", type: "Land title" },
-  { id: "V-0035", farmer: "Uche Okonkwo", location: "Anambra State", docs: 1, status: "Rejected", type: "Identity" },
+  { id: "V-0041", farmer: "Mizanur Rahman", location: "Jessore District", docs: 3, status: "Pending review", type: "Land title" },
+  { id: "V-0039", farmer: "Shirin Sultana", location: "Natore District", docs: 2, status: "Under review", type: "Quality cert" },
+  { id: "V-0037", farmer: "Tariqul Islam", location: "Comilla District", docs: 4, status: "Approved", type: "Land title" },
+  { id: "V-0035", farmer: "Rubel Mia", location: "Faridpur District", docs: 1, status: "Rejected", type: "Identity" },
 ];
 
 const disputes = [
-  { id: "D-0012", parties: "FreshMart Ltd vs Adamu Bello", issue: "Delivery weight discrepancy (—0.4t)", amount: "$127", status: "Open" },
-  { id: "D-0011", parties: "AgriCo vs Miriam Dansamu", issue: "Quality grade mismatch on delivery", amount: "$340", status: "Resolved" },
+  { id: "D-0012", parties: "Bengal Agro Ltd vs Rafiqul Islam", issue: "Delivery weight discrepancy (—0.4t)", amount: <CurrencyDisplay amount={127} />, status: "Open" },
+  { id: "D-0011", parties: "Krishi Bazar vs Fatema Begum", issue: "Quality grade mismatch on delivery", amount: <CurrencyDisplay amount={340} />, status: "Resolved" },
 ];
 
 const AdminDashboard = () => {
@@ -51,7 +52,7 @@ const AdminDashboard = () => {
             { label: "Total farmers", value: "312", sub: "+18 this month", icon: Users, trend: "up" },
             { label: "Active listings", value: "148", sub: "32 ready to harvest", icon: Map, trend: "up" },
             { label: "Pending verifications", value: "6", sub: "2 urgent", icon: Clock, trend: "warn" },
-            { label: "Platform GMV (Mar)", value: "$284k", sub: "+31% vs Feb", icon: TrendingUp, trend: "up" },
+            { label: "Platform GMV (Mar)", value: <><CurrencyDisplay amount={284000}/>k</>, sub: "+31% vs Feb", icon: TrendingUp, trend: "up" },
           ].map(({ label, value, sub, icon: Icon, trend }) => (
             <Card key={label} className="soil-card">
               <CardContent className="p-6 flex items-start justify-between gap-4">

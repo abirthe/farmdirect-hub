@@ -75,14 +75,18 @@ const AppLayout = () => {
   );
 };
 
+import { CurrencyProvider } from "@/contexts/CurrencyContext";
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <AppLayout />
-      </BrowserRouter>
+      <CurrencyProvider>
+        <BrowserRouter>
+          <AppLayout />
+        </BrowserRouter>
+      </CurrencyProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

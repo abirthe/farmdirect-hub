@@ -1,3 +1,4 @@
+import { CurrencyDisplay, CurrencySymbol } from "@/components/ui/currency-display";
 import {
   Leaf, Map, TrendingUp, CloudSun, ShieldCheck, Bell, Plus,
   ArrowUpRight, AlertTriangle, CheckCircle2, Clock, Sprout
@@ -22,7 +23,7 @@ const yieldHistory = [
 
 const farms = [
   {
-    name: "Makurdi Maize Plot A",
+    name: "Bogra Maize Plot A",
     crop: "Maize",
     area: "12.8 ha",
     ndvi: 1.12,
@@ -32,8 +33,8 @@ const farms = [
     health: 91,
   },
   {
-    name: "Benue Sorghum Block",
-    crop: "Sorghum",
+    name: "Rajshahi Wheat Block",
+    crop: "Wheat",
     area: "7.4 ha",
     ndvi: 0.98,
     yield: "11.2t",
@@ -46,7 +47,7 @@ const farms = [
 const alerts = [
   { type: "warning", text: "Dry-window alert in 6 days. Schedule irrigation.", time: "2h ago" },
   { type: "success", text: "NDVI reading improved 8.3% vs last week.", time: "1d ago" },
-  { type: "info", text: "New buyer demand: 3 buyers interested in Sorghum Block.", time: "2d ago" },
+  { type: "info", text: "New buyer demand: 3 buyers interested in Wheat Block.", time: "2d ago" },
 ];
 
 const FarmerDashboard = () => {
@@ -87,7 +88,7 @@ const FarmerDashboard = () => {
           {[
             { label: "Total Area Mapped", value: "20.2 ha", sub: "2 active farms", icon: Map, trend: "+12%" },
             { label: "Total Expected Yield", value: "29.6 t", sub: "Combined output", icon: Sprout, trend: "+18%" },
-            { label: "Best Floor Price", value: "$318/t", sub: "After logistics", icon: TrendingUp, trend: "+5%" },
+            { label: "Best Floor Price", value: <><CurrencyDisplay amount={318} />/t</>, sub: "After logistics", icon: TrendingUp, trend: "+5%" },
             { label: "Avg NDVI Score", value: "1.05×", sub: "Above seasonal avg", icon: CloudSun, trend: "+8%" },
           ].map(({ label, value, sub, icon: Icon, trend }) => (
             <Card key={label} className="soil-card">
@@ -226,7 +227,7 @@ const FarmerDashboard = () => {
                     {[
                       { label: "NDVI", value: `${farm.ndvi}×` },
                       { label: "Expected yield", value: farm.yield },
-                      { label: "Floor price", value: "$318/t" },
+                      { label: "Floor price", value: <><CurrencyDisplay amount={318} />/t</> },
                     ].map(m => (
                       <div key={m.label} className="rounded-xl border border-border/60 bg-background/70 p-3 text-center">
                         <p className="text-xs text-muted-foreground">{m.label}</p>

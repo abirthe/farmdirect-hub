@@ -1,3 +1,4 @@
+import { CurrencyDisplay, CurrencySymbol } from "@/components/ui/currency-display";
 import { useParams, Link } from "react-router-dom";
 import {
   ArrowLeft, Leaf, MapPin, CloudSun, Target, TrendingUp, AlertTriangle, CloudRain
@@ -38,7 +39,7 @@ const YieldDetail = () => {
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <Leaf className="h-5 w-5 text-primary" />
-                <h1 className="text-3xl font-black">Makurdi Maize Cluster</h1>
+                <h1 className="text-3xl font-black">Bogra Maize Cluster</h1>
               </div>
               <p className="text-muted-foreground">ID: {farmId || "FARM-001"} · 12.8 hectares · Maize</p>
             </div>
@@ -132,8 +133,8 @@ const YieldDetail = () => {
                 <TrendingUp className="h-4 w-4 text-green-500" />
               </div>
               <div>
-                <p className="text-4xl font-black">$5,850</p>
-                <p className="text-sm text-muted-foreground mt-1">Based on $318/t floor</p>
+                <p className="text-4xl font-black"><CurrencyDisplay amount={5850} /></p>
+                <p className="text-sm text-muted-foreground mt-1">Based on <CurrencyDisplay amount={318} />/t floor</p>
               </div>
               <div className="space-y-2">
                 <Button size="sm" className="w-full rounded-full gap-2">

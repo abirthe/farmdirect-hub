@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 const steps = ["Map field", "Crop details", "Confirm & submit"];
 
 const cropOptions = [
-  "Maize", "Sorghum", "Millet", "Rice", "Cassava", "Yam", "Soybean",
+  "Maize", "Wheat", "Millet", "Rice", "Potato", "Jute", "Soybean",
   "Wheat", "Cotton", "Groundnut", "Tomato", "Pepper",
 ];
 
@@ -110,13 +110,13 @@ const FarmRegister = () => {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="farmName" className="text-sm font-semibold">Farm name</Label>
-                  <Input id="farmName" placeholder="e.g. Makurdi Maize Plot A" value={form.farmName}
+                  <Input id="farmName" placeholder="e.g. Bogra Maize Plot A" value={form.farmName}
                     onChange={e => setForm({ ...form, farmName: e.target.value })}
                     className="h-12 rounded-xl border-border/60" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="location" className="text-sm font-semibold">Location / State</Label>
-                  <Input id="location" placeholder="e.g. Makurdi, Benue State" value={form.location}
+                  <Input id="location" placeholder="e.g. Bogra, Rajshahi Division" value={form.location}
                     onChange={e => setForm({ ...form, location: e.target.value })}
                     className="h-12 rounded-xl border-border/60" />
                 </div>

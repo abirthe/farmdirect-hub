@@ -16,11 +16,11 @@ const ProfileSettings = () => {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [profile, setProfile] = useState({
-    name: "Adamu Bello",
+    name: "Rafiqul Islam",
     email: "adamu.bello@agrodirect.farm",
     phone: "+234 803 555 0124",
-    location: "Makurdi, Benue State, Nigeria",
-    bio: "Smallholder maize and sorghum farmer with 12 years experience in the Benue River basin.",
+    location: "Bogra, Rajshahi Division, Bangladesh",
+    bio: "Smallholder maize and Wheat farmer with 12 years experience in the Padma River basin.",
   });
   const [notifications, setNotifications] = useState({
     ndviAlerts: true,

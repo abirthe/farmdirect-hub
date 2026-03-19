@@ -1,3 +1,4 @@
+import { CurrencyDisplay, CurrencySymbol } from "@/components/ui/currency-display";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, ShieldCheck, QrCode, CheckCircle2, Clock, Truck, BadgeDollarSign, Leaf, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,12 +7,12 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 const escrowSteps = [
-  { id: 1, label: "Listing created", detail: "Farmer listed 18.4t of maize at $318/t", status: "done", time: "Mar 8, 2026" },
-  { id: 2, label: "Buyer locked price", detail: "FreshMart Ltd committed to 12t. Total: $3,816", status: "done", time: "Mar 11, 2026" },
-  { id: 3, label: "Escrow initiated", detail: "$3,816 held securely. Farmer notified to prepare.", status: "done", time: "Mar 11, 2026" },
+  { id: 1, label: "Listing created", detail: <>Farmer listed 18.4t of maize at <CurrencyDisplay amount={318}/>/t</>, status: "done", time: "Mar 8, 2026" },
+  { id: 2, label: "Buyer locked price", detail: <>Bengal Agro Ltd committed to 12t. Total: <CurrencyDisplay amount={3816}/></>, status: "done", time: "Mar 11, 2026" },
+  { id: 3, label: "Escrow initiated", detail: <><CurrencyDisplay amount={3816}/> held securely. Farmer notified to prepare.</>, status: "done", time: "Mar 11, 2026" },
   { id: 4, label: "Crop in transit", detail: "GPS-tracked delivery en route. ETA: Mar 19", status: "active", time: "Mar 18, 2026" },
   { id: 5, label: "QR delivery confirmation", detail: "Buyer scans QR code to confirm receipt.", status: "pending", time: "Pending" },
-  { id: 6, label: "Funds released to farmer", detail: "$3,702 (after 3% platform fee) released.", status: "pending", time: "Pending" },
+  { id: 6, label: "Funds released to farmer", detail: <><CurrencyDisplay amount={3702}/> (after 3% platform fee) released.</>, status: "pending", time: "Pending" },
 ];
 
 const EscrowPage = () => {
@@ -35,14 +36,14 @@ const EscrowPage = () => {
             <ShieldCheck className="h-6 w-6 text-primary" />
             <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold">Escrow transaction</span>
           </div>
-          <h1 className="text-4xl font-black">Makurdi Maize Deal</h1>
+          <h1 className="text-4xl font-black">Bogra Maize Deal</h1>
           <p className="text-muted-foreground">Transaction ID: <span className="font-mono font-semibold">ESC-{id?.slice(0, 8).toUpperCase() || "LST00001"}</span></p>
         </div>
 
         {/* Summary Cards */}
         <div className="grid gap-4 sm:grid-cols-3">
           {[
-            { label: "Escrow amount", value: "$3,816", icon: BadgeDollarSign, color: "text-primary bg-primary/10" },
+            { label: "Escrow amount", value: <CurrencyDisplay amount={3816} />, icon: BadgeDollarSign, color: "text-primary bg-primary/10" },
             { label: "Crop quantity", value: "12 tons", icon: Leaf, color: "text-green-600 bg-green-50" },
             { label: "Delivery ETA", value: "Mar 19", icon: Truck, color: "text-blue-600 bg-blue-50" },
           ].map(({ label, value, icon: Icon, color }) => (
@@ -144,11 +145,11 @@ const EscrowPage = () => {
               <CardContent>
                 <div className="rounded-2xl border border-border/60 bg-background/70 divide-y divide-border/60 overflow-hidden text-sm">
                   {[
-                    { label: "Maize — 12t @ $318/t", value: "$3,816", highlight: false },
-                    { label: "Platform fee (3%)", value: "−$114", highlight: false, negative: true },
-                    { label: "Farmer receives", value: "$3,702", highlight: true },
-                  ].map(({ label, value, highlight, negative }) => (
-                    <div key={label} className={cn(
+                    { label: <>Maize — 12t @ <CurrencyDisplay amount={318}/>/t</>, value: <CurrencyDisplay amount={3816} />, highlight: false },
+                    { label: "Platform fee (3%)", value: <><span className="mr-0.5">-</span><CurrencyDisplay amount={114} /></>, highlight: false, negative: true },
+                    { label: "Farmer receives", value: <CurrencyDisplay amount={3702} />, highlight: true },
+                  ].map(({ label, value, highlight, negative }, idx) => (
+                    <div key={idx} className={cn(
                       "flex justify-between px-4 py-3",
                       highlight && "bg-primary/5 font-bold text-primary"
                     )}>
