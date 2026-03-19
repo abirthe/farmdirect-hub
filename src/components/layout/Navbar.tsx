@@ -1,25 +1,52 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, Leaf, LogIn } from "lucide-react";
+import { Menu, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "./ThemeToggle";
 import MobileNav from "./MobileNav";
 import { CurrencySwitcher } from "./CurrencySwitcher";
-
-const navLinks = [
-  { label: "Farmers", href: "/farmer" },
-  { label: "Buyers", href: "/buyer" },
-  { label: "Marketplace", href: "/marketplace" },
-  { label: "Escrow", href: "/escrow/demo" },
-  { label: "About", href: "/about" },
-];
+import { NotificationsPopover } from "./NotificationsPopover";
+import { UserProfileMenu } from "./UserProfileMenu";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Navbar = () => {
+  const { session } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const isLanding = location.pathname === "/";
+
+  const userRole = session?.user?.user_metadata?.role;
+  
+  // Dynamically resolve Navigation workflows enforcing absolute POV isolation
+  // A Farmer sees ZERO trace of Buyer-centric tools like Marketplace/Escrow
+  let navLinks = [];
+  if (!session) {
+    navLinks = [
+      { label: "Farmers", href: "/farmer" },
+      { label: "Buyers", href: "/buyer" },
+      { label: "Marketplace", href: "/marketplace" },
+      { label: "About", href: "/about" },
+    ];
+  } else if (userRole === "farmer") {
+    navLinks = [
+      { label: "My Farm", href: "/farmer" },
+      { label: "About", href: "/about" },
+    ];
+  } else if (userRole === "admin") {
+    navLinks = [
+      { label: "Platform Admin", href: "/admin" },
+      { label: "Live Marketplace", href: "/marketplace" },
+      { label: "Global Escrow", href: "/escrow/demo" },
+    ];
+  } else {
+    navLinks = [
+      { label: "Buyer Dashboard", href: "/buyer" },
+      { label: "Procurement Market", href: "/marketplace" },
+      { label: "Active Escrows", href: "/escrow/demo" },
+    ];
+  }
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
@@ -77,8 +104,8 @@ const Navbar = () => {
                         ? "bg-primary/10 text-primary font-semibold"
                         : "bg-primary-foreground/20 text-primary-foreground font-semibold"
                       : scrolled || !isLanding
-                      ? "text-muted-foreground hover:text-foreground hover:bg-accent"
-                      : "text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10"
+                        ? "text-muted-foreground hover:text-foreground hover:bg-accent"
+                        : "text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10"
                   )}
                 >
                   {label}
@@ -91,28 +118,23 @@ const Navbar = () => {
           <div className="flex items-center gap-2">
             <ThemeToggle />
             <CurrencySwitcher />
-            <Button
-              asChild
-              variant="ghost"
-              size="sm"
-              className={cn(
-                "hidden md:inline-flex gap-1.5 rounded-full",
-                !scrolled && isLanding && "text-primary-foreground hover:bg-primary-foreground/10"
-              )}
-            >
-              <Link to="/login">
-                <LogIn className="h-4 w-4" />
-                Sign in
-              </Link>
-            </Button>
-            <Button
-              asChild
-              variant={scrolled || !isLanding ? "default" : "hero"}
-              size="sm"
-              className="hidden md:inline-flex rounded-full"
-            >
-              <Link to="/signup">Get started</Link>
-            </Button>
+            
+            {/* Authenticated Dashboard Core UI */}
+            {session ? (
+              <div className="hidden md:flex items-center gap-2 border-l border-border/60 pl-2 ml-1">
+                <NotificationsPopover />
+                <UserProfileMenu />
+              </div>
+            ) : (
+              <div className="hidden md:flex items-center gap-2 border-l border-border/60 pl-2 ml-1">
+                <Button asChild variant="ghost" size="sm" className="rounded-full font-semibold">
+                  <Link to="/login">Sign in</Link>
+                </Button>
+                <Button asChild size="sm" className="rounded-full font-semibold">
+                  <Link to="/signup">Get Started</Link>
+                </Button>
+              </div>
+            )}
 
             {/* Mobile Hamburger */}
             <Button

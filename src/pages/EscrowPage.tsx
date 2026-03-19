@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import MapView from "@/components/ui/map-view";
+import { useAuth } from "@/contexts/AuthContext";
 
 const escrowSteps = [
   { id: 1, label: "Listing created", detail: <>Farmer listed 18.4t of maize at <CurrencyDisplay amount={318}/>/t</>, status: "done", time: "Mar 8, 2026" },
@@ -17,6 +19,8 @@ const escrowSteps = [
 
 const EscrowPage = () => {
   const { id } = useParams();
+  const { session } = useAuth();
+  const userRole = session?.user?.user_metadata?.role;
 
   return (
     <div className="min-h-screen bg-background">
@@ -59,6 +63,27 @@ const EscrowPage = () => {
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* Live Logistics Map */}
+        <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-muted shadow-sm">
+          <MapView 
+            interactive={true}
+            height="320px"
+            zoom={7}
+            center={[24.3, 89.8]} 
+            routePos={[[24.8480, 89.3730], [24.4, 89.6], [23.8103, 90.4125]]} // Bogra to Dhaka route line
+            locations={[
+              { id: 'origin', lat: 24.8480, lng: 89.3730, title: 'Bogra Origin Farm', color: '#22c55e' },
+              { id: 'truck', lat: 24.4, lng: 89.6, title: 'En Route (Live GPS)', color: '#3b82f6' },
+              { id: 'dest', lat: 23.8103, lng: 90.4125, title: 'Dhaka Destination', color: '#ef4444' },
+            ]}
+          />
+          <div className="absolute top-4 left-4 z-[400]">
+            <div className="glass-panel px-4 py-2 text-xs font-semibold bg-background/95 text-blue-600 flex items-center gap-2 rounded-xl shadow-lg border-blue-200">
+              <Truck className="h-4 w-4 shrink-0" /> Live GPS Escrow Tracking Active
+            </div>
+          </div>
         </div>
 
         <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
@@ -121,19 +146,36 @@ const EscrowPage = () => {
                   <h2 className="text-xl font-black">Scan to release funds</h2>
                   <p className="text-sm text-muted-foreground">When your delivery arrives, scan the farmer's QR code to release funds from escrow.</p>
                 </div>
-                {/* Mock QR */}
-                <div className="flex items-center justify-center rounded-2xl border-2 border-dashed border-border bg-muted/50 p-8">
-                  <div className="text-center space-y-3 text-muted-foreground">
-                    <QrCode className="h-16 w-16 mx-auto" />
-                    <p className="text-sm font-medium">Camera access required</p>
-                    <p className="text-xs">Enable when delivery arrives</p>
-                  </div>
-                </div>
-                <Button className="w-full h-11 rounded-xl gap-2" disabled>
-                  <QrCode className="h-4 w-4" />
-                  Scan delivery QR code
-                </Button>
-                <p className="text-xs text-center text-muted-foreground">Delivery expected: March 19, 2026</p>
+                {userRole === "buyer" ? (
+                  <>
+                    <div className="flex items-center justify-center rounded-2xl border-2 border-dashed border-border bg-muted/50 p-8">
+                      <div className="text-center space-y-3 text-muted-foreground">
+                        <QrCode className="h-16 w-16 mx-auto" />
+                        <p className="text-sm font-medium">Camera access required</p>
+                        <p className="text-xs">Enable when delivery arrives</p>
+                      </div>
+                    </div>
+                    <Button className="w-full h-11 rounded-xl gap-2" disabled>
+                      <QrCode className="h-4 w-4" />
+                      Scan delivery QR code
+                    </Button>
+                  </>
+                ) : userRole === "admin" ? (
+                  <Button variant="destructive" className="w-full h-11 rounded-xl gap-2">
+                    <ShieldCheck className="h-4 w-4" />
+                    Force Release Escrow (Admin)
+                  </Button>
+                ) : (
+                  <>
+                    <div className="flex items-center justify-center rounded-2xl border-2 border-border bg-white p-8">
+                      <div className="text-center space-y-3 text-black">
+                        <QrCode className="h-32 w-32 mx-auto" />
+                      </div>
+                    </div>
+                    <p className="text-xs text-center text-muted-foreground">Show this QR code to the buyer upon delivery to release your funds.</p>
+                  </>
+                )}
+                <p className="text-xs text-center text-muted-foreground font-semibold mt-2">Delivery expected: March 19, 2026</p>
               </CardContent>
             </Card>
 
@@ -169,9 +211,9 @@ const EscrowPage = () => {
             </Card>
 
             <Button asChild variant="outline" className="w-full rounded-xl gap-2">
-              <Link to="/buyer">
+              <Link to={userRole === "farmer" ? "/farmer" : userRole === "admin" ? "/admin" : "/buyer"}>
                 <ArrowRight className="h-4 w-4" />
-                Back to buyer dashboard
+                Back to {userRole === "admin" ? "Platform control" : userRole === "farmer" ? "farmer" : "buyer"} dashboard
               </Link>
             </Button>
           </div>

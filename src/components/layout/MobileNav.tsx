@@ -3,11 +3,10 @@ import { X, Leaf, LayoutDashboard, ShoppingBag, Map, ShieldCheck, LogIn, UserPlu
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 
-const mobileNavLinks = [
+const baseMobileNavLinks = [
   { label: "Marketplace", href: "/marketplace", icon: ShoppingBag },
-  { label: "Farmer Portal", href: "/farmer", icon: Map },
-  { label: "Buyer Dashboard", href: "/buyer", icon: LayoutDashboard },
   { label: "Escrow", href: "/escrow/demo", icon: ShieldCheck },
   { label: "About", href: "/about", icon: Info },
 ];
@@ -24,6 +23,39 @@ interface MobileNavProps {
 
 const MobileNav = ({ open, onClose }: MobileNavProps) => {
   const location = useLocation();
+  const { session } = useAuth();
+  
+  const userRole = session?.user?.user_metadata?.role;
+  
+  // Dynamically resolve Navigation links based on strict mutual exclusity
+  // A Farmer sees ZERO trace of Buyer-centric tools like Marketplace/Escrow
+  let mobileNavLinks = [];
+  if (!session) {
+    mobileNavLinks = [
+      { label: "Farmer Portal", href: "/farmer", icon: Map },
+      { label: "Buyer Dashboard", href: "/buyer", icon: LayoutDashboard },
+      { label: "Marketplace", href: "/marketplace", icon: ShoppingBag },
+      { label: "About", href: "/about", icon: Info },
+    ];
+  } else if (userRole === "farmer") {
+    mobileNavLinks = [
+      { label: "My Farm", href: "/farmer", icon: Map },
+      { label: "About", href: "/about", icon: Info },
+    ];
+  } else if (userRole === "admin") {
+    mobileNavLinks = [
+      { label: "Platform Admin", href: "/admin", icon: ShieldCheck },
+      { label: "Live Marketplace", href: "/marketplace", icon: ShoppingBag },
+      { label: "Global Escrow", href: "/escrow/demo", icon: ShieldCheck },
+    ];
+  } else {
+    // buyer
+    mobileNavLinks = [
+      { label: "Buyer Dashboard", href: "/buyer", icon: LayoutDashboard },
+      { label: "Procurement Market", href: "/marketplace", icon: ShoppingBag },
+      { label: "Active Escrows", href: "/escrow/demo", icon: ShieldCheck },
+    ];
+  }
 
   return (
     <Sheet open={open} onOpenChange={onClose}>
@@ -62,16 +94,19 @@ const MobileNav = ({ open, onClose }: MobileNavProps) => {
           })}
         </nav>
 
-        <div className="border-t border-border/60 p-4 space-y-2">
-          {mobileAuthLinks.map(({ label, href, icon: Icon, variant }) => (
-            <Button key={href} asChild variant={variant} className="w-full justify-start gap-2" onClick={onClose}>
-              <Link to={href}>
-                <Icon className="h-4 w-4" />
-                {label}
-              </Link>
-            </Button>
-          ))}
-        </div>
+        {/* Show Auth Buttons only when NOT logged in */}
+        {!session && (
+          <div className="border-t border-border/60 p-4 space-y-2">
+            {mobileAuthLinks.map(({ label, href, icon: Icon, variant }) => (
+              <Button key={href} asChild variant={variant} className="w-full justify-start gap-2" onClick={onClose}>
+                <Link to={href}>
+                  <Icon className="h-4 w-4" />
+                  {label}
+                </Link>
+              </Button>
+            ))}
+          </div>
+        )}
       </SheetContent>
     </Sheet>
   );

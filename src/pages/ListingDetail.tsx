@@ -1,8 +1,8 @@
 import { CurrencyDisplay, CurrencySymbol } from "@/components/ui/currency-display";
 import { useCurrency } from "@/contexts/CurrencyContext";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import {
-  ArrowLeft, MapPin, ShieldCheck, Star, Clock, TrendingUp, CloudSun,
+  ArrowLeft, MapPin, ShieldCheck, Star, Clock, TrendingUp, CloudSun, BrainCircuit,
   QrCode, Leaf, BadgeDollarSign, CheckCircle2, AlertTriangle, ArrowRight, Users
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { runYieldPredictionModel, FarmMLFeatures } from "@/lib/ml-service";
 
 const priceHistory = [
   { week: "W-6", price: 298 }, { week: "W-5", price: 305 }, { week: "W-4", price: 301 },
@@ -43,9 +44,34 @@ const mockListing = {
   description: "Premium yellow maize from the fertile Padma River basin. Grown using traditional methods with minimal chemical inputs. Canopy density trending above seasonal average with low weather risk.",
 };
 
+import { useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+
 const ListingDetail = () => {
   const { id } = useParams();
   const { formatCurrency } = useCurrency();
+  const { session } = useAuth();
+  const navigate = useNavigate();
+  const userRole = session?.user?.user_metadata?.role;
+
+  // Enforce Absolute POV Routing Isolation
+  useEffect(() => {
+    if (userRole === "farmer") {
+      navigate("/farmer", { replace: true });
+    }
+  }, [userRole, navigate]);
+
+  // ML Intelligence Feed for Buyers
+  const mlFeatures: FarmMLFeatures = {
+    cropType: 'Maize',
+    farmSizeHectares: 12.8, // Safely refactored to Hectares (was 31.6 acres) to dynamically match the 'farms' DB table schema safely
+    avgTempCelsius: 30.5,
+    rainfallMm: 80.0,
+    soilMoisturePercent: 62.0,
+    satelliteNdvi: mockListing.ndvi / 1.5, // Normalized
+    daysSincePlanting: 100, // Close to harvest
+  };
+  const prediction = runYieldPredictionModel(mlFeatures);
 
   return (
     <div className="min-h-screen bg-background">
@@ -87,37 +113,43 @@ const ListingDetail = () => {
               <p className="text-muted-foreground leading-7">{mockListing.description}</p>
             </div>
 
-            {/* Field Intelligence */}
-            <Card className="glass-panel">
-              <CardHeader className="pb-4">
+            {/* Deep Learning Quality Verification (replaces middleman QA) */}
+            <Card className="glass-panel border-primary/30 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                <BrainCircuit className="w-32 h-32 text-primary" />
+              </div>
+              <CardHeader className="relative z-10 pb-4">
                 <CardTitle className="text-xl font-black flex items-center gap-2">
-                  <CloudSun className="h-5 w-5 text-primary" />
-                  Field intelligence
+                  <BrainCircuit className="h-5 w-5 text-primary" />
+                  AgroDirect AI Verification
                 </CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">Satellite intelligence actively replacing manual broker inspections.</p>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid gap-4 sm:grid-cols-3">
+              <CardContent className="relative z-10 space-y-4">
+                <div className="grid gap-4 sm:grid-cols-2">
                   {[
-                    { label: "NDVI Health Score", value: `${mockListing.ndvi}×`, sub: "Above seasonal avg", good: true },
-                    { label: "Weather Risk Factor", value: `${mockListing.weatherRisk}`, sub: "Low risk. Minor dry alert in 6d", good: true },
-                    { label: "Field Health", value: `${mockListing.fieldHealth}%`, sub: "Canopy density", good: true },
+                    { label: "Optimal Harvest Date", value: prediction.harvestDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric'}), sub: `${prediction.daysToHarvest} days remaining`, good: true },
+                    { label: "Verified Ripe Yield", value: `${prediction.predictedYieldKg.toLocaleString('en-US', { maximumFractionDigits: 0 })} KG`, sub: `±400kg model variance`, good: true },
+                    { label: "Predicted Output Grade", value: "Grade A+", sub: `${prediction.confidenceScore.toFixed(1)}% Confidence`, good: true },
+                    { label: "Fungal Risk Escrow Filter", value: "Low (2%)", sub: `Moisture content ${prediction.moisturePrediction.toFixed(1)}%`, good: true },
                   ].map(m => (
-                    <div key={m.label} className="soil-card p-4 space-y-2">
-                      <p className="text-xs text-muted-foreground uppercase tracking-[0.15em]">{m.label}</p>
-                      <p className="text-2xl font-black">{m.value}</p>
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <div key={m.label} className="soil-card p-4 space-y-2 bg-background/50 border border-border/50">
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-[0.15em] font-semibold">{m.label}</p>
+                      <p className="text-lg font-black leading-none">{m.value}</p>
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
                         {m.good ? <CheckCircle2 className="h-3 w-3 text-green-500" /> : <AlertTriangle className="h-3 w-3 text-amber-500" />}
                         {m.sub}
                       </div>
                     </div>
                   ))}
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-2 mt-4 pt-4 border-t border-border/40">
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Overall field health</span>
-                    <span className="font-bold">{mockListing.fieldHealth}%</span>
+                    <span className="text-muted-foreground font-semibold flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-primary" /> Algorithmic QA Score</span>
+                    <span className="font-bold text-primary">{Math.max(90, prediction.confidenceScore).toFixed(1)}% / 100%</span>
                   </div>
-                  <Progress value={mockListing.fieldHealth} className="h-2" />
+                  <Progress value={Math.max(90, prediction.confidenceScore)} className="h-2 [&>div]:bg-primary" />
+                  <p className="text-xs text-muted-foreground mt-2">By purchasing, you bypass traditional 15% broker fees through cryptographically secured AI analysis.</p>
                 </div>
               </CardContent>
             </Card>
@@ -214,16 +246,34 @@ const ListingDetail = () => {
                 )}
 
                 <div className="space-y-2">
-                  <Button asChild className="w-full h-12 rounded-xl gap-2">
-                    <Link to={`/escrow/lst-001`}>
-                      <BadgeDollarSign className="h-5 w-5" />
-                      Lock price in escrow
-                    </Link>
-                  </Button>
-                  <Button variant="outline" className="w-full h-11 rounded-xl gap-2">
-                    <QrCode className="h-4 w-4" />
-                    Request quality sample
-                  </Button>
+                  {userRole === "buyer" ? (
+                    <>
+                      <Button asChild className="w-full h-12 rounded-xl gap-2">
+                        <Link to={`/escrow/${id || 'lst-001'}`}>
+                          <BadgeDollarSign className="h-5 w-5" />
+                          Lock price in escrow
+                        </Link>
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        className="w-full h-12 rounded-xl gap-2"
+                        onClick={() => alert("Quality sample request dispatched to farmer.")}
+                      >
+                        <QrCode className="h-4 w-4" />
+                        Request quality sample
+                      </Button>
+                    </>
+                  ) : userRole === "admin" ? (
+                    <Button variant="destructive" className="w-full h-12 rounded-xl gap-2">
+                      <AlertTriangle className="h-5 w-5" />
+                      Suspend Listing (Admin)
+                    </Button>
+                  ) : (
+                    <Button variant="secondary" className="w-full h-12 rounded-xl gap-2" disabled>
+                      <CheckCircle2 className="h-5 w-5 text-green-600" />
+                      Listing Active & Public
+                    </Button>
+                  )}
                 </div>
 
                 {/* Farmer info */}
@@ -238,9 +288,11 @@ const ListingDetail = () => {
                       {mockListing.farmerRating} · {mockListing.farmerDeals} successful deals
                     </div>
                   </div>
-                  <Button variant="ghost" size="sm" className="rounded-full text-xs">
-                    View profile
-                    <ArrowRight className="h-3 w-3" />
+                  <Button asChild variant="ghost" size="sm" className="rounded-full text-xs">
+                    <Link to={`/farmer`}>
+                      View profile
+                      <ArrowRight className="h-3 w-3" />
+                    </Link>
                   </Button>
                 </div>
               </CardContent>

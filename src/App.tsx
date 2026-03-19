@@ -50,15 +50,23 @@ const AppLayout = () => {
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/marketplace/:id" element={<ListingDetail />} />
           
-          {/* Protected Routes */}
+          {/* Shared Protected Routes (Both Buyer & Farmer) */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/farmer" element={<FarmerDashboard />} />
-            <Route path="/farmer/register" element={<FarmRegister />} />
-            <Route path="/farmer/yield/:farmId" element={<YieldDetail />} />
-            <Route path="/buyer" element={<BuyerDashboard />} />
             <Route path="/escrow/:id" element={<EscrowPage />} />
             <Route path="/settings" element={<ProfileSettings />} />
             <Route path="/notifications" element={<Notifications />} />
+          </Route>
+
+          {/* Farmer-Only Protected Network */}
+          <Route element={<ProtectedRoute role="farmer" />}>
+            <Route path="/farmer" element={<FarmerDashboard />} />
+            <Route path="/farmer/register" element={<FarmRegister />} />
+            <Route path="/farmer/yield/:farmId" element={<YieldDetail />} />
+          </Route>
+
+          {/* Buyer-Only Protected Network */}
+          <Route element={<ProtectedRoute role="buyer" />}>
+            <Route path="/buyer" element={<BuyerDashboard />} />
           </Route>
 
           {/* Admin Routes - simulating an admin role check */}
@@ -76,17 +84,20 @@ const AppLayout = () => {
 };
 
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <CurrencyProvider>
-        <BrowserRouter>
-          <AppLayout />
-        </BrowserRouter>
-      </CurrencyProvider>
+      <AuthProvider>
+        <CurrencyProvider>
+          <BrowserRouter>
+            <AppLayout />
+          </BrowserRouter>
+        </CurrencyProvider>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

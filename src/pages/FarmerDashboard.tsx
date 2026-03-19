@@ -1,7 +1,7 @@
 import { CurrencyDisplay, CurrencySymbol } from "@/components/ui/currency-display";
 import {
   Leaf, Map, TrendingUp, CloudSun, ShieldCheck, Bell, Plus,
-  ArrowUpRight, AlertTriangle, CheckCircle2, Clock, Sprout
+  ArrowUpRight, AlertTriangle, CheckCircle2, Clock, Sprout, Sparkles
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -241,9 +241,11 @@ const FarmerDashboard = () => {
                       <ShieldCheck className="h-4 w-4" />
                       List for sale
                     </Button>
-                    <Button variant="outline" size="sm" className="rounded-full gap-1.5">
-                      <Map className="h-4 w-4" />
-                      View map
+                    <Button asChild variant="outline" size="sm" className="flex-1 rounded-full gap-1.5 border-primary/20 hover:bg-primary/5 text-primary hover:text-primary">
+                      <Link to={`/farmer/yield/${farm.name.replace(/\s+/g, '-').toUpperCase()}`}>
+                        <Sparkles className="h-4 w-4" />
+                        AI Yield
+                      </Link>
                     </Button>
                   </div>
                 </CardContent>

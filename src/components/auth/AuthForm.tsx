@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabaseClient";
+import { useToast } from "@/hooks/use-toast";
 
 type Role = "farmer" | "buyer" | "admin";
 
@@ -17,9 +19,13 @@ const roleOptions: { value: Role; label: string; desc: string; emoji: string }[]
   { value: "buyer", label: "Buyer", desc: "Discover verified supply and lock in prices", emoji: "🏢" },
   { value: "admin", label: "Admin", desc: "Verify land titles and resolve disputes", emoji: "🛡️" },
 ];
+import { useAuth } from "@/contexts/AuthContext";
 
 const AuthForm = ({ mode }: AuthFormProps) => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const { mockLogin } = useAuth();
+  
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
   const [role, setRole] = useState<Role>("farmer");
@@ -27,18 +33,54 @@ const AuthForm = ({ mode }: AuthFormProps) => {
 
   const isLogin = mode === "login";
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate auth — redirect based on role
-    setTimeout(() => {
-      setLoading(false);
+    
+    try {
       if (isLogin) {
+        // Live Supabase Login Execution
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: form.email,
+          password: form.password,
+        });
+
+        if (error) throw new Error(error.message);
+
+        // Success - Route automatically based on user metadata fallback
         navigate("/farmer");
+        
       } else {
+        // Live Supabase Registration logic
+        const { data, error } = await supabase.auth.signUp({
+          email: form.email,
+          password: form.password,
+          options: {
+            data: {
+              full_name: form.name,
+              role: role,
+            }
+          }
+        });
+
+        if (error) throw new Error(error.message);
+        
+        toast({
+          title: "Account Created Successfully!",
+          description: "Welcome to the AgroDirect native network.",
+        });
+        
         navigate(role === "buyer" ? "/buyer" : role === "admin" ? "/admin" : "/farmer");
       }
-    }, 1200);
+    } catch (err: any) {
+      toast({
+        variant: "destructive",
+        title: "Authentication Failed",
+        description: err.message,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -213,6 +255,41 @@ const AuthForm = ({ mode }: AuthFormProps) => {
               {isLogin ? "Sign up free" : "Sign in"}
             </Link>
           </p>
+
+          {/* Local Testing Quick Accounts to bypass 2/hr IP Rate Limits */}
+          <div className="pt-6 mt-6 border-t border-border/60">
+            <div className="text-center space-y-3 mb-4">
+              <span className="text-xs uppercase tracking-[0.2em] font-semibold text-muted-foreground">Local network testing</span>
+              <p className="text-xs text-muted-foreground">Are you rate-limited by Supabase? Use a 1-click test account.</p>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="rounded-xl h-10 border-primary/20 hover:bg-primary/10 text-primary"
+                onClick={() => { mockLogin?.("farmer"); navigate("/farmer"); }}
+              >
+                🌾 Farmer
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="rounded-xl h-10 border-primary/20 hover:bg-primary/10 text-primary"
+                onClick={() => { mockLogin?.("buyer"); navigate("/buyer"); }}
+              >
+                🏢 Buyer
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="col-span-2 rounded-xl h-10 border-destructive/20 hover:bg-destructive/10 text-destructive"
+                onClick={() => { mockLogin?.("admin"); navigate("/admin"); }}
+              >
+                🛡️ System Admin
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

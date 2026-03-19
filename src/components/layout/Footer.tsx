@@ -30,10 +30,10 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { icon: Twitter, label: "Twitter / X", href: "#" },
-  { icon: Instagram, label: "Instagram", href: "#" },
-  { icon: Linkedin, label: "LinkedIn", href: "#" },
-  { icon: Github, label: "GitHub", href: "#" },
+  { icon: Twitter, label: "Twitter / X", href: "/" },
+  { icon: Instagram, label: "Instagram", href: "/" },
+  { icon: Linkedin, label: "LinkedIn", href: "/" },
+  { icon: Github, label: "GitHub", href: "/" },
 ];
 
 const Footer = () => {
@@ -99,9 +99,9 @@ const Footer = () => {
             © 2026 AgroDirect. Building the infrastructure for fair agricultural trade.
           </p>
           <div className="flex items-center gap-4">
-            <a href="#" className="text-xs text-muted-foreground hover:text-primary transition-colors duration-150">Privacy Policy</a>
-            <a href="#" className="text-xs text-muted-foreground hover:text-primary transition-colors duration-150">Terms of Service</a>
-            <a href="#" className="text-xs text-muted-foreground hover:text-primary transition-colors duration-150">Cookie Policy</a>
+            <a href="/" className="text-xs text-muted-foreground hover:text-primary transition-colors duration-150">Privacy Policy</a>
+            <a href="/" className="text-xs text-muted-foreground hover:text-primary transition-colors duration-150">Terms of Service</a>
+            <a href="/" className="text-xs text-muted-foreground hover:text-primary transition-colors duration-150">Cookie Policy</a>
           </div>
         </div>
       </div>

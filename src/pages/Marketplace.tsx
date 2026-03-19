@@ -1,10 +1,12 @@
 import { CurrencyDisplay, CurrencySymbol } from "@/components/ui/currency-display";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Search, SlidersHorizontal, MapPin, Clock, ShieldCheck, TrendingUp,
-  Leaf, Star, CheckCircle2, ArrowRight, ChevronDown
+  Leaf, Star, CheckCircle2, ArrowRight, ChevronDown, Map, LayoutGrid
 } from "lucide-react";
+import MapView from "@/components/ui/map-view";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,112 +16,46 @@ import { Slider } from "@/components/ui/slider";
 
 const listings = [
   {
-    id: "lst-001",
-    crop: "Maize",
-    emoji: "🌽",
-    farmName: "Bogra Maize Cluster",
-    farmer: "Rafiqul Islam",
-    location: "Rajshahi Division, Bangladesh",
-    area: "12.8 ha",
-    qty: "18.4 t",
-    floorPrice: 318,
-    status: "Ready in 10 days",
-    statusType: "upcoming",
-    ndvi: 1.12,
-    buyers: 26,
-    quality: "Grade A",
-    verified: true,
-    rating: 4.8,
+    id: "lst-001", crop: "Maize", emoji: "🌽",
+    farmName: "Bogra Maize Cluster", farmer: "Rafiqul Islam", location: "Rajshahi Division, Bangladesh",
+    lat: 24.8480, lng: 89.3730, // Bogra
+    area: "12.8 ha", qty: "18.4 t", floorPrice: 318,
+    status: "Ready in 10 days", statusType: "upcoming", ndvi: 1.12, buyers: 26, quality: "Grade A", verified: true, rating: 4.8,
   },
   {
-    id: "lst-002",
-    crop: "Wheat",
-    emoji: "🌾",
-    farmName: "Rajshahi Wheat Block",
-    farmer: "Rafiqul Islam",
-    location: "Rajshahi Division, Bangladesh",
-    area: "7.4 ha",
-    qty: "11.2 t",
-    floorPrice: 245,
-    status: "Ready now",
-    statusType: "ready",
-    ndvi: 0.98,
-    buyers: 14,
-    quality: "Grade B+",
-    verified: true,
-    rating: 4.6,
+    id: "lst-002", crop: "Wheat", emoji: "🌾",
+    farmName: "Rajshahi Wheat Block", farmer: "Rafiqul Islam", location: "Rajshahi Division, Bangladesh",
+    lat: 24.3636, lng: 88.6241, // Rajshahi
+    area: "7.4 ha", qty: "11.2 t", floorPrice: 245,
+    status: "Ready now", statusType: "ready", ndvi: 0.98, buyers: 14, quality: "Grade B+", verified: true, rating: 4.6,
   },
   {
-    id: "lst-003",
-    crop: "Rice",
-    emoji: "🍚",
-    farmName: "Dinajpur Rice Farm",
-    farmer: "Fatema Begum",
-    location: "Dinajpur District, Bangladesh",
-    area: "22.1 ha",
-    qty: "34.8 t",
-    floorPrice: 415,
-    status: "Ready in 21 days",
-    statusType: "upcoming",
-    ndvi: 1.05,
-    buyers: 41,
-    quality: "Grade A+",
-    verified: true,
-    rating: 4.9,
+    id: "lst-003", crop: "Rice", emoji: "🍚",
+    farmName: "Dinajpur Rice Farm", farmer: "Fatema Begum", location: "Dinajpur District, Bangladesh",
+    lat: 25.6221, lng: 88.6438, // Dinajpur
+    area: "22.1 ha", qty: "34.8 t", floorPrice: 415,
+    status: "Ready in 21 days", statusType: "upcoming", ndvi: 1.05, buyers: 41, quality: "Grade A+", verified: true, rating: 4.9,
   },
   {
-    id: "lst-004",
-    crop: "Potato",
-    emoji: "🪴",
-    farmName: "Jessore Potato Belt",
-    farmer: "Kamrul Hasan",
-    location: "Jessore District, Bangladesh",
-    area: "16.5 ha",
-    qty: "62.4 t",
-    floorPrice: 175,
-    status: "Growing",
-    statusType: "growing",
-    ndvi: 0.87,
-    buyers: 9,
-    quality: "Grade A",
-    verified: false,
-    rating: 4.3,
+    id: "lst-004", crop: "Potato", emoji: "🪴",
+    farmName: "Jessore Potato Belt", farmer: "Kamrul Hasan", location: "Jessore District, Bangladesh",
+    lat: 23.1664, lng: 89.2082, // Jessore
+    area: "16.5 ha", qty: "62.4 t", floorPrice: 175,
+    status: "Growing", statusType: "growing", ndvi: 0.87, buyers: 9, quality: "Grade A", verified: false, rating: 4.3,
   },
   {
-    id: "lst-005",
-    crop: "Soybean",
-    emoji: "🫘",
-    farmName: "Rangpur Soybean Collective",
-    farmer: "Abdul Karim",
-    location: "Rangpur Division, Bangladesh",
-    area: "31.2 ha",
-    qty: "28.6 t",
-    floorPrice: 520,
-    status: "Ready in 5 days",
-    statusType: "upcoming",
-    ndvi: 1.14,
-    buyers: 33,
-    quality: "Grade A+",
-    verified: true,
-    rating: 4.7,
+    id: "lst-005", crop: "Soybean", emoji: "🫘",
+    farmName: "Rangpur Soybean Collective", farmer: "Abdul Karim", location: "Rangpur Division, Bangladesh",
+    lat: 25.7439, lng: 89.2752, // Rangpur
+    area: "31.2 ha", qty: "28.6 t", floorPrice: 520,
+    status: "Ready in 5 days", statusType: "upcoming", ndvi: 1.14, buyers: 33, quality: "Grade A+", verified: true, rating: 4.7,
   },
   {
-    id: "lst-006",
-    crop: "Groundnut",
-    emoji: "🥜",
-    farmName: "Kushtia Groundnut Farm",
-    farmer: "Nasrin Akter",
-    location: "Kushtia District, Bangladesh",
-    area: "9.3 ha",
-    qty: "9.8 t",
-    floorPrice: 610,
-    status: "Ready now",
-    statusType: "ready",
-    ndvi: 1.01,
-    buyers: 18,
-    quality: "Grade A",
-    verified: true,
-    rating: 4.5,
+    id: "lst-006", crop: "Groundnut", emoji: "🥜",
+    farmName: "Kushtia Groundnut Farm", farmer: "Nasrin Akter", location: "Kushtia District, Bangladesh",
+    lat: 23.9012, lng: 89.1205, // Kushtia
+    area: "9.3 ha", qty: "9.8 t", floorPrice: 610,
+    status: "Ready now", statusType: "ready", ndvi: 1.01, buyers: 18, quality: "Grade A", verified: true, rating: 4.5,
   },
 ];
 
@@ -134,6 +70,18 @@ const Marketplace = () => {
   const [cropFilter, setCropFilter] = useState("all");
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const [showFilters, setShowFilters] = useState(false);
+  const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
+
+  const { session } = useAuth();
+  const navigate = useNavigate();
+  const userRole = session?.user?.user_metadata?.role;
+
+  // Enforce Absolute POV Routing Isolation
+  useEffect(() => {
+    if (userRole === "farmer") {
+      navigate("/farmer", { replace: true });
+    }
+  }, [userRole, navigate]);
 
   const filtered = listings.filter(l => {
     const matchSearch = l.crop.toLowerCase().includes(search.toLowerCase()) ||
@@ -250,28 +198,63 @@ const Marketplace = () => {
           </Card>
         )}
 
-        {/* Results Count */}
-        <div className="flex items-center justify-between">
+        {/* Results Count & View Toggle */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
             Showing <strong className="text-foreground">{filtered.length}</strong> of {listings.length} listings
           </p>
-          <Select>
-            <SelectTrigger className="h-9 w-44 rounded-full border-border/60 text-sm">
-              <SelectValue placeholder="Sort: Most buyers" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="buyers">Most buyers</SelectItem>
-              <SelectItem value="price-low">Price: Low to high</SelectItem>
-              <SelectItem value="price-high">Price: High to low</SelectItem>
-              <SelectItem value="newest">Newest first</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex items-center gap-2">
+            <div className="flex bg-muted/50 p-1 rounded-full border border-border/50">
+              <Button 
+                variant={viewMode === "grid" ? "default" : "ghost"} 
+                size="sm" 
+                className="h-8 rounded-full px-3 gap-1.5"
+                onClick={() => setViewMode("grid")}
+              >
+                <LayoutGrid className="h-4 w-4" /> Grid
+              </Button>
+              <Button 
+                variant={viewMode === "map" ? "default" : "ghost"} 
+                size="sm" 
+                className="h-8 rounded-full px-3 gap-1.5"
+                onClick={() => setViewMode("map")}
+              >
+                <Map className="h-4 w-4" /> Map
+              </Button>
+            </div>
+            
+            <Select>
+              <SelectTrigger className="h-10 w-[160px] rounded-full border-border/60 text-sm">
+                <SelectValue placeholder="Sort: Most buyers" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="buyers">Most buyers</SelectItem>
+                <SelectItem value="price-low">Price: Low to high</SelectItem>
+                <SelectItem value="price-high">Price: High to low</SelectItem>
+                <SelectItem value="newest">Newest first</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
-        {/* Listing Grid */}
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {filtered.map((listing) => (
-            <Card key={listing.id} className="soil-card overflow-hidden hover:-translate-y-1 transition-transform duration-300 group">
+        {/* View Layouts */}
+        {viewMode === "map" ? (
+          <MapView 
+            locations={filtered.map(l => ({
+              id: l.id,
+              lat: l.lat,
+              lng: l.lng,
+              title: l.farmName,
+              crop: l.crop,
+              price: l.floorPrice
+            }))} 
+            height="60vh"
+            center={[24.1, 89.5]} // Centered on Bangladesh
+          />
+        ) : (
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {filtered.map((listing) => (
+              <Card key={listing.id} className="soil-card overflow-hidden hover:-translate-y-1 transition-transform duration-300 group">
               <div className="h-1.5 bg-gradient-to-r from-primary via-secondary to-primary bg-size-200 group-hover:bg-pos-100 transition-all duration-500" />
               <CardContent className="p-6 space-y-4">
                 {/* Header */}
@@ -341,6 +324,7 @@ const Marketplace = () => {
             </Card>
           ))}
         </div>
+        )}
 
         {filtered.length === 0 && (
           <div className="py-20 text-center space-y-3">

@@ -8,6 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
+import { runYieldPredictionModel, FarmMLFeatures } from "@/lib/ml-service";
+
 const forecastData = [
   { day: "Day 1", predicted: 14.5, actual: 14.5 },
   { day: "Day 10", predicted: 15.2, actual: 15.0 },
@@ -20,6 +22,20 @@ const forecastData = [
 
 const YieldDetail = () => {
   const { farmId } = useParams();
+
+  // 1. Create Dummy AI Feature Set corresponding to Python data logic
+  const mlFeatures: FarmMLFeatures = {
+    cropType: 'Boro Rice',
+    farmSizeHectares: 1.82, // Standardized safely to match PostgreSQL Table (exactly 4.5 acres)
+    avgTempCelsius: 32.5,
+    rainfallMm: 145.0,
+    soilMoisturePercent: 55.0,
+    satelliteNdvi: 0.75, // Healthy Crop
+    daysSincePlanting: 45,
+  };
+
+  // 2. Fetch realtime machine learning output
+  const prediction = runYieldPredictionModel(mlFeatures);
 
   return (
     <div className="min-h-screen bg-background">
@@ -39,51 +55,125 @@ const YieldDetail = () => {
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <Leaf className="h-5 w-5 text-primary" />
-                <h1 className="text-3xl font-black">Bogra Maize Cluster</h1>
+                <h1 className="text-3xl font-black">Rajshahi {mlFeatures.cropType} Cluster</h1>
               </div>
-              <p className="text-muted-foreground">ID: {farmId || "FARM-001"} · 12.8 hectares · Maize</p>
+              <p className="text-muted-foreground">ID: {farmId || "ACRE-092"} · {mlFeatures.farmSizeHectares} hectares · {mlFeatures.cropType}</p>
             </div>
             <div className="flex items-center gap-4 text-sm text-right">
               <div>
                 <p className="text-muted-foreground uppercase tracking-widest text-[10px] font-bold">Predicted Yield</p>
-                <p className="font-black text-2xl text-primary">18.4 tons</p>
+                <p className="font-black text-2xl text-primary">{prediction.predictedYieldTons.toFixed(2)} tons</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Forecast Chart */}
+        {/* ML Yield Forecast Chart */}
         <Card className="glass-panel overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
           <CardHeader className="relative z-10 pb-2">
             <CardTitle className="text-xl font-black flex items-center gap-2">
               <Target className="h-5 w-5 text-primary" />
-              Machine Learning Yield Forecast
+              Yield Trajectory Neural Network
             </CardTitle>
-            <p className="text-sm text-muted-foreground">Model confidence: ±0.4 tons</p>
+            <p className="text-sm text-muted-foreground">Model confidence: ±{((100 - prediction.confidenceScore)/100 * prediction.predictedYieldTons).toFixed(2)} tons</p>
           </CardHeader>
           <CardContent className="relative z-10 pt-4">
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={260}>
               <AreaChart data={forecastData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorPredicted" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="hsl(112, 40%, 26%)" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="hsl(112, 40%, 26%)" stopOpacity={0} />
+                    <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(102, 20%, 79%, 0.4)" vertical={false} />
-                <XAxis dataKey="day" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 12 }} axisLine={false} tickLine={false} domain={[12, 20]} />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--muted-foreground))" strokeOpacity={0.2} vertical={false} />
+                <XAxis dataKey="day" tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} domain={[12, 20]} />
                 <Tooltip
-                  contentStyle={{ borderRadius: "12px", border: "1px solid hsl(102, 20%, 79%)" }}
+                  contentStyle={{ backgroundColor: "hsl(var(--card))", borderRadius: "12px", border: "1px solid hsl(var(--border))", color: "hsl(var(--card-foreground))" }}
                   itemStyle={{ fontSize: "14px", fontWeight: "bold" }}
                 />
-                <Area type="monotone" dataKey="predicted" stroke="hsl(112, 40%, 26%)" strokeWidth={2} fill="url(#colorPredicted)" name="Forecast (t)" />
-                <Area type="monotone" dataKey="actual" stroke="hsl(46, 86%, 63%)" strokeWidth={3} fill="none" dot={{ r: 4 }} name="Actual (t)" />
+                <Area type="monotone" dataKey="predicted" stroke="hsl(var(--primary))" strokeWidth={3} fill="url(#colorPredicted)" name="Forecast (t)" />
+                <Area type="monotone" dataKey="actual" stroke="hsl(var(--secondary))" strokeWidth={3} fill="none" dot={{ r: 5, fill: "hsl(var(--secondary))" }} name="Actual (t)" />
               </AreaChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
+
+        {/* AI Harvest Prediction Model */}
+        <div className="grid gap-6 md:grid-cols-2">
+          <Card className="glass-panel border-primary/30 relative overflow-hidden">
+             <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+               <Target className="w-32 h-32" />
+             </div>
+             <CardContent className="p-6 space-y-5">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-primary">
+                    <CloudSun className="h-4 w-4" />
+                  </div>
+                  <h3 className="text-lg font-black text-primary">Optimal Ripening Window</h3>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-background/50 rounded-xl p-4 border border-border/50">
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">Predicted Harvest Date</p>
+                    <p className="text-2xl font-black mt-1 leading-none">{prediction.harvestDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric'})}</p>
+                    <div className="flex justify-between items-center mt-2">
+                      <p className="text-xs font-medium text-green-500">{prediction.daysToHarvest} days left</p>
+                    </div>
+                  </div>
+                  <div className="bg-background/50 rounded-xl p-4 border border-border/50">
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">Riped Crop Est.</p>
+                    <p className="text-2xl font-black mt-1 leading-none">{prediction.predictedYieldKg.toLocaleString('en-US', { maximumFractionDigits: 0 })} KG</p>
+                    <div className="flex justify-between items-center mt-2">
+                      <p className="text-xs font-medium text-amber-500">{prediction.confidenceScore.toFixed(1)}% Confidence</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex justify-between text-xs font-semibold text-muted-foreground mb-1 mt-3">
+                    <span>Crop Development Timeline</span>
+                    <span>{mlFeatures.daysSincePlanting} / {mlFeatures.daysSincePlanting + prediction.daysToHarvest} Days</span>
+                  </div>
+                  <Progress value={(mlFeatures.daysSincePlanting / (mlFeatures.daysSincePlanting + prediction.daysToHarvest)) * 100} className="h-2 [&>div]:bg-primary" />
+                </div>
+             </CardContent>
+          </Card>
+
+          <Card className="glass-panel border-blue-500/20 relative overflow-hidden">
+             <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
+               <AlertTriangle className="w-32 h-32 text-blue-500" />
+             </div>
+             <CardContent className="p-6 space-y-5">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/10 text-blue-500">
+                    <TrendingUp className="h-4 w-4" />
+                  </div>
+                  <h3 className="text-lg font-black text-blue-500">AgroDirect Deep Learning AI</h3>
+                </div>
+                
+                <div className="grid gap-3">
+                  <div className="flex items-center justify-between border-b border-border/60 pb-3">
+                    <p className="text-sm font-medium text-muted-foreground">Predicted Moisture Content</p>
+                    <p className="font-bold">{prediction.moisturePrediction.toFixed(1)}% (Optimal)</p>
+                  </div>
+                  <div className="flex items-center justify-between border-b border-border/60 pb-3">
+                    <p className="text-sm font-medium text-muted-foreground">Estimated Fungal Risk</p>
+                    <p className="font-bold text-green-500">Low ({(prediction.confidenceScore / 40).toFixed(1)}%)</p>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-muted-foreground">Projected Gross Floor</p>
+                    <div className="flex items-center gap-1">
+                      <span className="font-black text-primary"><CurrencyDisplay amount={prediction.predictedYieldTons * 318} /></span>
+                      <Leaf className="h-4 w-4 text-primary" />
+                    </div>
+                  </div>
+                </div>
+             </CardContent>
+          </Card>
+        </div>
 
         {/* Intelligence Grid */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

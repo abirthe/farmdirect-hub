@@ -3,7 +3,7 @@ import { useCurrency } from "@/contexts/CurrencyContext";
 import { Link } from "react-router-dom";
 import {
   ShoppingBag, TrendingUp, Clock, CheckCircle2, ArrowRight,
-  BadgeDollarSign, Package, Truck, QrCode, Star, BarChart3
+  BadgeDollarSign, Package, Truck, QrCode, Star, BarChart3, BrainCircuit
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -118,25 +118,41 @@ const BuyerDashboard = () => {
           </Card>
 
           {/* Recommended Listings */}
-          <Card className="glass-panel">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-xl font-black">Recommended for you</CardTitle>
-              <p className="text-xs text-muted-foreground">Based on your buying history</p>
+          <Card className="glass-panel border-primary/20">
+            <CardHeader className="pb-3 border-b border-border/60 bg-primary/5 rounded-t-xl">
+              <div className="flex items-center gap-2">
+                <BrainCircuit className="h-5 w-5 text-primary" />
+                <div>
+                  <CardTitle className="text-xl font-black">AI Smart Sourcing</CardTitle>
+                  <p className="text-xs text-muted-foreground mt-0.5">High-confidence AI verified yields. Zero broker risk.</p>
+                </div>
+              </div>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-3 pt-4">
               {[
-                { crop: "🌽 Maize", farm: "Bogra Cluster", price: <><CurrencyDisplay amount={318} />/t</>, ready: "10 days", buyers: 26 },
-                { crop: "🍚 Rice", farm: "Dinajpur", price: <><CurrencyDisplay amount={415} />/t</>, ready: "21 days", buyers: 41 },
-                { crop: "🫘 Soybean", farm: "Rangpur Coll.", price: <><CurrencyDisplay amount={520} />/t</>, ready: "5 days", buyers: 33 },
+                { crop: "🌽 Maize", farm: "Bogra Cluster", price: <><CurrencyDisplay amount={318} />/t</>, ready: "May 12, 2026", conf: 94.8, grade: "A+" },
+                { crop: "🍚 Boro Rice", farm: "Rajshahi A-1", price: <><CurrencyDisplay amount={415} />/t</>, ready: "Jun 18, 2026", conf: 91.2, grade: "A+" },
+                { crop: "🫘 Soybean", farm: "Rangpur Coll.", price: <><CurrencyDisplay amount={520} />/t</>, ready: "Apr 04, 2026", conf: 88.5, grade: "A" },
               ].map(r => (
-                <div key={r.crop} className="flex items-center gap-3 rounded-xl border border-border/60 bg-background/70 p-3">
+                <div key={r.crop} className="flex items-center gap-3 rounded-xl border border-primary/20 bg-primary/5 p-3 hover:-translate-y-0.5 transition-transform duration-200">
                   <div className="text-xl">{r.crop.split(" ")[0]}</div>
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-sm truncate">{r.crop.split(" ").slice(1).join(" ")} · {r.farm}</p>
-                    <p className="text-xs text-muted-foreground">{r.price} · Ready in {r.ready}</p>
+                    <div className="flex flex-wrap items-center gap-2 mt-1">
+                      <Badge variant="secondary" className="bg-primary/10 text-primary border-transparent h-5 text-[10px]">
+                        {r.conf}% AI Conf
+                      </Badge>
+                      <Badge variant="outline" className="h-5 text-[10px] border-border/60">
+                        Grade {r.grade}
+                      </Badge>
+                    </div>
                   </div>
-                  <Button asChild variant="ghost" size="sm" className="rounded-full shrink-0">
-                    <Link to="/marketplace"><ArrowRight className="h-4 w-4" /></Link>
+                  <div className="text-right">
+                     <p className="font-bold">{r.price}</p>
+                     <p className="text-[10px] text-muted-foreground mt-0.5">Harvest: {r.ready}</p>
+                  </div>
+                  <Button asChild variant="ghost" size="sm" className="rounded-full shrink-0 text-primary hover:bg-primary/10">
+                    <Link to="/marketplace/lst-001"><ArrowRight className="h-4 w-4" /></Link>
                   </Button>
                 </div>
               ))}

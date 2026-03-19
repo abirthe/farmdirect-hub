@@ -10,19 +10,40 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const verificationQueue = [
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+
+const initialVerificationQueue = [
   { id: "V-0041", farmer: "Mizanur Rahman", location: "Jessore District", docs: 3, status: "Pending review", type: "Land title" },
   { id: "V-0039", farmer: "Shirin Sultana", location: "Natore District", docs: 2, status: "Under review", type: "Quality cert" },
   { id: "V-0037", farmer: "Tariqul Islam", location: "Comilla District", docs: 4, status: "Approved", type: "Land title" },
   { id: "V-0035", farmer: "Rubel Mia", location: "Faridpur District", docs: 1, status: "Rejected", type: "Identity" },
 ];
 
-const disputes = [
+const initialDisputes = [
   { id: "D-0012", parties: "Bengal Agro Ltd vs Rafiqul Islam", issue: "Delivery weight discrepancy (—0.4t)", amount: <CurrencyDisplay amount={127} />, status: "Open" },
   { id: "D-0011", parties: "Krishi Bazar vs Fatema Begum", issue: "Quality grade mismatch on delivery", amount: <CurrencyDisplay amount={340} />, status: "Resolved" },
 ];
 
 const AdminDashboard = () => {
+  const { toast } = useToast();
+  const [verificationQueue, setVerificationQueue] = useState(initialVerificationQueue);
+  const [disputes, setDisputes] = useState(initialDisputes);
+
+  const handleApprove = (id: string) => {
+    setVerificationQueue(prev => prev.map(item => item.id === id ? { ...item, status: "Approved" } : item));
+    toast({ title: "Verification Approved", description: `Farmer KYC document ${id} has been cryptographically signed.` });
+  };
+
+  const handleReject = (id: string) => {
+    setVerificationQueue(prev => prev.map(item => item.id === id ? { ...item, status: "Rejected" } : item));
+    toast({ variant: "destructive", title: "Verification Rejected", description: `Rejection notice dispatched to farmer for ${id}.` });
+  };
+
+  const handleMediate = (id: string) => {
+    setDisputes(prev => prev.map(item => item.id === id ? { ...item, status: "Resolved" } : item));
+    toast({ title: "Dispute Mediated", description: `Escrow forced release executed for dispute ${id}.` });
+  };
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -38,7 +59,12 @@ const AdminDashboard = () => {
             <h1 className="text-3xl font-black">Platform Administration</h1>
             <p className="text-muted-foreground text-sm">System health, verification queue, and dispute management.</p>
           </div>
-          <Button variant="outline" size="sm" className="rounded-full gap-1.5">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="rounded-full gap-1.5"
+            onClick={() => toast({ title: "Admin Panel Action", description: "Opening configuration modal..." })}
+          >
             <Settings className="h-4 w-4" />
             Platform settings
           </Button>
@@ -100,11 +126,11 @@ const AdminDashboard = () => {
           <TabsList className="rounded-full bg-muted p-1">
             <TabsTrigger value="verifications" className="rounded-full text-sm gap-1.5">
               <ShieldCheck className="h-4 w-4" />Verifications
-              <Badge variant="secondary" className="h-5 rounded-full px-1.5 text-xs">6</Badge>
+              <Badge variant="secondary" className="h-5 rounded-full px-1.5 text-xs">{verificationQueue.length}</Badge>
             </TabsTrigger>
             <TabsTrigger value="disputes" className="rounded-full text-sm gap-1.5">
               <AlertTriangle className="h-4 w-4" />Disputes
-              <Badge variant="secondary" className="h-5 rounded-full px-1.5 text-xs">2</Badge>
+              <Badge variant="secondary" className="h-5 rounded-full px-1.5 text-xs">{disputes.length}</Badge>
             </TabsTrigger>
             <TabsTrigger value="farmers" className="rounded-full text-sm gap-1.5">
               <Users className="h-4 w-4" />Farmers
@@ -142,10 +168,10 @@ const AdminDashboard = () => {
                     </Badge>
                     {(item.status === "Pending review" || item.status === "Under review") && (
                       <div className="flex gap-2">
-                        <Button size="sm" className="rounded-full h-8 gap-1">
+                        <Button size="sm" className="rounded-full h-8 gap-1" onClick={() => handleApprove(item.id)}>
                           <CheckCircle2 className="h-3.5 w-3.5" />Approve
                         </Button>
-                        <Button size="sm" variant="outline" className="rounded-full h-8">Reject</Button>
+                        <Button size="sm" variant="outline" className="rounded-full h-8" onClick={() => handleReject(item.id)}>Reject</Button>
                       </div>
                     )}
                   </div>
@@ -171,7 +197,7 @@ const AdminDashboard = () => {
                       {d.status}
                     </Badge>
                     {d.status === "Open" && (
-                      <Button size="sm" className="rounded-full h-8">Mediate</Button>
+                      <Button size="sm" className="rounded-full h-8" onClick={() => handleMediate(d.id)}>Mediate</Button>
                     )}
                   </div>
                 </CardContent>
