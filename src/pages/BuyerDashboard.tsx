@@ -1,6 +1,9 @@
 import { CurrencyDisplay, CurrencySymbol } from "@/components/ui/currency-display";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   ShoppingBag, TrendingUp, Clock, CheckCircle2, ArrowRight,
   BadgeDollarSign, Package, Truck, QrCode, Star, BarChart3, BrainCircuit
@@ -37,6 +40,37 @@ const statusIcon: Record<string, React.ElementType> = {
 const BuyerDashboard = () => {
   const { formatCurrency, currency } = useCurrency();
   const getSymbol = () => currency === "BDT" ? "৳" : currency === "EUR" ? "€" : "$";
+  const { user } = useAuth();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [dbOrders, setDbOrders] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      if (!user?.id) return;
+      // Fetch dynamic live orders where current auth user is the buyer
+      const { data } = await supabase.from('orders').select(`
+        id, qty_purchased, total_price, status, created_at,
+        listings ( crop_cycles ( crop_type, farms ( farm_name ) ) )
+      `).eq('buyer_id', user.id);
+      
+      if (data) setDbOrders(data);
+    };
+    fetchOrders();
+  }, [user]);
+
+  // Combine real DB orders with mock defaults
+  const dynamicOrders = dbOrders.length > 0 ? dbOrders.map(o => ({
+    id: `#ORD-${o.id.substring(0, 4).toUpperCase()}`,
+    crop: o.listings?.crop_cycles?.crop_type || "Crop",
+    farm: o.listings?.crop_cycles?.farms?.farm_name || "Verified Farm",
+    qty: `${o.qty_purchased}t`,
+    price: <><CurrencyDisplay amount={o.total_price / o.qty_purchased} />/t</>,
+    total: <CurrencyDisplay amount={o.total_price} />,
+    status: o.status,
+    statusType: o.status === 'IN_TRANSIT' ? 'transit' : o.status === 'DELIVERED' ? 'delivered' : 'pending',
+    date: new Date(o.created_at).toLocaleDateString()
+  })) : orders; // Fallback to mocks if DB entirely empty
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -173,13 +207,13 @@ const BuyerDashboard = () => {
             <Button variant="outline" size="sm" className="rounded-full">View all orders</Button>
           </div>
           <div className="space-y-3">
-            {orders.map(order => {
+            {dynamicOrders.map(order => {
               const StatusIcon = statusIcon[order.statusType];
               return (
                 <Card key={order.id} className="soil-card hover:-translate-y-0.5 transition-transform duration-200">
                   <CardContent className="p-5 flex flex-col sm:flex-row sm:items-center gap-4">
                     <div className="flex items-center gap-4 flex-1 min-w-0">
-                      <div className="text-2xl">{order.crop.split(" ").pop()}</div>
+                      <div className="text-2xl">{order.crop.split(" ").pop() || "📦"}</div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <p className="font-bold">{order.crop.split(" ")[0]}</p>

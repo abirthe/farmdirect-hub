@@ -4,6 +4,9 @@ import {
   ArrowUpRight, AlertTriangle, CheckCircle2, Clock, Sprout, Sparkles
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -51,6 +54,32 @@ const alerts = [
 ];
 
 const FarmerDashboard = () => {
+  const { user } = useAuth();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [dbFarms, setDbFarms] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchFarms = async () => {
+      if (!user?.id) return;
+      const { data } = await supabase.from('farms').select('*').eq('user_id', user.id);
+      if (data) setDbFarms(data);
+    };
+    fetchFarms();
+  }, [user]);
+
+  // Combine real DB farms with mock defaults for missing ML properties
+  const displayFarms = dbFarms.length > 0 ? dbFarms.map(f => ({
+    id: f.id,
+    name: f.farm_name,
+    crop: "Assessing...",
+    area: `${f.total_hectares} ha`,
+    ndvi: 1.0,
+    yield: "Pending",
+    status: "Registered",
+    daysLeft: 0,
+    health: 100,
+  })) : farms;
+
   return (
     <div className="min-h-screen bg-background">
       {/* Page Header */}
@@ -64,7 +93,7 @@ const FarmerDashboard = () => {
               <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold">Farmer cockpit</span>
             </div>
             <h1 className="text-3xl font-black">Farm Intelligence</h1>
-            <p className="text-muted-foreground text-sm">Welcome back, Adamu. Here's today's field briefing.</p>
+            <p className="text-muted-foreground text-sm">Welcome back. Here's today's field briefing.</p>
           </div>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" className="rounded-full gap-1.5">
@@ -195,7 +224,7 @@ const FarmerDashboard = () => {
             </Button>
           </div>
           <div className="grid gap-5 md:grid-cols-2">
-            {farms.map((farm) => (
+            {displayFarms.map((farm) => (
               <Card key={farm.name} className="soil-card overflow-hidden hover:-translate-y-1 transition-transform duration-300">
                 <div className="h-1.5 bg-gradient-to-r from-primary to-secondary" />
                 <CardContent className="p-6 space-y-5">

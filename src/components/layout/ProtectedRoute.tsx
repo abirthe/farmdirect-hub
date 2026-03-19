@@ -36,7 +36,7 @@ const ProtectedRoute = ({ role }: ProtectedRouteProps) => {
   // Live Role Validation tied explicitly to Native Database Authenticated tokens!
   const userRole = session?.user?.user_metadata?.role || "farmer";
   
-  if (role && role !== userRole && userRole !== "admin") {
+  if (role && role !== userRole) {
     return <Navigate to="/" replace />;
   }
 
