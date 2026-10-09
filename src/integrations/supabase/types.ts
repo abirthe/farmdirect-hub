@@ -1,4 +1,4 @@
-export type Json =
+﻿export type Json =
   | string
   | number
   | boolean
@@ -2031,6 +2031,15 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      record_audit_entry: {
+        Args: {
+          p_action: string
+          p_details?: Json
+          p_entity: string
+          p_entity_id: string
+        }
+        Returns: string
       }
       register_sensor_device: {
         Args: {
