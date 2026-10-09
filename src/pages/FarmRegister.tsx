@@ -17,7 +17,7 @@ const steps = ["Map field", "Crop details", "Confirm & submit"];
 
 const cropOptions = [
   "Maize", "Wheat", "Millet", "Rice", "Potato", "Jute", "Soybean",
-  "Wheat", "Cotton", "Groundnut", "Tomato", "Pepper",
+  "Cotton", "Groundnut", "Tomato", "Pepper",
 ];
 
 const FarmRegister = () => {

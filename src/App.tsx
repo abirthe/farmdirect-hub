@@ -19,11 +19,20 @@ import ListingDetail from "./pages/ListingDetail";
 import EscrowPage from "./pages/EscrowPage";
 import About from "./pages/About";
 import AdminDashboard from "./pages/AdminDashboard";
+import RfqPage from "./pages/RfqPage";
+import ForwardContractsPage from "./pages/ForwardContractsPage";
+import DisputesPage from "./pages/DisputesPage";
+import TraceabilityPage from "./pages/TraceabilityPage";
+import FinancingPage from "./pages/FinancingPage";
+import DemandForecastPage from "./pages/DemandForecastPage";
+import CommodityReportsPage from "./pages/CommodityReportsPage";
 import ProfileSettings from "./pages/ProfileSettings";
 import YieldDetail from "./pages/YieldDetail";
 import Notifications from "./pages/Notifications";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
+import { CurrencyProvider } from "@/contexts/CurrencyContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const queryClient = new QueryClient();
 
@@ -49,12 +58,18 @@ const AppLayout = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/marketplace/:id" element={<ListingDetail />} />
+          <Route path="/reports" element={<CommodityReportsPage />} />
+          <Route path="/trace" element={<TraceabilityPage />} />
+          <Route path="/trace/:orderId" element={<TraceabilityPage />} />
           
           {/* Shared Protected Routes (Both Buyer & Farmer) */}
           <Route element={<ProtectedRoute />}>
             <Route path="/escrow/:id" element={<EscrowPage />} />
             <Route path="/settings" element={<ProfileSettings />} />
             <Route path="/notifications" element={<Notifications />} />
+            <Route path="/rfq" element={<RfqPage />} />
+            <Route path="/forward" element={<ForwardContractsPage />} />
+            <Route path="/disputes" element={<DisputesPage />} />
           </Route>
 
           {/* Farmer-Only Protected Network */}
@@ -62,11 +77,13 @@ const AppLayout = () => {
             <Route path="/farmer" element={<FarmerDashboard />} />
             <Route path="/farmer/register" element={<FarmRegister />} />
             <Route path="/farmer/yield/:farmId" element={<YieldDetail />} />
+            <Route path="/financing" element={<FinancingPage />} />
           </Route>
 
           {/* Buyer-Only Protected Network */}
           <Route element={<ProtectedRoute role="buyer" />}>
             <Route path="/buyer" element={<BuyerDashboard />} />
+            <Route path="/forecasts" element={<DemandForecastPage />} />
           </Route>
 
           {/* Admin Routes - simulating an admin role check */}
@@ -82,9 +99,6 @@ const AppLayout = () => {
     </div>
   );
 };
-
-import { CurrencyProvider } from "@/contexts/CurrencyContext";
-import { AuthProvider } from "@/contexts/AuthContext";
 
 const App = () => (
   <QueryClientProvider client={queryClient}>

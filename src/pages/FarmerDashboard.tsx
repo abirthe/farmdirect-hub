@@ -96,10 +96,12 @@ const FarmerDashboard = () => {
             <p className="text-muted-foreground text-sm">Welcome back. Here's today's field briefing.</p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="rounded-full gap-1.5">
-              <Bell className="h-4 w-4" />
-              Alerts
-              <Badge variant="destructive" className="h-4 w-4 p-0 flex items-center justify-center text-[10px] rounded-full">1</Badge>
+            <Button asChild variant="outline" size="sm" className="rounded-full gap-1.5">
+              <Link to="/notifications">
+                <Bell className="h-4 w-4" />
+                Alerts
+                <Badge variant="destructive" className="h-4 w-4 p-0 flex items-center justify-center text-[10px] rounded-full">1</Badge>
+              </Link>
             </Button>
             <Button asChild size="sm" className="rounded-full gap-1.5">
               <Link to="/farmer/register">

@@ -1,6 +1,9 @@
 import { CurrencyDisplay, CurrencySymbol } from "@/components/ui/currency-display";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 import {
   ArrowLeft, MapPin, ShieldCheck, Star, Clock, TrendingUp, CloudSun, BrainCircuit,
   QrCode, Leaf, BadgeDollarSign, CheckCircle2, AlertTriangle, ArrowRight, Users
@@ -11,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { runYieldPredictionModel, FarmMLFeatures } from "@/lib/ml-service";
+import { supabase } from "@/lib/supabaseClient";
 
 const priceHistory = [
   { week: "W-6", price: 298 }, { week: "W-5", price: 305 }, { week: "W-4", price: 301 },
@@ -44,13 +48,11 @@ const mockListing = {
   description: "Premium yellow maize from the fertile Padma River basin. Grown using traditional methods with minimal chemical inputs. Canopy density trending above seasonal average with low weather risk.",
 };
 
-import { useEffect } from "react";
-import { useAuth } from "@/contexts/AuthContext";
-
 const ListingDetail = () => {
   const { id } = useParams();
   const { formatCurrency } = useCurrency();
   const { session } = useAuth();
+  const { toast } = useToast();
   const navigate = useNavigate();
   const userRole = session?.user?.user_metadata?.role;
 
@@ -257,7 +259,7 @@ const ListingDetail = () => {
                       <Button 
                         variant="outline" 
                         className="w-full h-12 rounded-xl gap-2"
-                        onClick={() => alert("Quality sample request dispatched to farmer.")}
+                        onClick={() => toast({ title: "Sample Request Dispatched", description: "Farmer has been notified to dispatch quality sample inspection." })}
                       >
                         <QrCode className="h-4 w-4" />
                         Request quality sample

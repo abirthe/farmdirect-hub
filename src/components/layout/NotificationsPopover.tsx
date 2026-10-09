@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Bell, CloudRain, ShieldCheck, Leaf, BrainCircuit, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -97,8 +98,8 @@ export function NotificationsPopover() {
           )}
         </div>
         <div className="p-3 bg-muted/20 border-t border-border/60 text-center">
-          <Button disabled={notifs.length === 0} variant="ghost" size="sm" className="text-xs w-full text-primary hover:text-primary hover:bg-primary/10 rounded-full">
-            View intelligence archive
+          <Button asChild disabled={notifs.length === 0} variant="ghost" size="sm" className="text-xs w-full text-primary hover:text-primary hover:bg-primary/10 rounded-full">
+            <Link to="/notifications">View intelligence archive</Link>
           </Button>
         </div>
       </PopoverContent>

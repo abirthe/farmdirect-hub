@@ -38,7 +38,8 @@ PROJECT_SPEC.md
 
 # Proprietary Backend Schemas (Confidential)
 supabase_schema.sql
-supabase/
+supabase/.temp/
+!supabase/migrations/
 
 # Keys and Tokens
 *.pem

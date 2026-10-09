@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 type Role = "farmer" | "buyer" | "admin";
 
@@ -19,7 +20,6 @@ const roleOptions: { value: Role; label: string; desc: string; emoji: string }[]
   { value: "buyer", label: "Buyer", desc: "Discover verified supply and lock in prices", emoji: "🏢" },
   { value: "admin", label: "Admin", desc: "Verify land titles and resolve disputes", emoji: "🛡️" },
 ];
-import { useAuth } from "@/contexts/AuthContext";
 
 const AuthForm = ({ mode }: AuthFormProps) => {
   const navigate = useNavigate();

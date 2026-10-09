@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   User, Mail, Phone, MapPin, Bell, Shield, Save, Loader2,
@@ -11,17 +11,33 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabaseClient";
 
 const ProfileSettings = () => {
+  const { user } = useAuth();
+  const { toast } = useToast();
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [profile, setProfile] = useState({
-    name: "Rafiqul Islam",
-    email: "adamu.bello@agrodirect.farm",
-    phone: "+234 803 555 0124",
+    name: user?.user_metadata?.full_name || "Rafiqul Islam",
+    email: user?.email || "user@agrodirect.farm",
+    phone: "+880 1712 345678",
     location: "Bogra, Rajshahi Division, Bangladesh",
-    bio: "Smallholder maize and Wheat farmer with 12 years experience in the Padma River basin.",
+    bio: "Smallholder maize and wheat farmer with experience in the Padma River basin.",
   });
+
+  useEffect(() => {
+    if (user) {
+      setProfile((prev) => ({
+        ...prev,
+        name: user.user_metadata?.full_name || prev.name,
+        email: user.email || prev.email,
+      }));
+    }
+  }, [user]);
+
   const [notifications, setNotifications] = useState({
     ndviAlerts: true,
     priceUpdates: true,
@@ -30,13 +46,23 @@ const ProfileSettings = () => {
     marketNews: true,
   });
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setSaving(true);
-    setTimeout(() => {
-      setSaving(false);
+    try {
+      if (user?.id && user.id !== "mock-farmer-123" && user.id !== "mock-buyer-123") {
+        await supabase.auth.updateUser({
+          data: { full_name: profile.name },
+        });
+        await supabase.from("users").update({ full_name: profile.name }).eq("id", user.id);
+      }
       setSaved(true);
+      toast({ title: "Settings saved", description: "Your profile details have been successfully updated." });
       setTimeout(() => setSaved(false), 3000);
-    }, 1200);
+    } catch {
+      toast({ variant: "destructive", title: "Update failed", description: "Could not save preferences." });
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (

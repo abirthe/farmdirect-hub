@@ -27,11 +27,18 @@ const Navbar = () => {
       { label: "Farmers", href: "/farmer" },
       { label: "Buyers", href: "/buyer" },
       { label: "Marketplace", href: "/marketplace" },
+      { label: "RFQs", href: "/rfq" },
+      { label: "Forwards", href: "/forward" },
+      { label: "Disputes", href: "/disputes" },
       { label: "About", href: "/about" },
     ];
   } else if (userRole === "farmer") {
     navLinks = [
       { label: "My Farm", href: "/farmer" },
+      { label: "Financing", href: "/financing" },
+      { label: "RFQs", href: "/rfq" },
+      { label: "Forwards", href: "/forward" },
+      { label: "Disputes", href: "/disputes" },
       { label: "About", href: "/about" },
     ];
   } else if (userRole === "admin") {
@@ -43,6 +50,7 @@ const Navbar = () => {
   } else {
     navLinks = [
       { label: "Buyer Dashboard", href: "/buyer" },
+      { label: "Forecasts", href: "/forecasts" },
       { label: "Procurement Market", href: "/marketplace" },
       { label: "Active Escrows", href: "/escrow/demo" },
     ];

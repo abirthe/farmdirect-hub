@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import { DemandForecastPanel } from "@/features/forecasts/components/DemandForecastPanel";
 
 const spendData = [
   { month: "Oct", spend: 12400 }, { month: "Nov", spend: 18200 },
@@ -235,8 +236,10 @@ const BuyerDashboard = () => {
                         <StatusIcon className="h-3 w-3" />{order.status}
                       </Badge>
                       {order.statusType === "transit" && (
-                        <Button variant="outline" size="sm" className="rounded-full gap-1.5">
-                          <QrCode className="h-4 w-4" />Scan QR
+                        <Button asChild variant="outline" size="sm" className="rounded-full gap-1.5">
+                          <Link to="/escrow/ORD-2401">
+                            <QrCode className="h-4 w-4" />Scan QR
+                          </Link>
                         </Button>
                       )}
                     </div>
@@ -246,6 +249,9 @@ const BuyerDashboard = () => {
             })}
           </div>
         </div>
+
+        {/* Demand Forecasting & Macro Shortage Alerts */}
+        <DemandForecastPanel />
 
         {/* Supplier Quality */}
         <div>

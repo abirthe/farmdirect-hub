@@ -9,6 +9,8 @@ import { Progress } from "@/components/ui/progress";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 import { runYieldPredictionModel, FarmMLFeatures } from "@/lib/ml-service";
+import { IoTTelemetryPanel } from "@/features/iot/components/IoTTelemetryPanel";
+import { PrecisionPrescriptionPanel } from "@/features/prescriptions/components/PrecisionPrescriptionPanel";
 
 const forecastData = [
   { day: "Day 1", predicted: 14.5, actual: 14.5 },
@@ -234,6 +236,12 @@ const YieldDetail = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Real-time Field IoT Sensors & Soil Telemetry */}
+        <IoTTelemetryPanel cycleId={farmId || "00000000-0000-4000-8000-000000000001"} />
+
+        {/* AI Precision Agronomy Prescriptions Engine */}
+        <PrecisionPrescriptionPanel cycleId={farmId || "00000000-0000-4000-8000-000000000001"} />
       </div>
     </div>
   );

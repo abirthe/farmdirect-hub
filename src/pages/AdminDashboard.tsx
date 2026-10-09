@@ -12,38 +12,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-
-const initialVerificationQueue = [
-  { id: "V-0041", farmer: "Mizanur Rahman", location: "Jessore District", docs: 3, status: "Pending review", type: "Land title" },
-  { id: "V-0039", farmer: "Shirin Sultana", location: "Natore District", docs: 2, status: "Under review", type: "Quality cert" },
-  { id: "V-0037", farmer: "Tariqul Islam", location: "Comilla District", docs: 4, status: "Approved", type: "Land title" },
-  { id: "V-0035", farmer: "Rubel Mia", location: "Faridpur District", docs: 1, status: "Rejected", type: "Identity" },
-];
-
-const initialDisputes = [
-  { id: "D-0012", parties: "Bengal Agro Ltd vs Rafiqul Islam", issue: "Delivery weight discrepancy (—0.4t)", amount: <CurrencyDisplay amount={127} />, status: "Open" },
-  { id: "D-0011", parties: "Krishi Bazar vs Fatema Begum", issue: "Quality grade mismatch on delivery", amount: <CurrencyDisplay amount={340} />, status: "Resolved" },
-];
+import { AuditLogPanel } from "@/features/audit/components/AuditLogPanel";
+import { FeeTiersPanel } from "@/features/fees/components/FeeTiersPanel";
+import { AdminDisputesPanel } from "@/features/disputes/components/AdminDisputesPanel";
+import { AdminKycQueue } from "@/features/kyc/components/AdminKycQueue";
 
 const AdminDashboard = () => {
   const { toast } = useToast();
-  const [verificationQueue, setVerificationQueue] = useState(initialVerificationQueue);
-  const [disputes, setDisputes] = useState(initialDisputes);
-
-  const handleApprove = (id: string) => {
-    setVerificationQueue(prev => prev.map(item => item.id === id ? { ...item, status: "Approved" } : item));
-    toast({ title: "Verification Approved", description: `Farmer KYC document ${id} has been cryptographically signed.` });
-  };
-
-  const handleReject = (id: string) => {
-    setVerificationQueue(prev => prev.map(item => item.id === id ? { ...item, status: "Rejected" } : item));
-    toast({ variant: "destructive", title: "Verification Rejected", description: `Rejection notice dispatched to farmer for ${id}.` });
-  };
-
-  const handleMediate = (id: string) => {
-    setDisputes(prev => prev.map(item => item.id === id ? { ...item, status: "Resolved" } : item));
-    toast({ title: "Dispute Mediated", description: `Escrow forced release executed for dispute ${id}.` });
-  };
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -126,83 +101,27 @@ const AdminDashboard = () => {
           <TabsList className="rounded-full bg-muted p-1">
             <TabsTrigger value="verifications" className="rounded-full text-sm gap-1.5">
               <ShieldCheck className="h-4 w-4" />Verifications
-              <Badge variant="secondary" className="h-5 rounded-full px-1.5 text-xs">{verificationQueue.length}</Badge>
             </TabsTrigger>
             <TabsTrigger value="disputes" className="rounded-full text-sm gap-1.5">
               <AlertTriangle className="h-4 w-4" />Disputes
-              <Badge variant="secondary" className="h-5 rounded-full px-1.5 text-xs">{disputes.length}</Badge>
             </TabsTrigger>
             <TabsTrigger value="farmers" className="rounded-full text-sm gap-1.5">
               <Users className="h-4 w-4" />Farmers
             </TabsTrigger>
+            <TabsTrigger value="audit" className="rounded-full text-sm gap-1.5">
+              <ShieldCheck className="h-4 w-4" />Audit Log
+            </TabsTrigger>
+            <TabsTrigger value="fees" className="rounded-full text-sm gap-1.5">
+              Fees
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="verifications" className="mt-5 space-y-3">
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-muted-foreground">{verificationQueue.length} items in queue</p>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <input placeholder="Search…" className="h-9 pl-9 pr-4 rounded-full border border-border/60 bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
-              </div>
-            </div>
-            {verificationQueue.map(item => (
-              <Card key={item.id} className="soil-card">
-                <CardContent className="p-5 flex flex-col sm:flex-row sm:items-center gap-4">
-                  <div className="flex-1 min-w-0 space-y-1">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <p className="font-bold">{item.farmer}</p>
-                      <span className="text-xs text-muted-foreground font-mono">{item.id}</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">{item.location} · {item.type} · {item.docs} documents</p>
-                  </div>
-                  <div className="flex items-center gap-3 shrink-0">
-                    <Badge className={
-                      item.status === "Approved" ? "bg-green-100 text-green-700 border-green-200 rounded-full" :
-                      item.status === "Rejected" ? "bg-red-100 text-red-700 border-red-200 rounded-full" :
-                      item.status === "Under review" ? "bg-blue-100 text-blue-700 border-blue-200 rounded-full" :
-                      "bg-amber-100 text-amber-700 border-amber-200 rounded-full"
-                    }>
-                      {item.status === "Approved" && <CheckCircle2 className="h-3 w-3 mr-1" />}
-                      {item.status === "Rejected" && <AlertTriangle className="h-3 w-3 mr-1" />}
-                      {item.status}
-                    </Badge>
-                    {(item.status === "Pending review" || item.status === "Under review") && (
-                      <div className="flex gap-2">
-                        <Button size="sm" className="rounded-full h-8 gap-1" onClick={() => handleApprove(item.id)}>
-                          <CheckCircle2 className="h-3.5 w-3.5" />Approve
-                        </Button>
-                        <Button size="sm" variant="outline" className="rounded-full h-8" onClick={() => handleReject(item.id)}>Reject</Button>
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+          <TabsContent value="verifications" className="mt-5">
+            <AdminKycQueue />
           </TabsContent>
 
-          <TabsContent value="disputes" className="mt-5 space-y-3">
-            {disputes.map(d => (
-              <Card key={d.id} className="soil-card">
-                <CardContent className="p-5 flex flex-col sm:flex-row sm:items-center gap-4">
-                  <div className="flex-1 min-w-0 space-y-1">
-                    <div className="flex items-center gap-2">
-                      <p className="font-bold text-sm">{d.parties}</p>
-                      <span className="text-xs text-muted-foreground font-mono">{d.id}</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">{d.issue}</p>
-                    <p className="text-sm font-semibold">Disputed amount: {d.amount}</p>
-                  </div>
-                  <div className="flex items-center gap-3 shrink-0">
-                    <Badge className={d.status === "Resolved" ? "bg-green-100 text-green-700 border-green-200 rounded-full" : "bg-amber-100 text-amber-700 border-amber-200 rounded-full"}>
-                      {d.status}
-                    </Badge>
-                    {d.status === "Open" && (
-                      <Button size="sm" className="rounded-full h-8" onClick={() => handleMediate(d.id)}>Mediate</Button>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+          <TabsContent value="disputes" className="mt-5">
+            <AdminDisputesPanel />
           </TabsContent>
 
           <TabsContent value="farmers" className="mt-5">
@@ -211,6 +130,14 @@ const AdminDashboard = () => {
               <p className="font-semibold">Full farmer registry coming soon</p>
               <p className="text-sm">Search, filter, and manage all 312 verified farmers on the platform.</p>
             </div>
+          </TabsContent>
+
+          <TabsContent value="audit" className="mt-5">
+            <AuditLogPanel />
+          </TabsContent>
+
+          <TabsContent value="fees" className="mt-5">
+            <FeeTiersPanel />
           </TabsContent>
         </Tabs>
       </div>

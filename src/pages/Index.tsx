@@ -34,7 +34,7 @@ const proofCards = [
 
 const Index = () => {
   return (
-    <main className="min-h-screen overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden">
       <section className="relative isolate min-h-screen">
         <img
           src={heroImage}
@@ -174,7 +174,7 @@ const Index = () => {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 };
 

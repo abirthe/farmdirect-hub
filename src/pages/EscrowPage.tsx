@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import MapView from "@/components/ui/map-view";
 import { useAuth } from "@/contexts/AuthContext";
+import { LogisticsTracker } from "@/features/logistics/components/LogisticsTracker";
 
 const escrowSteps = [
   { id: 1, label: "Listing created", detail: <>Farmer listed 18.4t of maize at <CurrencyDisplay amount={318}/>/t</>, status: "done", time: "Mar 8, 2026" },
@@ -138,6 +139,12 @@ const EscrowPage = () => {
 
           {/* Action Panel */}
           <div className="space-y-5">
+            {/* 3PL Freight Logistics */}
+            <LogisticsTracker
+              orderId={id && id !== "demo" ? id : "00000000-0000-4000-8000-000000000001"}
+              isFarmerOrAdmin={userRole === "farmer" || userRole === "admin"}
+            />
+
             {/* QR Scan */}
             <Card className="glass-panel">
               <CardContent className="p-6 space-y-4">

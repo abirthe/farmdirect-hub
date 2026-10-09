@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { CurrencyDisplay, CurrencySymbol } from "@/components/ui/currency-display";
 import { Bell, Info, AlertTriangle, ShieldCheck, Mail, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -60,6 +61,13 @@ const NotifTypeIcon = {
 };
 
 const Notifications = () => {
+  const [inbox, setInbox] = useState(INBOX);
+  const unreadCount = inbox.filter((item) => !item.read).length;
+
+  const handleMarkAllRead = () => {
+    setInbox((prev) => prev.map((item) => ({ ...item, read: true })));
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -71,10 +79,16 @@ const Notifications = () => {
             </div>
             <div>
               <h1 className="text-3xl font-black">Inbox</h1>
-              <p className="text-sm text-muted-foreground mt-0.5">2 unread messages</p>
+              <p className="text-sm text-muted-foreground mt-0.5">{unreadCount} unread message{unreadCount === 1 ? "" : "s"}</p>
             </div>
           </div>
-          <Button variant="outline" size="sm" className="rounded-full gap-2">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="rounded-full gap-2"
+            onClick={handleMarkAllRead}
+            disabled={unreadCount === 0}
+          >
             <CheckCircle2 className="h-4 w-4" />
             Mark all read
           </Button>
@@ -82,7 +96,7 @@ const Notifications = () => {
       </div>
 
       <div className="container py-8 max-w-4xl space-y-4">
-        {INBOX.map((item, index) => {
+        {inbox.map((item, index) => {
           const Icon = NotifTypeIcon[item.type as keyof typeof NotifTypeIcon];
           const badgeClass = NotifTypeStyles[item.type as keyof typeof NotifTypeStyles];
           

@@ -5,9 +5,10 @@ import { Separator } from "@/components/ui/separator";
 const footerLinks = {
   Platform: [
     { label: "Marketplace", href: "/marketplace" },
+    { label: "Commodity Reports", href: "/reports" },
     { label: "Escrow", href: "/escrow/demo" },
     { label: "Monitoring", href: "/farmer" },
-    { label: "Price Intelligence", href: "/marketplace" },
+    { label: "Batch QR Trace", href: "/trace" },
   ],
   Farmers: [
     { label: "Dashboard", href: "/farmer" },
