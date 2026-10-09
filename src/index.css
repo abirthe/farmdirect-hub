@@ -179,6 +179,7 @@
 
   .scan-line {
     background: linear-gradient(90deg, transparent, hsl(var(--glow) / 0.48), transparent);
+    will-change: transform, left;
   }
 
   /* Page-level fade-up entrance animation */

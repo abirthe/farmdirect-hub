@@ -100,8 +100,8 @@ export default {
           "50%": { transform: "translateY(-10px)" },
         },
         sweep: {
-          "0%": { transform: "translateX(-120%)" },
-          "100%": { transform: "translateX(120%)" },
+          "0%": { left: "0%", transform: "translateX(-100%)" },
+          "100%": { left: "100%", transform: "translateX(0%)" },
         },
       },
       animation: {

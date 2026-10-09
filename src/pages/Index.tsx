@@ -35,7 +35,7 @@ const proofCards = [
 const Index = () => {
   return (
     <div className="min-h-screen overflow-x-hidden">
-      <section className="relative isolate min-h-screen">
+      <section className="relative isolate min-h-screen overflow-hidden">
         <img
           src={heroImage}
           alt="Aerial view of cultivated farmland representing GIS-mapped agricultural intelligence"
