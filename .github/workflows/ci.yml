@@ -18,8 +18,8 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     env:
-      VITE_SUPABASE_URL: https://mock-ci-project.supabase.co
-      VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.mock-key
+      VITE_SUPABASE_URL: https://alvazacydjlyfdwiwzwo.supabase.co
+      VITE_SUPABASE_ANON_KEY: sb_publishable_sFow3SkEFnoxeglIhmnkyQ_r6uDo2HC
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

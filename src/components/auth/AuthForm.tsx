@@ -111,10 +111,14 @@ const AuthForm = ({ mode }: AuthFormProps) => {
         }
       }
     } catch (err: unknown) {
+      const rawMessage = err instanceof Error ? err.message : "An unknown error occurred";
+      const isFetchFailure = rawMessage.toLowerCase().includes("failed to fetch") || rawMessage.toLowerCase().includes("fetch failed");
       toast({
         variant: "destructive",
         title: "Authentication Failed",
-        description: err instanceof Error ? err.message : "An unknown error occurred",
+        description: isFetchFailure
+          ? "Unable to reach the authentication service. Please check your network connection or try again."
+          : rawMessage,
       });
     } finally {
       setLoading(false);
