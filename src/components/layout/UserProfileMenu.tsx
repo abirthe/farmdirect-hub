@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
 export function UserProfileMenu() {
-  const { user, signOut } = useAuth();
+  const { user, profile, role, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -13,36 +13,40 @@ export function UserProfileMenu() {
     navigate('/');
   };
 
+  const displayName = profile?.full_name || user?.user_metadata?.full_name || "AgroDirect Member";
+  const initial = (displayName || user?.email || "U").charAt(0).toUpperCase();
+  const roleLabel = isAdmin ? "Platform Admin" : role === "buyer" ? "Commercial Buyer" : "Registered Farmer";
+
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="ghost" size="icon" className="rounded-full overflow-hidden bg-primary/10 border-2 border-primary/20 hover:border-primary transition-colors">
            <div className="h-full w-full flex items-center justify-center font-bold text-primary">
-             {user?.user_metadata?.full_name?.charAt(0) || "F"}
+             {initial}
            </div>
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-[240px] p-2 rounded-2xl border-border/60 shadow-xl glass-panel">
         <div className="flex items-center gap-3 px-3 py-3 border-b border-border/60 mb-1">
           <div className="h-10 w-10 flex items-center justify-center rounded-full overflow-hidden shrink-0 ring-2 ring-primary bg-primary/20 text-primary font-bold">
-            {user?.user_metadata?.full_name?.charAt(0) || "F"}
+            {initial}
           </div>
           <div>
             <p className="font-bold text-sm leading-tight text-foreground truncate max-w-[150px]">
-               {user?.user_metadata?.full_name || "New Farmer"}
+               {displayName}
             </p>
             <p className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-wider font-semibold">
-               {user?.user_metadata?.role || "Verified Tier"}
+               {roleLabel}
             </p>
           </div>
         </div>
         
         <div className="p-1 space-y-1">
-          {user?.user_metadata?.role === "admin" ? (
+          {isAdmin ? (
             <Button asChild variant="ghost" className="w-full justify-start text-sm hover:bg-muted/50 rounded-xl h-10 text-destructive hover:text-destructive">
               <Link to="/admin"><UserCircle2 className="h-4 w-4 mr-2" /> Platform Settings</Link>
             </Button>
-          ) : user?.user_metadata?.role === "buyer" ? (
+          ) : role === "buyer" ? (
             <Button asChild variant="ghost" className="w-full justify-start text-sm hover:bg-muted/50 rounded-xl h-10 text-primary hover:text-primary">
               <Link to="/buyer"><UserCircle2 className="h-4 w-4 mr-2" /> Buyer Dashboard</Link>
             </Button>

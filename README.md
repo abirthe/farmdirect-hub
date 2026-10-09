@@ -205,7 +205,7 @@ Open your browser at `http://localhost:8080`.
 The project enforces a strict definition of done with comprehensive automated verification:
 
 ```bash
-# Run unit & component tests (25 test suites, 108 tests)
+# Run unit & component tests (26 test suites, 118 tests)
 npm test
 
 # Run ESLint validation (0 errors, 0 warnings)

@@ -11,16 +11,13 @@ import { UserProfileMenu } from "./UserProfileMenu";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Navbar = () => {
-  const { session } = useAuth();
+  const { session, role, isAdmin } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const isLanding = location.pathname === "/";
 
-  const userRole = session?.user?.user_metadata?.role;
-  
   // Dynamically resolve Navigation workflows enforcing absolute POV isolation
-  // A Farmer sees ZERO trace of Buyer-centric tools like Marketplace/Escrow
   let navLinks = [];
   if (!session) {
     navLinks = [
@@ -32,7 +29,13 @@ const Navbar = () => {
       { label: "Disputes", href: "/disputes" },
       { label: "About", href: "/about" },
     ];
-  } else if (userRole === "farmer") {
+  } else if (isAdmin) {
+    navLinks = [
+      { label: "Platform Admin", href: "/admin" },
+      { label: "Live Marketplace", href: "/marketplace" },
+      { label: "Global Escrow", href: "/escrow/demo" },
+    ];
+  } else if (role === "farmer") {
     navLinks = [
       { label: "My Farm", href: "/farmer" },
       { label: "Financing", href: "/financing" },
@@ -40,12 +43,6 @@ const Navbar = () => {
       { label: "Forwards", href: "/forward" },
       { label: "Disputes", href: "/disputes" },
       { label: "About", href: "/about" },
-    ];
-  } else if (userRole === "admin") {
-    navLinks = [
-      { label: "Platform Admin", href: "/admin" },
-      { label: "Live Marketplace", href: "/marketplace" },
-      { label: "Global Escrow", href: "/escrow/demo" },
     ];
   } else {
     navLinks = [

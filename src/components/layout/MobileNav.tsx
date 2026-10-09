@@ -23,12 +23,9 @@ interface MobileNavProps {
 
 const MobileNav = ({ open, onClose }: MobileNavProps) => {
   const location = useLocation();
-  const { session } = useAuth();
+  const { session, role, isAdmin } = useAuth();
   
-  const userRole = session?.user?.user_metadata?.role;
-  
-  // Dynamically resolve Navigation links based on strict mutual exclusity
-  // A Farmer sees ZERO trace of Buyer-centric tools like Marketplace/Escrow
+  // Dynamically resolve Navigation links based on strict mutual exclusivity
   let mobileNavLinks = [];
   if (!session) {
     mobileNavLinks = [
@@ -37,16 +34,16 @@ const MobileNav = ({ open, onClose }: MobileNavProps) => {
       { label: "Marketplace", href: "/marketplace", icon: ShoppingBag },
       { label: "About", href: "/about", icon: Info },
     ];
-  } else if (userRole === "farmer") {
-    mobileNavLinks = [
-      { label: "My Farm", href: "/farmer", icon: Map },
-      { label: "About", href: "/about", icon: Info },
-    ];
-  } else if (userRole === "admin") {
+  } else if (isAdmin) {
     mobileNavLinks = [
       { label: "Platform Admin", href: "/admin", icon: ShieldCheck },
       { label: "Live Marketplace", href: "/marketplace", icon: ShoppingBag },
       { label: "Global Escrow", href: "/escrow/demo", icon: ShieldCheck },
+    ];
+  } else if (role === "farmer") {
+    mobileNavLinks = [
+      { label: "My Farm", href: "/farmer", icon: Map },
+      { label: "About", href: "/about", icon: Info },
     ];
   } else {
     // buyer

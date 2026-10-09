@@ -16,7 +16,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabaseClient";
 
 const ProfileSettings = () => {
-  const { user } = useAuth();
+  const { user, refreshProfile } = useAuth();
   const { toast } = useToast();
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -54,6 +54,7 @@ const ProfileSettings = () => {
           data: { full_name: profile.name },
         });
         await supabase.from("users").update({ full_name: profile.name }).eq("id", user.id);
+        await refreshProfile();
       }
       setSaved(true);
       toast({ title: "Settings saved", description: "Your profile details have been successfully updated." });

@@ -31,16 +31,15 @@ const Marketplace = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
 
-  const { session } = useAuth();
+  const { role, isAdmin } = useAuth();
   const navigate = useNavigate();
-  const userRole = session?.user?.user_metadata?.role;
 
-  // Enforce Absolute POV Routing Isolation
+  // Enforce POV Routing Isolation (Admins have global access)
   useEffect(() => {
-    if (userRole === "farmer") {
+    if (role === "farmer" && !isAdmin) {
       navigate("/farmer", { replace: true });
     }
-  }, [userRole, navigate]);
+  }, [role, isAdmin, navigate]);
 
   const getEmoji = (cropType: string) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

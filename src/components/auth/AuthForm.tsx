@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { deriveRole } from "@/contexts/AuthContext";
 import { AuthBrandSidePanel } from "./AuthBrandSidePanel";
 
 type Role = "farmer" | "buyer" | "admin";
@@ -44,43 +45,70 @@ const AuthForm = ({ mode }: AuthFormProps) => {
     e.preventDefault();
     setLoading(true);
     
+    const email = form.email.trim().toLowerCase();
+    const password = form.password;
+
     try {
       if (isLogin) {
         const { data, error } = await supabase.auth.signInWithPassword({
-          email: form.email,
-          password: form.password,
+          email,
+          password,
         });
 
         if (error) throw new Error(error.message);
 
-        const loggedInRole = data.user?.user_metadata?.role;
-        if (loggedInRole === "admin") {
+        // Fetch user profile from database to determine true role
+        let dbRole: string | null = null;
+        if (data.user?.id) {
+          const { data: profile } = await supabase
+            .from("users")
+            .select("role")
+            .eq("id", data.user.id)
+            .maybeSingle();
+          if (profile) dbRole = profile.role;
+        }
+
+        const targetRole = deriveRole(data.user, dbRole);
+        toast({
+          title: "Welcome back!",
+          description: "Signed in successfully.",
+        });
+
+        if (targetRole === "admin") {
           navigate("/admin");
-        } else if (loggedInRole === "buyer") {
+        } else if (targetRole === "buyer") {
           navigate("/buyer");
         } else {
           navigate("/farmer");
         }
       } else {
-        const { error } = await supabase.auth.signUp({
-          email: form.email,
-          password: form.password,
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
           options: {
             data: {
-              full_name: form.name,
+              full_name: form.name.trim(),
               role: role,
             },
           },
         });
 
         if (error) throw new Error(error.message);
-        
-        toast({
-          title: "Account Created Successfully!",
-          description: "Welcome to the AgroDirect native network.",
-        });
-        
-        navigate(role === "buyer" ? "/buyer" : role === "admin" ? "/admin" : "/farmer");
+
+        if (data.session) {
+          toast({
+            title: "Account Created Successfully!",
+            description: "Welcome to the AgroDirect native network.",
+          });
+          const targetRole = deriveRole(data.user, role);
+          navigate(targetRole === "buyer" ? "/buyer" : targetRole === "admin" ? "/admin" : "/farmer");
+        } else {
+          toast({
+            title: "Registration Initiated!",
+            description: "Please check your email inbox to confirm your account before signing in.",
+          });
+          navigate("/login");
+        }
       }
     } catch (err: unknown) {
       toast({
