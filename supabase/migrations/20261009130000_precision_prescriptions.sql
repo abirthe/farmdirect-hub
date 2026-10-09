@@ -30,7 +30,7 @@ CREATE POLICY "Farmers view own prescriptions" ON prescriptions
         EXISTS (
             SELECT 1 FROM farms f
             JOIN crop_cycles c ON c.farm_id = f.id
-            WHERE c.id = prescriptions.crop_cycle_id AND f.farmer_id = auth.uid()
+            WHERE c.id = prescriptions.crop_cycle_id AND f.user_id = auth.uid()
         ) OR
         is_admin()
     );
@@ -67,7 +67,7 @@ DECLARE
     v_fungal_dosage TEXT := 'Neem-oil extract 3ml/L water or Trichoderma bio-inoculant';
     v_fungal_rationale TEXT := 'Standard preventative canopy defense.';
 BEGIN
-    SELECT c.*, f.farmer_id as farm_farmer_id
+    SELECT c.*, f.user_id as farm_farmer_id
     INTO v_cycle
     FROM crop_cycles c
     JOIN farms f ON f.id = c.farm_id
