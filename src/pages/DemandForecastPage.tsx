@@ -3,8 +3,14 @@ import { ArrowLeft, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DemandForecastPanel } from "@/features/forecasts/components/DemandForecastPanel";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function DemandForecastPage() {
+  usePageMeta({
+    title: "Regional Shortage Forecasts",
+    description: "Macroeconomic supply and demand balance trajectories, shortage alerts, and procurement price intelligence."
+  });
+
   return (
     <div className="min-h-screen bg-background">
       {/* Top Navigation Bar */}
@@ -17,9 +23,9 @@ export default function DemandForecastPage() {
           </Button>
           <div className="flex items-center gap-2">
             <TrendingUp className="h-4 w-4 text-primary" />
-            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            <h1 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Macro Intelligence Hub
-            </span>
+            </h1>
           </div>
         </div>
       </div>

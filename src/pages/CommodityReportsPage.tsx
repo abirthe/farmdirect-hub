@@ -3,8 +3,14 @@ import { ArrowLeft, Globe2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CommodityReportsPanel } from "@/features/reports/components/CommodityReportsPanel";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function CommodityReportsPage() {
+  usePageMeta({
+    title: "Regional Commodity Intelligence",
+    description: "Anonymized macro yield benchmarks, satellite NDVI vegetative vigor, and regional crop supply aggregates."
+  });
+
   return (
     <div className="min-h-screen bg-background">
       {/* Top Navigation */}
@@ -17,9 +23,9 @@ export default function CommodityReportsPage() {
           </Button>
           <div className="flex items-center gap-2">
             <Globe2 className="h-4 w-4 text-primary" />
-            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            <h1 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Regional Commodity Intelligence
-            </span>
+            </h1>
           </div>
         </div>
       </div>
