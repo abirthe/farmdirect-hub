@@ -77,20 +77,20 @@ const Navbar = () => {
           <Link to="/" className="flex items-center gap-2.5 shrink-0" aria-label="AgroDirect home">
             <div className={cn(
               "flex h-8 w-8 items-center justify-center rounded-full transition-colors duration-300",
-              scrolled || !isLanding ? "bg-primary text-primary-foreground" : "bg-primary-foreground/20 text-primary-foreground"
+              scrolled || !isLanding ? "bg-primary text-primary-foreground" : "bg-white/20 text-white"
             )}>
               <Leaf className="h-4 w-4" />
             </div>
             <div>
               <p className={cn(
                 "text-base font-black leading-none transition-colors duration-300",
-                scrolled || !isLanding ? "text-foreground" : "text-primary-foreground"
+                scrolled || !isLanding ? "text-foreground" : "text-white"
               )}>
                 AgroDirect
               </p>
               <p className={cn(
                 "text-[10px] uppercase tracking-[0.2em] leading-none mt-0.5 transition-colors duration-300",
-                scrolled || !isLanding ? "text-muted-foreground" : "text-primary-foreground/70"
+                scrolled || !isLanding ? "text-muted-foreground" : "text-white/70"
               )}>
                 Field intelligence
               </p>
@@ -110,10 +110,10 @@ const Navbar = () => {
                     isActive
                       ? scrolled || !isLanding
                         ? "bg-primary/10 text-primary font-semibold"
-                        : "bg-primary-foreground/20 text-primary-foreground font-semibold"
+                        : "bg-white/20 text-white font-semibold"
                       : scrolled || !isLanding
                         ? "text-muted-foreground hover:text-foreground hover:bg-accent"
-                        : "text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10"
+                        : "text-white/85 hover:text-white hover:bg-white/10"
                   )}
                 >
                   {label}
@@ -135,7 +135,10 @@ const Navbar = () => {
               </div>
             ) : (
               <div className="hidden md:flex items-center gap-2 border-l border-border/60 pl-2 ml-1">
-                <Button asChild variant="ghost" size="sm" className="rounded-full font-semibold">
+                <Button asChild variant="ghost" size="sm" className={cn(
+                  "rounded-full font-semibold",
+                  !scrolled && isLanding && "text-white hover:text-white hover:bg-white/15"
+                )}>
                   <Link to="/login">Sign in</Link>
                 </Button>
                 <Button asChild size="sm" className="rounded-full font-semibold">
@@ -150,7 +153,7 @@ const Navbar = () => {
               size="icon"
               className={cn(
                 "md:hidden rounded-full",
-                !scrolled && isLanding && "text-primary-foreground hover:bg-primary-foreground/10"
+                !scrolled && isLanding ? "text-white hover:bg-white/10" : "text-foreground"
               )}
               onClick={() => setMobileOpen(true)}
               aria-label="Open navigation menu"

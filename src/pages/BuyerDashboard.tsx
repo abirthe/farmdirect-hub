@@ -28,9 +28,9 @@ const orders = [
 ];
 
 const statusColor: Record<string, string> = {
-  transit: "bg-blue-100 text-blue-700 border-blue-200",
-  delivered: "bg-green-100 text-green-700 border-green-200",
-  pending: "bg-amber-100 text-amber-700 border-amber-200",
+  transit: "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800",
+  delivered: "bg-green-100 text-green-700 border-green-200 dark:bg-green-950/40 dark:text-green-300 dark:border-green-800",
+  pending: "bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800",
 };
 const statusIcon: Record<string, React.ElementType> = {
   transit: Truck,
@@ -103,10 +103,10 @@ const BuyerDashboard = () => {
         {/* KPI Row */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { label: "Active orders", value: "3", sub: "2 in transit", icon: Package, color: "text-blue-500 bg-blue-50" },
+            { label: "Active orders", value: "3", sub: "2 in transit", icon: Package, color: "text-blue-500 bg-blue-50 dark:bg-blue-950/40 dark:text-blue-300" },
             { label: "Total spend this month", value: <CurrencyDisplay amount={24600} />, sub: "+26% vs last month", icon: BadgeDollarSign, color: "text-primary bg-primary/10" },
-            { label: "Avg price below retail", value: "−24%", sub: "vs middleman pricing", icon: TrendingUp, color: "text-green-600 bg-green-50" },
-            { label: "Verified suppliers", value: "8", sub: "Avg rating 4.7 ★", icon: Star, color: "text-amber-500 bg-amber-50" },
+            { label: "Avg price below retail", value: "−24%", sub: "vs middleman pricing", icon: TrendingUp, color: "text-green-600 bg-green-50 dark:bg-green-950/40 dark:text-green-300" },
+            { label: "Verified suppliers", value: "8", sub: "Avg rating 4.7 ★", icon: Star, color: "text-amber-500 bg-amber-50 dark:bg-amber-950/40 dark:text-amber-300" },
           ].map(({ label, value, sub, icon: Icon, color }) => (
             <Card key={label} className="soil-card">
               <CardContent className="p-6 flex items-start justify-between gap-4">

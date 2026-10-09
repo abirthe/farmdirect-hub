@@ -26,9 +26,9 @@ export interface MarketplaceListingItem {
 }
 
 const statusColor: Record<string, string> = {
-  ready: "bg-green-100 text-green-700 border-green-200",
-  upcoming: "bg-amber-100 text-amber-700 border-amber-200",
-  growing: "bg-blue-100 text-blue-700 border-blue-200",
+  ready: "bg-green-100 text-green-700 border-green-200 dark:bg-green-950/40 dark:text-green-300 dark:border-green-800",
+  upcoming: "bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800",
+  growing: "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800",
 };
 
 export function MarketplaceCard({ listing }: { listing: MarketplaceListingItem }) {

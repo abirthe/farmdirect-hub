@@ -126,7 +126,7 @@ const EscrowPage = () => {
                         {step.detail}
                       </p>
                       {step.status === "active" && (
-                        <Badge className="mt-2 bg-amber-100 text-amber-700 border-amber-200 rounded-full text-xs gap-1">
+                        <Badge className="mt-2 bg-amber-100 text-amber-700 border-amber-200 rounded-full text-xs gap-1 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800">
                           <Clock className="h-3 w-3" />In progress
                         </Badge>
                       )}

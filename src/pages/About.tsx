@@ -29,25 +29,25 @@ const About = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-primary">
+      <section className="relative overflow-hidden bg-hero-overlay text-white">
         <div className="field-grid absolute inset-0 opacity-10" />
         <div className="scan-line pointer-events-none absolute inset-y-0 left-0 w-1/2 motion-safe:animate-sweep" />
         <div className="container relative z-10 py-24 md:py-32">
           <div className="max-w-3xl space-y-6">
-            <span className="eyebrow border-primary-foreground/20 bg-primary-foreground/10 text-primary-foreground">
+            <span className="eyebrow border-white/20 bg-white/10 text-white backdrop-blur-sm">
               Our mission
             </span>
-            <h1 className="text-5xl md:text-6xl font-black text-primary-foreground leading-tight">
+            <h1 className="text-5xl md:text-6xl font-black text-white leading-tight">
               We exist to end middleman exploitation in agriculture.
             </h1>
-            <p className="text-primary-foreground/80 text-lg leading-8 max-w-2xl">
+            <p className="text-white/80 text-lg leading-8 max-w-2xl">
               AgroDirect is a decentralized agriculture platform connecting farmers directly to buyers using satellite intelligence, machine learning forecasting, and escrow-protected trade.
             </p>
             <div className="flex gap-3">
               <Button asChild variant="hero" size="lg" className="rounded-full gap-2">
                 <Link to="/signup">Join the platform <ArrowRight className="h-4 w-4" /></Link>
               </Button>
-              <Button asChild variant="soil" size="lg" className="rounded-full border-primary-foreground/25 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/16">
+              <Button asChild variant="soil" size="lg" className="rounded-full border-white/25 bg-white/10 text-white hover:bg-white/20 hover:text-white backdrop-blur-sm">
                 <Link to="/marketplace">View marketplace</Link>
               </Button>
             </div>

@@ -51,12 +51,12 @@ const Index = () => {
         <div className="section-shell relative flex min-h-screen flex-col pt-28 pb-12 md:pt-32 md:pb-16">
           <div className="relative z-10 grid flex-1 items-end gap-10 py-4 md:py-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
             <div className="max-w-3xl space-y-6 md:space-y-8">
-              <span className="eyebrow border-primary-foreground/20 bg-primary-foreground/10 text-primary-foreground">Decentralized agriculture platform</span>
+              <span className="eyebrow border-white/20 bg-white/10 text-white backdrop-blur-sm">Decentralized agriculture platform</span>
               <div className="space-y-4 md:space-y-6">
-                <h1 className="max-w-4xl text-5xl font-black leading-[0.95] text-primary-foreground sm:text-6xl md:text-7xl lg:text-[5.5rem]">
+                <h1 className="max-w-4xl text-5xl font-black leading-[0.95] text-white sm:text-6xl md:text-7xl lg:text-[5.5rem]">
                   Help farmers map land, predict yield, and sell without exploitation.
                 </h1>
-                <p className="max-w-2xl text-base leading-7 text-primary-foreground/82 md:text-lg md:leading-8">
+                <p className="max-w-2xl text-base leading-7 text-white/85 md:text-lg md:leading-8">
                   AgroDirect turns field boundaries, crop signals, and market pricing into a direct trade engine for growers, buyers, and local food networks.
                 </p>
               </div>
@@ -67,15 +67,15 @@ const Index = () => {
                     <ArrowRight />
                   </Link>
                 </Button>
-                <Button asChild variant="soil" size="xl" className="border-primary-foreground/25 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/16">
+                <Button asChild variant="soil" size="xl" className="border-white/25 bg-white/10 text-white hover:bg-white/20 hover:text-white backdrop-blur-sm">
                   <Link to="/buyer">View buyer dashboard</Link>
                 </Button>
               </div>
               <div className="grid gap-3 sm:grid-cols-3">
                 {heroStats.map((item) => (
-                  <div key={item.label} className="glass-panel p-4 text-primary-foreground">
-                    <p className="text-xs uppercase tracking-[0.18em] text-primary-foreground/72">{item.label}</p>
-                    <p className="mt-2 text-2xl font-black md:text-3xl">{item.value}</p>
+                  <div key={item.label} className="glass-panel p-4 text-white">
+                    <p className="text-xs uppercase tracking-[0.18em] text-white/70">{item.label}</p>
+                    <p className="mt-2 text-2xl font-black md:text-3xl text-white">{item.value}</p>
                   </div>
                 ))}
               </div>

@@ -63,7 +63,7 @@ const AdminDashboard = () => {
                   <p className="text-xs text-muted-foreground">{sub}</p>
                 </div>
                 <div className={`flex h-10 w-10 items-center justify-center rounded-xl shrink-0 ${
-                  trend === "warn" ? "bg-amber-100 text-amber-600" : "bg-primary/10 text-primary"
+                  trend === "warn" ? "bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400" : "bg-primary/10 text-primary"
                 }`}>
                   <Icon className="h-5 w-5" />
                 </div>

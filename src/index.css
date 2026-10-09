@@ -159,7 +159,7 @@
   }
 
   .glass-panel {
-    @apply rounded-[calc(var(--radius)+0.5rem)] border border-border/70 bg-card/75 backdrop-blur-xl;
+    @apply rounded-[calc(var(--radius)+0.5rem)] border border-border/70 bg-card/75 backdrop-blur-xl text-card-foreground;
     box-shadow: var(--shadow-soft);
   }
 

@@ -108,7 +108,7 @@ const ListingDetail = () => {
                     </div>
                   </div>
                 </div>
-                <Badge className="bg-amber-100 text-amber-700 border-amber-200 rounded-full px-3 py-1.5 text-sm">
+                <Badge className="bg-amber-100 text-amber-700 border-amber-200 rounded-full px-3 py-1.5 text-sm dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800">
                   <Clock className="h-3.5 w-3.5 mr-1" />{mockListing.status}
                 </Badge>
               </div>

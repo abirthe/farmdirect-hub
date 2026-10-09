@@ -34,9 +34,9 @@ const mockListings = [
 ];
 
 const statusColor: Record<string, string> = {
-  ready: "bg-green-100 text-green-700 border-green-200",
-  upcoming: "bg-amber-100 text-amber-700 border-amber-200",
-  growing: "bg-blue-100 text-blue-700 border-blue-200",
+  ready: "bg-green-100 text-green-700 border-green-200 dark:bg-green-950/40 dark:text-green-300 dark:border-green-800",
+  upcoming: "bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800",
+  growing: "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800",
 };
 
 const Marketplace = () => {
@@ -93,26 +93,26 @@ const Marketplace = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Banner */}
-      <div className="relative bg-primary overflow-hidden">
+      <div className="relative bg-hero-overlay text-white overflow-hidden">
         <div className="field-grid absolute inset-0 opacity-10" />
         <div className="scan-line pointer-events-none absolute inset-y-0 left-0 w-1/2 motion-safe:animate-sweep" />
         <div className="container relative z-10 py-14 md:py-20">
           <div className="max-w-2xl space-y-4">
-            <span className="eyebrow border-primary-foreground/20 bg-primary-foreground/10 text-primary-foreground">
+            <span className="eyebrow border-white/20 bg-white/10 text-white backdrop-blur-sm">
               Live marketplace
             </span>
-            <h1 className="text-4xl md:text-5xl font-black text-primary-foreground leading-tight">
+            <h1 className="text-4xl md:text-5xl font-black text-white leading-tight">
               Discover future-ready supply from verified farmers.
             </h1>
-            <p className="text-primary-foreground/80 text-base leading-7">
+            <p className="text-white/80 text-base leading-7">
               Browse quality-certified listings with transparent floor pricing, NDVI health scores, and escrow-protected transactions.
             </p>
           </div>
           <div className="mt-8 grid grid-cols-3 gap-3 max-w-lg">
             {[{ label: "Active listings", v: "148" }, { label: "Verified farmers", v: "312" }, { label: "Avg price uplift", v: "+27%" }].map(s => (
-              <div key={s.label} className="glass-panel px-4 py-3 text-primary-foreground text-center">
-                <p className="text-2xl font-black">{s.v}</p>
-                <p className="text-[10px] uppercase tracking-[0.16em] text-primary-foreground/70 mt-1">{s.label}</p>
+              <div key={s.label} className="glass-panel px-4 py-3 text-white text-center">
+                <p className="text-2xl font-black text-white">{s.v}</p>
+                <p className="text-[10px] uppercase tracking-[0.16em] text-white/70 mt-1">{s.label}</p>
               </div>
             ))}
           </div>

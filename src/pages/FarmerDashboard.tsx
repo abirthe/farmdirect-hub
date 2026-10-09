@@ -234,8 +234,8 @@ const FarmerDashboard = () => {
                     <div>
                       <Badge className={
                         farm.status === "Ready"
-                          ? "bg-green-100 text-green-700 border-green-200 rounded-full"
-                          : "bg-amber-100 text-amber-700 border-amber-200 rounded-full"
+                          ? "bg-green-100 text-green-700 border-green-200 rounded-full dark:bg-green-950/40 dark:text-green-300 dark:border-green-800"
+                          : "bg-amber-100 text-amber-700 border-amber-200 rounded-full dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800"
                       }>
                         {farm.status === "Ready" ? <CheckCircle2 className="h-3 w-3 mr-1" /> : <Clock className="h-3 w-3 mr-1" />}
                         {farm.status}{farm.daysLeft > 0 ? ` · ${farm.daysLeft}d` : ""}
