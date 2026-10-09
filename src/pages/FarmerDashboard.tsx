@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { FieldWeatherWidget } from "@/components/agrodirect/FieldWeatherWidget";
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from "recharts";
@@ -216,6 +217,9 @@ const FarmerDashboard = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Real-time Agricultural Weather & Satellite Agro-Telemetry */}
+        <FieldWeatherWidget />
 
         {/* Farm Cards */}
         <div>
