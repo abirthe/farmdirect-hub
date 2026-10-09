@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VITE_SUPABASE_URL: https://alvazacydjlyfdwiwzwo.supabase.co
-      VITE_SUPABASE_ANON_KEY: sb_publishable_sFow3SkEFnoxeglIhmnkyQ_r6uDo2HC
+      VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsdmF6YWN5ZGpseWZkd2l3endvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0ODI5NzYsImV4cCI6MjEwNzA1ODk3Nn0.Ft2UG3nKrFmgUP5XYG65AaAR5gqAZXmrorHnUEle428
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

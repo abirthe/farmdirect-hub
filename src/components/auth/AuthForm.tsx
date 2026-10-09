@@ -111,6 +111,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
         }
       }
     } catch (err: unknown) {
+      console.error("Authentication exception:", err);
       const rawMessage = err instanceof Error ? err.message : "An unknown error occurred";
       const isFetchFailure = rawMessage.toLowerCase().includes("failed to fetch") || rawMessage.toLowerCase().includes("fetch failed");
       toast({
