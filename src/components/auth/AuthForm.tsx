@@ -8,6 +8,9 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { usePageMeta } from "@/hooks/usePageMeta";
+import { AuthBrandSidePanel } from "./AuthBrandSidePanel";
+import { AuthDemoAccounts } from "./AuthDemoAccounts";
 
 type Role = "farmer" | "buyer" | "admin";
 
@@ -33,13 +36,19 @@ const AuthForm = ({ mode }: AuthFormProps) => {
 
   const isLogin = mode === "login";
 
+  usePageMeta({
+    title: isLogin ? "Sign In" : "Create Account",
+    description: isLogin
+      ? "Sign in to access your farm intelligence dashboard."
+      : "Join the direct agriculture marketplace.",
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
     try {
       if (isLogin) {
-        // Live Supabase Login Execution
         const { data, error } = await supabase.auth.signInWithPassword({
           email: form.email,
           password: form.password,
@@ -47,7 +56,6 @@ const AuthForm = ({ mode }: AuthFormProps) => {
 
         if (error) throw new Error(error.message);
 
-        // Success - Route automatically based on user metadata fallback
         const loggedInRole = data.user?.user_metadata?.role;
         if (loggedInRole === "admin") {
           navigate("/admin");
@@ -56,18 +64,16 @@ const AuthForm = ({ mode }: AuthFormProps) => {
         } else {
           navigate("/farmer");
         }
-        
       } else {
-        // Live Supabase Registration logic
-        const { data, error } = await supabase.auth.signUp({
+        const { error } = await supabase.auth.signUp({
           email: form.email,
           password: form.password,
           options: {
             data: {
               full_name: form.name,
               role: role,
-            }
-          }
+            },
+          },
         });
 
         if (error) throw new Error(error.message);
@@ -92,41 +98,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
 
   return (
     <div className="flex min-h-screen">
-      {/* Left decorative panel */}
-      <div className="hidden lg:flex lg:w-[42%] relative overflow-hidden bg-hero-overlay text-white flex-col justify-between p-12">
-        <div className="field-grid absolute inset-0 opacity-10" />
-        <div className="scan-line pointer-events-none absolute inset-y-0 left-0 w-full motion-safe:animate-sweep" />
-        <div className="relative z-10">
-          <Link to="/" className="flex items-center gap-2.5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white">
-              <Leaf className="h-5 w-5" />
-            </div>
-            <p className="text-xl font-black text-white">AgroDirect</p>
-          </Link>
-        </div>
-        <div className="relative z-10 space-y-6">
-          <div className="space-y-3">
-            <span className="eyebrow text-white border-white/20 bg-white/10 backdrop-blur-sm">
-              Decentralized agriculture
-            </span>
-            <h2 className="text-4xl font-black text-white leading-tight">
-              The direct trade engine for growers and buyers.
-            </h2>
-            <p className="text-white/80 text-base leading-7">
-              Map your land, forecast your yield, and sell direct — no middlemen, no exploitation.
-            </p>
-          </div>
-          <div className="grid grid-cols-3 gap-3">
-            {[{ label: "Mapped hectares", value: "14.2k" }, { label: "Price uplift", value: "+27%" }, { label: "Accuracy", value: "±8.6%" }].map(s => (
-              <div key={s.label} className="rounded-2xl border border-white/20 bg-white/10 p-4 text-white text-center">
-                <p className="text-2xl font-black">{s.value}</p>
-                <p className="text-xs uppercase tracking-[0.16em] text-white/70 mt-1">{s.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-        <p className="relative z-10 text-xs text-white/60">© 2026 AgroDirect</p>
-      </div>
+      <AuthBrandSidePanel />
 
       {/* Right form panel */}
       <div className="flex-1 flex items-center justify-center p-6 md:p-12 bg-background">
@@ -154,7 +126,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
               <div className="space-y-3">
                 <Label className="text-sm font-semibold">I am a…</Label>
                 <div className="grid gap-2">
-                  {roleOptions.map(opt => (
+                  {roleOptions.map((opt) => (
                     <button
                       key={opt.value}
                       type="button"
@@ -168,13 +140,17 @@ const AuthForm = ({ mode }: AuthFormProps) => {
                     >
                       <span className="text-2xl">{opt.emoji}</span>
                       <div>
-                        <p className={cn("font-semibold text-sm", role === opt.value ? "text-primary" : "text-foreground")}>{opt.label}</p>
+                        <p className={cn("font-semibold text-sm", role === opt.value ? "text-primary" : "text-foreground")}>
+                          {opt.label}
+                        </p>
                         <p className="text-xs text-muted-foreground">{opt.desc}</p>
                       </div>
-                      <div className={cn(
-                        "ml-auto h-4 w-4 rounded-full border-2 transition-all",
-                        role === opt.value ? "border-primary bg-primary" : "border-border"
-                      )} />
+                      <div
+                        className={cn(
+                          "ml-auto h-4 w-4 rounded-full border-2 transition-all",
+                          role === opt.value ? "border-primary bg-primary" : "border-border"
+                        )}
+                      />
                     </button>
                   ))}
                 </div>
@@ -263,40 +239,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
             </Link>
           </p>
 
-          {/* Local Testing Quick Accounts to bypass 2/hr IP Rate Limits */}
-          <div className="pt-6 mt-6 border-t border-border/60">
-            <div className="text-center space-y-3 mb-4">
-              <span className="text-xs uppercase tracking-[0.2em] font-semibold text-muted-foreground">Local network testing</span>
-              <p className="text-xs text-muted-foreground">Are you rate-limited by Supabase? Use a 1-click test account.</p>
-            </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="rounded-xl h-10 border-primary/20 hover:bg-primary/10 text-primary"
-                onClick={() => { mockLogin?.("farmer"); navigate("/farmer"); }}
-              >
-                🌾 Farmer
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="rounded-xl h-10 border-primary/20 hover:bg-primary/10 text-primary"
-                onClick={() => { mockLogin?.("buyer"); navigate("/buyer"); }}
-              >
-                🏢 Buyer
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="col-span-2 rounded-xl h-10 border-destructive/20 hover:bg-destructive/10 text-destructive"
-                onClick={() => { mockLogin?.("admin"); navigate("/admin"); }}
-              >
-                🛡️ System Admin
-              </Button>
-            </div>
-          </div>
+          <AuthDemoAccounts onMockLogin={mockLogin} />
         </div>
       </div>
     </div>

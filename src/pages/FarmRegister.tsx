@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 import MapView from "@/components/ui/map-view";
 
@@ -24,6 +25,11 @@ const FarmRegister = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  usePageMeta({
+    title: "Register Farm & Plot Boundary",
+    description: "Map your farmland boundaries using precision satellite layers and register crops.",
+  });
   const [form, setForm] = useState({
     farmName: "",
     location: "",
@@ -63,7 +69,6 @@ const FarmRegister = () => {
         throw new Error(error.message);
       }
       
-      console.log("Supabase direct transaction successful:", data);
       toast({ title: "Success", description: "Farm registered successfully!" });
       navigate("/farmer");
     } catch (error: unknown) {

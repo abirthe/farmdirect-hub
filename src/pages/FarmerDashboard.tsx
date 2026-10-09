@@ -12,9 +12,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { FieldWeatherWidget } from "@/components/agrodirect/FieldWeatherWidget";
-import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
-} from "recharts";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const yieldHistory = [
   { month: "Oct", actual: 14.2, predicted: 15 },
@@ -58,6 +57,11 @@ const FarmerDashboard = () => {
   const { user } = useAuth();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [dbFarms, setDbFarms] = useState<any[]>([]);
+
+  usePageMeta({
+    title: "Farmer Operations Dashboard",
+    description: "Monitor precision microclimate conditions, yield telemetry, and farm plots.",
+  });
 
   useEffect(() => {
     const fetchFarms = async () => {

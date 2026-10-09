@@ -23,14 +23,7 @@ const ProtectedRoute = ({ role }: ProtectedRouteProps) => {
 
   // Pure Supabase Auth enforcement
   if (hasSupabaseKeys && !session) {
-    console.warn("🔒 [Supabase Auth] Access Denied: User is not authenticated.");
     return <Navigate to="/login" replace />;
-  }
-  
-  // If the user hasn't configured .env keys yet, we aggressively fallback to demo mode
-  // so the website doesn't completely hard-lock them out during setup!
-  if (!hasSupabaseKeys) {
-    console.log("⚠️ [Demo Mode] Bypassing Auth Gate since VITE_SUPABASE_URL is missing.");
   }
 
   // Live Role Validation tied explicitly to Native Database Authenticated tokens!

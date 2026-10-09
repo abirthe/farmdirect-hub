@@ -1,27 +1,27 @@
-import { CurrencyDisplay, CurrencySymbol } from "@/components/ui/currency-display";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import {
-  ArrowLeft, MapPin, ShieldCheck, Star, Clock, TrendingUp, CloudSun, BrainCircuit,
-  QrCode, Leaf, BadgeDollarSign, CheckCircle2, AlertTriangle, ArrowRight, Users
+  ArrowLeft, MapPin, ShieldCheck, Clock, TrendingUp, CheckCircle2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { runYieldPredictionModel, FarmMLFeatures } from "@/lib/ml-service";
-import { supabase } from "@/lib/supabaseClient";
+import { ListingAiVerification } from "@/features/marketplace/components/ListingAiVerification";
+import { ListingDealCard } from "@/features/marketplace/components/ListingDealCard";
+import { MarketplaceListing } from "@/features/marketplace/types";
 
 const priceHistory = [
   { week: "W-6", price: 298 }, { week: "W-5", price: 305 }, { week: "W-4", price: 301 },
   { week: "W-3", price: 310 }, { week: "W-2", price: 314 }, { week: "W-1", price: 318 },
 ];
 
-const mockListing = {
+const mockListing: MarketplaceListing = {
   id: "lst-001",
   crop: "Maize",
   emoji: "🌽",
@@ -56,6 +56,11 @@ const ListingDetail = () => {
   const navigate = useNavigate();
   const userRole = session?.user?.user_metadata?.role;
 
+  usePageMeta({
+    title: `${mockListing.crop} Listing (${mockListing.farmName})`,
+    description: mockListing.description,
+  });
+
   // Enforce Absolute POV Routing Isolation
   useEffect(() => {
     if (userRole === "farmer") {
@@ -66,14 +71,21 @@ const ListingDetail = () => {
   // ML Intelligence Feed for Buyers
   const mlFeatures: FarmMLFeatures = {
     cropType: 'Maize',
-    farmSizeHectares: 12.8, // Safely refactored to Hectares (was 31.6 acres) to dynamically match the 'farms' DB table schema safely
+    farmSizeHectares: 12.8,
     avgTempCelsius: 30.5,
     rainfallMm: 80.0,
     soilMoisturePercent: 62.0,
-    satelliteNdvi: mockListing.ndvi / 1.5, // Normalized
-    daysSincePlanting: 100, // Close to harvest
+    satelliteNdvi: mockListing.ndvi / 1.5,
+    daysSincePlanting: 100,
   };
   const prediction = runYieldPredictionModel(mlFeatures);
+
+  const handleRequestSample = () => {
+    toast({
+      title: "Sample Request Dispatched",
+      description: "Farmer has been notified to dispatch quality sample inspection."
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -81,7 +93,10 @@ const ListingDetail = () => {
       <div className="border-b border-border/60 bg-card/50 backdrop-blur-sm">
         <div className="container py-4 flex items-center gap-3">
           <Button asChild variant="ghost" size="sm" className="rounded-full gap-1.5">
-            <Link to="/marketplace"><ArrowLeft className="h-4 w-4" />Back to marketplace</Link>
+            <Link to="/marketplace">
+              <ArrowLeft className="h-4 w-4" />
+              Back to marketplace
+            </Link>
           </Button>
         </div>
       </div>
@@ -115,46 +130,8 @@ const ListingDetail = () => {
               <p className="text-muted-foreground leading-7">{mockListing.description}</p>
             </div>
 
-            {/* Deep Learning Quality Verification (replaces middleman QA) */}
-            <Card className="glass-panel border-primary/30 relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-                <BrainCircuit className="w-32 h-32 text-primary" />
-              </div>
-              <CardHeader className="relative z-10 pb-4">
-                <CardTitle className="text-xl font-black flex items-center gap-2">
-                  <BrainCircuit className="h-5 w-5 text-primary" />
-                  AgroDirect AI Verification
-                </CardTitle>
-                <p className="text-sm text-muted-foreground mt-1">Satellite intelligence actively replacing manual broker inspections.</p>
-              </CardHeader>
-              <CardContent className="relative z-10 space-y-4">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {[
-                    { label: "Optimal Harvest Date", value: prediction.harvestDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric'}), sub: `${prediction.daysToHarvest} days remaining`, good: true },
-                    { label: "Verified Ripe Yield", value: `${prediction.predictedYieldKg.toLocaleString('en-US', { maximumFractionDigits: 0 })} KG`, sub: `±400kg model variance`, good: true },
-                    { label: "Predicted Output Grade", value: "Grade A+", sub: `${prediction.confidenceScore.toFixed(1)}% Confidence`, good: true },
-                    { label: "Fungal Risk Escrow Filter", value: "Low (2%)", sub: `Moisture content ${prediction.moisturePrediction.toFixed(1)}%`, good: true },
-                  ].map(m => (
-                    <div key={m.label} className="soil-card p-4 space-y-2 bg-background/50 border border-border/50">
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-[0.15em] font-semibold">{m.label}</p>
-                      <p className="text-lg font-black leading-none">{m.value}</p>
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
-                        {m.good ? <CheckCircle2 className="h-3 w-3 text-green-500" /> : <AlertTriangle className="h-3 w-3 text-amber-500" />}
-                        {m.sub}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="space-y-2 mt-4 pt-4 border-t border-border/40">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground font-semibold flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-primary" /> Algorithmic QA Score</span>
-                    <span className="font-bold text-primary">{Math.max(90, prediction.confidenceScore).toFixed(1)}% / 100%</span>
-                  </div>
-                  <Progress value={Math.max(90, prediction.confidenceScore)} className="h-2 [&>div]:bg-primary" />
-                  <p className="text-xs text-muted-foreground mt-2">By purchasing, you bypass traditional 15% broker fees through cryptographically secured AI analysis.</p>
-                </div>
-              </CardContent>
-            </Card>
+            {/* Deep Learning Quality Verification */}
+            <ListingAiVerification prediction={prediction} />
 
             {/* Price Trend Chart */}
             <Card className="glass-panel">
@@ -174,8 +151,14 @@ const ListingDetail = () => {
                       contentStyle={{ borderRadius: "12px", border: "1px solid hsl(102,20%,79%)", fontSize: "12px" }}
                       formatter={(v: number) => [`${formatCurrency(v)}/t`, "Floor price"]}
                     />
-                    <Line type="monotone" dataKey="price" stroke="hsl(112,40%,26%)" strokeWidth={2.5}
-                      dot={{ r: 4, fill: "hsl(112,40%,26%)" }} activeDot={{ r: 6 }} />
+                    <Line
+                      type="monotone"
+                      dataKey="price"
+                      stroke="hsl(112,40%,26%)"
+                      strokeWidth={2.5}
+                      dot={{ r: 4, fill: "hsl(112,40%,26%)" }}
+                      activeDot={{ r: 6 }}
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -191,7 +174,7 @@ const ListingDetail = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid gap-3 sm:grid-cols-3">
-                  {mockListing.certDocs.map(doc => (
+                  {mockListing.certDocs.map((doc) => (
                     <div key={doc} className="flex items-center gap-2 rounded-xl border border-border/60 bg-background/70 p-3">
                       <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
                       <span className="text-sm font-medium">{doc}</span>
@@ -204,101 +187,11 @@ const ListingDetail = () => {
 
           {/* Right column — Deal card */}
           <div className="space-y-5">
-            <Card className="glass-panel sticky top-24">
-              <CardContent className="p-6 space-y-5">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground font-semibold">Floor price (logistics deducted)</p>
-                  <p className="text-5xl font-black mt-1"><CurrencyDisplay amount={mockListing.floorPrice} /><span className="text-lg font-normal text-muted-foreground">/t</span></p>
-                  <div className="mt-2 space-y-1 text-xs text-muted-foreground">
-                    <div className="flex justify-between">
-                      <span>Retail benchmark</span><span><CurrencyDisplay amount={mockListing.retailPrice} />/t</span>
-                    </div>
-                    <div className="flex justify-between text-destructive">
-                      <span>— Logistics cost</span><span>-<CurrencyDisplay amount={mockListing.logisticsCost} />/t</span>
-                    </div>
-                    <div className="flex justify-between font-bold text-primary border-t border-border/60 pt-1">
-                      <span>Your floor price</span><span><CurrencyDisplay amount={mockListing.floorPrice} />/t</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-border/60 bg-background/70 divide-y divide-border/60 overflow-hidden text-sm">
-                  {[
-                    { label: "Available quantity", value: mockListing.qty, icon: Leaf },
-                    { label: "Farm area", value: mockListing.area, icon: MapPin },
-                    { label: "Interested buyers", value: `${mockListing.buyers} active`, icon: Users },
-                    { label: "Quality grade", value: mockListing.quality, icon: Star },
-                  ].map(({ label, value, icon: Icon }) => (
-                    <div key={label} className="flex items-center gap-3 px-4 py-3">
-                      <Icon className="h-4 w-4 text-muted-foreground shrink-0" />
-                      <span className="text-muted-foreground flex-1">{label}</span>
-                      <span className="font-semibold">{value}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {mockListing.escrowReady && (
-                  <div className="rounded-2xl bg-primary/8 border border-primary/20 p-4 flex items-start gap-3">
-                    <ShieldCheck className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-semibold text-sm text-primary">Escrow protected</p>
-                      <p className="text-xs text-muted-foreground mt-1">Funds held until QR delivery scan. Zero payment risk.</p>
-                    </div>
-                  </div>
-                )}
-
-                <div className="space-y-2">
-                  {userRole === "buyer" ? (
-                    <>
-                      <Button asChild className="w-full h-12 rounded-xl gap-2">
-                        <Link to={`/escrow/${id || 'lst-001'}`}>
-                          <BadgeDollarSign className="h-5 w-5" />
-                          Lock price in escrow
-                        </Link>
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        className="w-full h-12 rounded-xl gap-2"
-                        onClick={() => toast({ title: "Sample Request Dispatched", description: "Farmer has been notified to dispatch quality sample inspection." })}
-                      >
-                        <QrCode className="h-4 w-4" />
-                        Request quality sample
-                      </Button>
-                    </>
-                  ) : userRole === "admin" ? (
-                    <Button variant="destructive" className="w-full h-12 rounded-xl gap-2">
-                      <AlertTriangle className="h-5 w-5" />
-                      Suspend Listing (Admin)
-                    </Button>
-                  ) : (
-                    <Button variant="secondary" className="w-full h-12 rounded-xl gap-2" disabled>
-                      <CheckCircle2 className="h-5 w-5 text-green-600" />
-                      Listing Active & Public
-                    </Button>
-                  )}
-                </div>
-
-                {/* Farmer info */}
-                <div className="flex items-center gap-3 border-t border-border/60 pt-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground font-bold text-sm shrink-0">
-                    {mockListing.farmer.charAt(0)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm">{mockListing.farmer}</p>
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                      {mockListing.farmerRating} · {mockListing.farmerDeals} successful deals
-                    </div>
-                  </div>
-                  <Button asChild variant="ghost" size="sm" className="rounded-full text-xs">
-                    <Link to={`/farmer`}>
-                      View profile
-                      <ArrowRight className="h-3 w-3" />
-                    </Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <ListingDealCard
+              listing={{ ...mockListing, id: id || mockListing.id }}
+              userRole={userRole}
+              onRequestSample={handleRequestSample}
+            />
           </div>
         </div>
       </div>
