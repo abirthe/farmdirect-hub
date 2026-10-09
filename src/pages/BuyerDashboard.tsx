@@ -6,7 +6,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import {
-  ShoppingBag, TrendingUp, BadgeDollarSign, Package, Star
+  ShoppingBag, TrendingUp, BadgeDollarSign, Package, Star, Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,16 +16,11 @@ import { AiSmartSourcingCard } from "@/features/buyers/components/AiSmartSourcin
 import { SupplierPerformanceList } from "@/features/buyers/components/SupplierPerformanceList";
 import { BuyerOrderCard, BuyerOrderSummary } from "@/features/buyers/components/BuyerOrderCard";
 
-const defaultOrders: BuyerOrderSummary[] = [
-  { id: "#ORD-2401", crop: "Maize 🌽", farm: "Bogra Cluster", qty: "12t", price: <><CurrencyDisplay amount={318} />/t</>, total: <CurrencyDisplay amount={3816} />, status: "In transit", statusType: "transit", date: "Mar 18" },
-  { id: "#ORD-2398", crop: "Soybean 🫘", farm: "Rangpur Coll.ctive", qty: "8t", price: <><CurrencyDisplay amount={520} />/t</>, total: <CurrencyDisplay amount={4160} />, status: "Delivered", statusType: "delivered", date: "Mar 12" },
-  { id: "#ORD-2391", crop: "Rice 🍚", farm: "Dinajpur Rice Farm", qty: "15t", price: <><CurrencyDisplay amount={415} />/t</>, total: <CurrencyDisplay amount={6225} />, status: "Pending escrow", statusType: "pending", date: "Mar 8" },
-];
-
 const BuyerDashboard = () => {
   const { user } = useAuth();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [dbOrders, setDbOrders] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   usePageMeta({
     title: "Buyer Procurement Centre",
@@ -34,19 +29,23 @@ const BuyerDashboard = () => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-      if (!user?.id) return;
+      if (!user?.id) {
+        setLoading(false);
+        return;
+      }
+      setLoading(true);
       const { data } = await supabase.from('orders').select(`
         id, qty_purchased, total_price, status, created_at,
         listings ( crop_cycles ( crop_type, farms ( farm_name ) ) )
       `).eq('buyer_id', user.id);
       
       if (data) setDbOrders(data);
+      setLoading(false);
     };
     fetchOrders();
   }, [user]);
 
-  // Combine real DB orders with fallback defaults
-  const dynamicOrders: BuyerOrderSummary[] = dbOrders.length > 0 ? dbOrders.map((o) => ({
+  const dynamicOrders: BuyerOrderSummary[] = dbOrders.map((o) => ({
     id: `#ORD-${o.id.substring(0, 4).toUpperCase()}`,
     crop: o.listings?.crop_cycles?.crop_type || "Crop",
     farm: o.listings?.crop_cycles?.farms?.farm_name || "Verified Farm",
@@ -56,7 +55,7 @@ const BuyerDashboard = () => {
     status: o.status,
     statusType: o.status === 'IN_TRANSIT' ? 'transit' : o.status === 'DELIVERED' ? 'delivered' : 'pending',
     date: new Date(o.created_at).toLocaleDateString(),
-  })) : defaultOrders;
+  }));
 
   return (
     <div className="min-h-screen bg-background">
@@ -126,11 +125,38 @@ const BuyerDashboard = () => {
               View all orders
             </Button>
           </div>
-          <div className="space-y-3">
-            {dynamicOrders.map((order) => (
-              <BuyerOrderCard key={order.id} order={order} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="py-12 text-center text-muted-foreground">
+              <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary mb-2" />
+              <p className="text-sm">Loading procurement history...</p>
+            </div>
+          ) : dynamicOrders.length === 0 ? (
+            <Card className="glass-panel text-center py-12 px-4">
+              <CardContent className="space-y-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary/10 text-secondary mx-auto">
+                  <Package className="h-6 w-6" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-lg font-bold">No orders placed yet</h3>
+                  <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                    Explore active harvests on the marketplace to lock in direct prices with escrow protection.
+                  </p>
+                </div>
+                <Button asChild className="rounded-full gap-2">
+                  <Link to="/marketplace">
+                    <ShoppingBag className="h-4 w-4" />
+                    Explore marketplace
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="space-y-3">
+              {dynamicOrders.map((order) => (
+                <BuyerOrderCard key={order.id} order={order} />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Demand Forecasting & Macro Shortage Alerts */}

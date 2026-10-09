@@ -8,6 +8,9 @@ import { cn } from "@/lib/utils";
 import MapView from "@/components/ui/map-view";
 import { useAuth } from "@/contexts/AuthContext";
 import { LogisticsTracker } from "@/features/logistics/components/LogisticsTracker";
+import { BkashEscrowPaymentCard } from "@/features/payments/components/BkashEscrowPaymentCard";
+import { supabase } from "@/lib/supabaseClient";
+import { useState, useEffect } from "react";
 
 const escrowSteps = [
   { id: 1, label: "Listing created", detail: <>Farmer listed 18.4t of maize at <CurrencyDisplay amount={318}/>/t</>, status: "done", time: "Mar 8, 2026" },
@@ -22,6 +25,17 @@ const EscrowPage = () => {
   const { id } = useParams();
   const { session } = useAuth();
   const userRole = session?.user?.user_metadata?.role;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [order, setOrder] = useState<any | null>(null);
+
+  useEffect(() => {
+    const fetchOrder = async () => {
+      if (!id || id === "demo") return;
+      const { data } = await supabase.from('orders').select('*').eq('id', id).single();
+      if (data) setOrder(data);
+    };
+    fetchOrder();
+  }, [id]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -139,6 +153,21 @@ const EscrowPage = () => {
 
           {/* Action Panel */}
           <div className="space-y-5">
+            {/* bKash Manual Escrow Deposit Card for Buyers */}
+            {userRole === "buyer" && id && (
+              <BkashEscrowPaymentCard
+                orderId={id}
+                totalAmount={order?.total_price || 3816}
+                onPaymentSubmitted={() => {
+                  if (id) {
+                    supabase.from('orders').select('*').eq('id', id).single().then(({ data }) => {
+                      if (data) setOrder(data);
+                    });
+                  }
+                }}
+              />
+            )}
+
             {/* 3PL Freight Logistics */}
             <LogisticsTracker
               orderId={id && id !== "demo" ? id : "00000000-0000-4000-8000-000000000001"}

@@ -7,7 +7,6 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   signOut: () => Promise<void>;
-  mockLogin?: (role: 'farmer' | 'buyer' | 'admin') => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -36,46 +35,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signOut = async () => {
-    if (session?.access_token === "mock-token") {
-      setSession(null);
-      setUser(null);
-      return;
-    }
     await supabase.auth.signOut();
   };
 
-  const mockLogin = (role: 'farmer' | 'buyer' | 'admin') => {
-    const mockUser: User = {
-      id: `mock-${role}-123`,
-      aud: "authenticated",
-      role: "authenticated",
-      email: `${role}@demo.test`,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      user_metadata: {
-        full_name: role === 'farmer' ? "Adam (Demo Farmer)" : role === 'buyer' ? "Bengal Agro (Demo Buyer)" : "System Admin",
-        role: role
-      },
-      app_metadata: { provider: "mock" },
-      identities: [],
-      factors: []
-    };
-    
-    const mockSession: Session = {
-      access_token: "mock-token",
-      refresh_token: "mock-refresh",
-      expires_in: 3600,
-      expires_at: 9999999999,
-      token_type: "bearer",
-      user: mockUser
-    };
-    
-    setSession(mockSession);
-    setUser(mockUser);
-  };
-
   return (
-    <AuthContext.Provider value={{ session, user, loading, signOut, mockLogin }}>
+    <AuthContext.Provider value={{ session, user, loading, signOut }}>
       {children}
     </AuthContext.Provider>
   );

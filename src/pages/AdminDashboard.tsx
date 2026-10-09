@@ -2,7 +2,7 @@ import { CurrencyDisplay, CurrencySymbol } from "@/components/ui/currency-displa
 import { Link } from "react-router-dom";
 import {
   Users, ShieldCheck, BarChart3, CheckCircle2, Clock,
-  AlertTriangle, Search, Map, TrendingUp, Settings
+  AlertTriangle, Search, Map, TrendingUp, Settings, BadgeDollarSign
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,15 +10,44 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { AuditLogPanel } from "@/features/audit/components/AuditLogPanel";
 import { FeeTiersPanel } from "@/features/fees/components/FeeTiersPanel";
 import { AdminDisputesPanel } from "@/features/disputes/components/AdminDisputesPanel";
 import { AdminKycQueue } from "@/features/kyc/components/AdminKycQueue";
+import { AdminBkashPaymentVerification } from "@/features/payments/components/AdminBkashPaymentVerification";
+import { supabase } from "@/lib/supabaseClient";
 
 const AdminDashboard = () => {
   const { toast } = useToast();
+  const [stats, setStats] = useState({
+    farmers: 0,
+    listings: 0,
+    pendingKyc: 0,
+    orders: 0
+  });
+
+  useEffect(() => {
+    const fetchAdminStats = async () => {
+      const [farmersRes, listingsRes, kycRes, ordersRes] = await Promise.all([
+        supabase.from('users').select('id', { count: 'exact', head: true }).eq('role', 'FARMER'),
+        supabase.from('listings').select('id', { count: 'exact', head: true }).eq('status', 'ACTIVE'),
+        supabase.from('kyc_verifications').select('id', { count: 'exact', head: true }).eq('status', 'PENDING'),
+        supabase.from('orders').select('id', { count: 'exact', head: true })
+      ]);
+
+      setStats({
+        farmers: farmersRes.count || 0,
+        listings: listingsRes.count || 0,
+        pendingKyc: kycRes.count || 0,
+        orders: ordersRes.count || 0
+      });
+    };
+
+    fetchAdminStats();
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -50,10 +79,10 @@ const AdminDashboard = () => {
         {/* Platform KPIs */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { label: "Total farmers", value: "312", sub: "+18 this month", icon: Users, trend: "up" },
-            { label: "Active listings", value: "148", sub: "32 ready to harvest", icon: Map, trend: "up" },
-            { label: "Pending verifications", value: "6", sub: "2 urgent", icon: Clock, trend: "warn" },
-            { label: "Platform GMV (Mar)", value: <><CurrencyDisplay amount={284000}/>k</>, sub: "+31% vs Feb", icon: TrendingUp, trend: "up" },
+            { label: "Total farmers", value: stats.farmers.toString(), sub: "Live registered growers", icon: Users, trend: "up" },
+            { label: "Active listings", value: stats.listings.toString(), sub: "Ready for harvest trade", icon: Map, trend: "up" },
+            { label: "Pending verifications", value: stats.pendingKyc.toString(), sub: "Awaiting admin review", icon: Clock, trend: stats.pendingKyc > 0 ? "warn" : "up" },
+            { label: "Total orders", value: stats.orders.toString(), sub: "Escrow deals recorded", icon: TrendingUp, trend: "up" },
           ].map(({ label, value, sub, icon: Icon, trend }) => (
             <Card key={label} className="soil-card">
               <CardContent className="p-6 flex items-start justify-between gap-4">
@@ -99,6 +128,9 @@ const AdminDashboard = () => {
         {/* Verification Queue & Disputes */}
         <Tabs defaultValue="verifications">
           <TabsList className="rounded-full bg-muted p-1">
+            <TabsTrigger value="payments" className="rounded-full text-sm gap-1.5">
+              <BadgeDollarSign className="h-4 w-4" />bKash Queue
+            </TabsTrigger>
             <TabsTrigger value="verifications" className="rounded-full text-sm gap-1.5">
               <ShieldCheck className="h-4 w-4" />Verifications
             </TabsTrigger>
@@ -116,6 +148,10 @@ const AdminDashboard = () => {
             </TabsTrigger>
           </TabsList>
 
+          <TabsContent value="payments" className="mt-5">
+            <AdminBkashPaymentVerification />
+          </TabsContent>
+
           <TabsContent value="verifications" className="mt-5">
             <AdminKycQueue />
           </TabsContent>
@@ -128,7 +164,7 @@ const AdminDashboard = () => {
             <div className="py-12 text-center space-y-3 text-muted-foreground">
               <Users className="h-12 w-12 mx-auto opacity-30" />
               <p className="font-semibold">Full farmer registry coming soon</p>
-              <p className="text-sm">Search, filter, and manage all 312 verified farmers on the platform.</p>
+              <p className="text-sm">Search, filter, and manage all verified farmers on the platform.</p>
             </div>
           </TabsContent>
 

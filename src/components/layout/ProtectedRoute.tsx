@@ -26,8 +26,10 @@ const ProtectedRoute = ({ role }: ProtectedRouteProps) => {
     return <Navigate to="/login" replace />;
   }
 
-  // Live Role Validation tied explicitly to Native Database Authenticated tokens!
-  const userRole = session?.user?.user_metadata?.role || "farmer";
+  const email = session?.user?.email?.toLowerCase();
+  const rawRole = (session?.user?.user_metadata?.role || "").toLowerCase();
+  const isAdmin = email === "md.abirsharif68@gmail.com" || rawRole === "admin";
+  const userRole = isAdmin ? "admin" : (rawRole || "farmer");
   
   if (role && role !== userRole) {
     return <Navigate to="/" replace />;

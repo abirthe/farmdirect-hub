@@ -7,10 +7,8 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/contexts/AuthContext";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { AuthBrandSidePanel } from "./AuthBrandSidePanel";
-import { AuthDemoAccounts } from "./AuthDemoAccounts";
 
 type Role = "farmer" | "buyer" | "admin";
 
@@ -27,7 +25,6 @@ const roleOptions: { value: Role; label: string; desc: string; emoji: string }[]
 const AuthForm = ({ mode }: AuthFormProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { mockLogin } = useAuth();
   
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -238,8 +235,6 @@ const AuthForm = ({ mode }: AuthFormProps) => {
               {isLogin ? "Sign up free" : "Sign in"}
             </Link>
           </p>
-
-          <AuthDemoAccounts onMockLogin={mockLogin} />
         </div>
       </div>
     </div>

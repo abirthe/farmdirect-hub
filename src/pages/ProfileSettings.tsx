@@ -49,7 +49,7 @@ const ProfileSettings = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      if (user?.id && user.id !== "mock-farmer-123" && user.id !== "mock-buyer-123") {
+      if (user?.id) {
         await supabase.auth.updateUser({
           data: { full_name: profile.name },
         });

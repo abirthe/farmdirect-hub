@@ -16,24 +16,7 @@ import { Slider } from "@/components/ui/slider";
 import { useMarketplaceListings } from "@/hooks/useMarketplaceListings";
 import { MarketplaceCard } from "@/components/marketplace/MarketplaceCard";
 
-const mockListings = [
-  {
-    id: "lst-001", crop: "Maize", emoji: "🌽",
-    farmName: "Bogra Maize Cluster", farmer: "Rafiqul Islam", location: "Rajshahi Division, Bangladesh",
-    lat: 24.8480, lng: 89.3730,
-    area: "12.8 ha", qty: "18.4 t", floorPrice: 318,
-    status: "Ready in 10 days", statusType: "upcoming", ndvi: 1.12, buyers: 26, quality: "Grade A", verified: true, rating: 4.8,
-  },
-  {
-    id: "lst-002", crop: "Wheat", emoji: "🌾",
-    farmName: "Rajshahi Wheat Block", farmer: "Rafiqul Islam", location: "Rajshahi Division, Bangladesh",
-    lat: 24.3636, lng: 88.6241,
-    area: "7.4 ha", qty: "11.2 t", floorPrice: 245,
-    status: "Ready now", statusType: "ready", ndvi: 0.98, buyers: 14, quality: "Grade B+", verified: true, rating: 4.6,
-  }
-];
-
-const statusColor: Record<string, string> = {
+export const marketplaceStatusStyles: Record<string, string> = {
   ready: "bg-green-100 text-green-700 border-green-200 dark:bg-green-950/40 dark:text-green-300 dark:border-green-800",
   upcoming: "bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800",
   growing: "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800",
@@ -58,28 +41,27 @@ const Marketplace = () => {
     }
   }, [userRole, navigate]);
 
-
   const getEmoji = (cropType: string) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const map: any = { maize: "🌽", wheat: "🌾", rice: "🍚", potato: "🪴", soybean: "🫘", groundnut: "🥜" };
     return map[cropType?.toLowerCase()] || "📦";
   };
 
-  const dynamicListings = dbListings.length > 0 ? dbListings.map(d => ({
+  const dynamicListings = dbListings.map(d => ({
     id: d.id,
     crop: d.crop_cycles?.crop_type || "Unknown Crop",
     emoji: getEmoji(d.crop_cycles?.crop_type),
     farmName: d.crop_cycles?.farms?.farm_name || "Unknown Farm",
     farmer: d.crop_cycles?.farms?.users?.full_name || "Unknown Farmer",
     location: d.crop_cycles?.farms?.location_name || "Unverified Location",
-    lat: 24.8480, lng: 89.3730, // Mocked lat/lng since boundary_coordinates is complex
+    lat: 24.8480, lng: 89.3730,
     area: `${d.crop_cycles?.farms?.total_hectares || 0} ha`,
     qty: `${d.quantity_tons} t`,
     floorPrice: d.floor_price_per_ton,
     status: d.status === 'ACTIVE' ? "Ready now" : "Upcoming",
     statusType: d.status === 'ACTIVE' ? "ready" : "upcoming",
     ndvi: 1.0, buyers: 0, quality: d.quality_grade || "Pending", verified: true, rating: 5.0
-  })) : mockListings; // Fallback to mocks if DB entirely empty to maintain design
+  }));
 
   const filtered = dynamicListings.filter(l => {
     const matchSearch = l.crop.toLowerCase().includes(search.toLowerCase()) ||
