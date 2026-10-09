@@ -21,8 +21,17 @@ By combining satellite remote sensing, ground IoT sensor telemetry, algorithmic 
   * **Esri High-Res Orthomosaic:** Sub-meter photographic land-cover imagery.
   * **OpenTopo Elevation:** Contour maps for slope analysis and water-drainage assessment.
   * **Carto Minimalist:** Clean vector layout for cadastral boundary review.
-* **Interactive Polygon Digitizing:** Powered by Leaflet and Leaflet-Geoman (`@geoman-io/leaflet-geoman-free`), allowing farmers to draw parcel boundaries, calculate exact hectare areas, and bind boundaries to legal land deeds.
-* **District Cluster Boundaries:** Integrated GeoJSON boundaries (`geoBoundariesService`) covering major agricultural divisions (Rajshahi, Rangpur, Bogura, Dinajpur, etc.) for regional analysis.
+* **Lovable Floating Drawing Command Ribbon:** Intuitive point-and-click parcel digitizing powered by Leaflet & Geoman with:
+  * 📐 **Draw Field (Polygon):** Freehand multi-point perimeter tracing with double-click or origin seal.
+  * 🔲 **Box Plot (Rectangle):** Quick click-and-drag bounding boundary creation.
+  * ✏️ **Reshape Pins (Vertex Edit):** Live corner pin dragging and edge vertex refinement.
+  * 📍 **Fly-to-District Navigation:** Instant camera zoom to key agricultural clusters (Bogura, Rajshahi, Dinajpur, Rangpur, Jashore, Mymensingh, Dhaka Hub).
+* **Real-Time Geodesic Parcel Telemetry HUD:** Uses spherical excess ($R = 6,378,137\text{ m}$) to compute:
+  * Exact land area in **Hectares**, **Acres**, **$m^2$**, and South Asian **Bigha** units.
+  * Total perimeter boundary length in kilometers via Haversine distance.
+  * GPS vertex count with instant "GPS Locked" verification badges.
+  * Automatic form auto-population during farm registration.
+* **District Cluster Boundaries:** Integrated GeoJSON boundaries (`geoBoundariesService`) covering major agricultural divisions for regional analysis.
 
 ### 2. Agroclimatic Microclimate Intelligence & Satellite NDVI
 * **Real-Time Soil Profile (Open-Meteo Integration):** Direct ingestion from Open-Meteo Agroclimatic APIs:
@@ -120,11 +129,12 @@ farmdirect-hub/
 ├── docs/                    # Architectural decision records (DECISIONS.md)
 ├── public/                  # Static assets, _headers (CSP/HSTS), and _redirects
 ├── src/
-│   ├── components/          # Shared layout, auth, common, and UI elements
+│   ├── components/          # Shared layout, auth, common, map, and UI elements
 │   │   ├── agrodirect/      # Agroclimatic widgets & components
 │   │   ├── auth/            # Modular authentication subcomponents
 │   │   ├── common/          # GlobalErrorBoundary, ThemeToggle
 │   │   ├── layout/          # ProtectedRoute, Navbar, PageSkeleton
+│   │   ├── map/             # MapDrawingControls & ParcelTelemetryHud
 │   │   └── ui/              # shadcn UI components & MapView
 │   ├── contexts/            # Auth and Currency state providers
 │   ├── features/            # Feature-Sliced Architecture modules
@@ -146,7 +156,7 @@ farmdirect-hub/
 │   │   ├── rfq/             # Reverse auction tenders & bidding board
 │   │   └── traceability/    # Consumer batch origin & certificate verification
 │   ├── hooks/               # Custom hooks (usePageMeta, useToast, useFarmerFarms)
-│   ├── lib/                 # Pure utility algorithms (ML yield model, Supabase client)
+│   ├── lib/                 # Pure algorithms (geodesic calculations, ML yield model)
 │   ├── pages/               # Code-split top-level view routes
 │   ├── services/            # Open APIs (weather, routing, NDVI, commodity quotes)
 │   └── test/                # Unit, integration, and security test suites
@@ -195,7 +205,7 @@ Open your browser at `http://localhost:8080`.
 The project enforces a strict definition of done with comprehensive automated verification:
 
 ```bash
-# Run unit & component tests (23 test suites, 101 tests)
+# Run unit & component tests (25 test suites, 108 tests)
 npm test
 
 # Run ESLint validation (0 errors, 0 warnings)
