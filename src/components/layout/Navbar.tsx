@@ -74,10 +74,10 @@ const Navbar = () => {
       >
         <div className="container flex items-center justify-between h-16 md:h-18 gap-4 py-3">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2.5 shrink-0" aria-label="AgroDirect home">
+          <Link to="/" className="flex items-center gap-2.5 shrink-0 group" aria-label="AgroDirect home">
             <div className={cn(
-              "flex h-8 w-8 items-center justify-center rounded-full transition-colors duration-300",
-              scrolled || !isLanding ? "bg-primary text-primary-foreground" : "bg-white/20 text-white"
+              "flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 group-hover:scale-110 group-hover:shadow-md",
+              scrolled || !isLanding ? "bg-primary text-primary-foreground" : "bg-white/20 text-white group-hover:bg-white/30"
             )}>
               <Leaf className="h-4 w-4" />
             </div>

@@ -92,8 +92,8 @@ const Marketplace = () => {
           </div>
           <div className="mt-8 grid grid-cols-3 gap-3 max-w-lg">
             {[{ label: "Active listings", v: "148" }, { label: "Verified farmers", v: "312" }, { label: "Avg price uplift", v: "+27%" }].map(s => (
-              <div key={s.label} className="glass-panel px-4 py-3 text-white text-center">
-                <p className="text-2xl font-black text-white">{s.v}</p>
+              <div key={s.label} className="glass-panel px-4 py-3 text-white text-center group transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                <p className="text-2xl font-black text-white transition-transform group-hover:scale-105">{s.v}</p>
                 <p className="text-[10px] uppercase tracking-[0.16em] text-white/70 mt-1">{s.label}</p>
               </div>
             ))}

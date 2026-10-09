@@ -84,14 +84,14 @@ const AdminDashboard = () => {
             { label: "Pending verifications", value: stats.pendingKyc.toString(), sub: "Awaiting admin review", icon: Clock, trend: stats.pendingKyc > 0 ? "warn" : "up" },
             { label: "Total orders", value: stats.orders.toString(), sub: "Escrow deals recorded", icon: TrendingUp, trend: "up" },
           ].map(({ label, value, sub, icon: Icon, trend }) => (
-            <Card key={label} className="soil-card">
+            <Card key={label} className="soil-card group transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
               <CardContent className="p-6 flex items-start justify-between gap-4">
                 <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground uppercase tracking-[0.15em]">{label}</p>
+                  <p className="text-xs text-muted-foreground uppercase tracking-[0.15em] transition-colors group-hover:text-foreground/80">{label}</p>
                   <p className="text-3xl font-black">{value}</p>
                   <p className="text-xs text-muted-foreground">{sub}</p>
                 </div>
-                <div className={`flex h-10 w-10 items-center justify-center rounded-xl shrink-0 ${
+                <div className={`flex h-10 w-10 items-center justify-center rounded-xl shrink-0 transition-transform duration-300 group-hover:scale-110 ${
                   trend === "warn" ? "bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400" : "bg-primary/10 text-primary"
                 }`}>
                   <Icon className="h-5 w-5" />
