@@ -1,7 +1,7 @@
 # AgroDirect Hub 🌾
 
 > **Decentralized Direct-Trade Marketplace & Precision AgroTech Operating System**  
-> Direct farm-to-buyer transactions, algorithmic yield verification, satellite parcel digitizing, and automated escrow settlement — bypassing extractive middlemen.
+> Direct farm-to-buyer transactions, algorithmic yield verification, satellite parcel digitizing, multi-layer GIS mapping, and automated escrow settlement — bypassing extractive middlemen.
 
 ---
 
@@ -9,7 +9,7 @@
 
 **AgroDirect Hub** bridges smallholder agricultural producers, corporate food processors, institutional buyers, and agronomists into a unified, cryptographically verified trading ecosystem.
 
-By combining satellite remote sensing, ground IoT sensor telemetry, algorithmic dispute resolution, and smart escrow contracts, the platform eliminates traditional 15–25% broker markups while securing guaranteed floor pricing for farmers.
+By combining satellite remote sensing, ground IoT sensor telemetry, algorithmic dispute resolution, and smart escrow contracts with mobile money (bKash/Nagad) support, the platform eliminates traditional 15–25% broker markups while securing guaranteed floor pricing for farmers.
 
 ---
 
@@ -22,19 +22,25 @@ By combining satellite remote sensing, ground IoT sensor telemetry, algorithmic 
   * **OpenTopo Elevation:** Contour maps for slope analysis and water-drainage assessment.
   * **Carto Minimalist:** Clean vector layout for cadastral boundary review.
 * **Interactive Polygon Digitizing:** Powered by Leaflet and Leaflet-Geoman (`@geoman-io/leaflet-geoman-free`), allowing farmers to draw parcel boundaries, calculate exact hectare areas, and bind boundaries to legal land deeds.
+* **District Cluster Boundaries:** Integrated GeoJSON boundaries (`geoBoundariesService`) covering major agricultural divisions (Rajshahi, Rangpur, Bogura, Dinajpur, etc.) for regional analysis.
 
-### 2. Agroclimatic Microclimate Intelligence (Open-Meteo Integration)
-* **Real-Time Soil Profile:** Direct ingestion from Open-Meteo Agroclimatic APIs:
+### 2. Agroclimatic Microclimate Intelligence & Satellite NDVI
+* **Real-Time Soil Profile (Open-Meteo Integration):** Direct ingestion from Open-Meteo Agroclimatic APIs:
   * Root-zone soil moisture (0–7 cm surface layer & 7–28 cm root reserve).
   * Surface and sub-surface soil temperatures.
 * **FAO-56 Evapotranspiration:** Daily water loss modeling to detect crop moisture deficits.
 * **Fungal Hazard Risk Model:** Automated pathogen growth indexing combining relative humidity, dewpoint spread, and ambient temperature.
+* **Satellite NDVI Telemetry (`satelliteNdviService`):** Sentinel-2 canopy vigor and photosynthetic absorption telemetry estimating biomass and projected harvest yield.
 
-### 3. Direct Trade & Escrow Settlement
+### 3. Direct Trade, Smart Escrow & bKash Mobile Money Settlement
 * **Escrow Lock & QR Delivery Verification:** Buyer deposits are held in smart escrow. Funds are released exclusively upon cryptographically hashed QR delivery scans at logistics intake.
+* **bKash Escrow & Verification Engine:** Full support for mobile financial services (MFS) escrow workflows (`submit_bkash_escrow_payment`, `verify_bkash_payment`, `cancel_unpaid_order`), including:
+  * Real-time 1% platform fee auto-deduction.
+  * Safe order cancellation and inventory stock restoration.
+  * Admin TRX audit and manual dispute verification panels.
 * **Forward Crop Contracts:** Buyers lock future harvest pricing against AI-predicted yields under atomic PostgreSQL row locks.
 * **Reverse Auction RFQs:** Institutional buyers issue bulk procurement tenders; verified farmers submit competitive bids with automated award logic.
-* **Integrated 3PL Carrier Logistics:** Carrier assignment with automated tracking code generation (`AGRO-3PL-XXXX`) and GPS waypoint history.
+* **Integrated 3PL Carrier Logistics & OSRM Routing:** Real-time turn-by-turn road routing via the Open Source Routing Machine (`routingService`) for dispatch waypoints, travel duration, and distance estimation (`AGRO-3PL-XXXX`).
 
 ### 4. Precision Agronomy & IoT Telemetry
 * **Hardware Probe Telemetry:** Ingests nitrogen, phosphorus, potassium (NPK), moisture, and soil pH levels directly into crop cycles.
@@ -49,6 +55,7 @@ By combining satellite remote sensing, ground IoT sensor telemetry, algorithmic 
 
 ### 6. Institutional Intelligence & Agricultural Credit Passports
 * **De-Identified Commodity Market Reports:** Aggregates regional yield, acreage, and pricing trends across district clusters without compromising farmer PII or exact parcel GPS coordinates.
+* **Live Commodity Quotes:** Real-time grain, rice, and vegetable pricing feeds with percentage shifts.
 * **Credit & Insurance Dossiers:** Computes objective 300–850 agricultural credit scores backed by NDVI historical variance, sealed with immutable SHA-256 verification hashes for institutional lenders.
 * **Automated KYC/KYB Rule Engine:** Validates farmer NID and corporate tax identification numbers, detects duplicate parcel claims, and conducts AML screening.
 
@@ -70,20 +77,23 @@ By combining satellite remote sensing, ground IoT sensor telemetry, algorithmic 
 │  - Default-Deny Row Level Security (RLS) on all tables     │
 │  - SECURITY DEFINER RPCs for all financial/stock mutations│
 │  - search_path = public, pg_temp isolation                │
-│  - Forward-Only Schema Migrations (18 applied)            │
+│  - Forward-Only Schema Migrations (24 applied)            │
 │  - Immutable SHA-256 Chained Audit Logs                   │
 └─────────────────────────────┬─────────────────────────────┘
                               │
                  External Services / APIs
      ├── Open-Meteo Agroclimatic API (Soil & Evapotranspiration)
+     ├── OSRM Road Routing Engine (Turn-by-turn logistics)
      ├── Esri / OpenStreetMap / OpenTopoMap Tile Engines
      └── Cloudflare Pages & Vercel Edge Security Headers (CSP)
 ```
 
 ### Security Prime Directives
 1. **Server-Enforced State & Financial Logic:** Client applications never perform direct price, stock, or status mutations. All critical actions occur inside transactional PostgreSQL RPCs.
-2. **Hardened Content Security Policy (CSP):** `connect-src` restricted strictly to Supabase backends and Open-Meteo agroclimatic endpoints; clickjacking prevention via `X-Frame-Options: DENY` and `nosniff` headers.
-3. **Client Secret Isolation:** Zero backend secrets or service role keys shipped in client code. Automated CI regression tests verify mock credential handling in `.env`-less environments.
+2. **Hardened Content Security Policy (CSP):** `connect-src` restricted strictly to Supabase backends, Open-Meteo agroclimatic endpoints, and OSRM routing; clickjacking prevention via `X-Frame-Options: DENY` and `nosniff` headers.
+3. **Session & Cache Hygiene:** TanStack React Query cache is wiped (`queryClient.clear()`) on sign-out to prevent credential or protected transaction leakages across shared workstations.
+4. **Client Secret Isolation:** Zero backend secrets or service role keys shipped in client code. Automated CI regression tests verify mock credential handling in `.env`-less environments.
+5. **Fresh HTML Revalidation:** Cache-Control enforces `must-revalidate` on HTML entrypoints while hashed assets are cached immutably.
 
 ---
 
@@ -94,10 +104,10 @@ By combining satellite remote sensing, ground IoT sensor telemetry, algorithmic 
 | **Frontend Framework** | [React 18](https://react.dev/), [Vite](https://vitejs.dev/), [TypeScript](https://www.typescriptlang.org/) |
 | **Styling & UI** | [Tailwind CSS](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/), [Lucide Icons](https://lucide.dev/) |
 | **Mapping & GIS** | [Leaflet](https://leafletjs.com/), [Leaflet-Geoman](https://geoman.io/), Esri ArcGIS, OpenTopoMap |
-| **Data & Caching** | [TanStack React Query](https://tanstack.com/query), Context API |
+| **Data & Caching** | [TanStack React Query v5](https://tanstack.com/query), Context API |
 | **Charts & Analytics** | [Recharts](https://recharts.org/) |
 | **Database & Auth** | [Supabase](https://supabase.com/) (PostgreSQL 15, Auth, RLS, Stored Procedures) |
-| **External APIs** | [Open-Meteo Agroclimatic API](https://open-meteo.com/en/docs/agronomy-api) |
+| **External APIs** | [Open-Meteo Agroclimatic API](https://open-meteo.com/en/docs/agronomy-api), OSRM Routing Engine |
 | **Testing & Quality** | [Vitest](https://vitest.dev/), [React Testing Library](https://testing-library.com/), [ESLint](https://eslint.org/) |
 
 ---
@@ -110,16 +120,18 @@ farmdirect-hub/
 ├── docs/                    # Architectural decision records (DECISIONS.md)
 ├── public/                  # Static assets, _headers (CSP/HSTS), and _redirects
 ├── src/
-│   ├── components/          # Shared layout, auth, and UI elements
+│   ├── components/          # Shared layout, auth, common, and UI elements
 │   │   ├── agrodirect/      # Agroclimatic widgets & components
 │   │   ├── auth/            # Modular authentication subcomponents
+│   │   ├── common/          # GlobalErrorBoundary, ThemeToggle
 │   │   ├── layout/          # ProtectedRoute, Navbar, PageSkeleton
 │   │   └── ui/              # shadcn UI components & MapView
 │   ├── contexts/            # Auth and Currency state providers
 │   ├── features/            # Feature-Sliced Architecture modules
-│   │   ├── audit/           # Immutable audit log verification
+│   │   ├── audit/           # Immutable audit log verification & admin panels
 │   │   ├── buyers/          # Procurement analytics & smart sourcing
 │   │   ├── disputes/        # Evidence threads & AI dispute triage
+│   │   ├── farmer/          # Modular farmer cockpit (KPIs, yield charts, plots list)
 │   │   ├── fees/            # Dynamic basis-point tier configuration
 │   │   ├── financing/       # Credit passport dossiers & underwriting
 │   │   ├── forecasts/       # Regional demand deficit forecasting
@@ -128,16 +140,18 @@ farmdirect-hub/
 │   │   ├── kyc/             # Identity & land title validation queue
 │   │   ├── logistics/       # 3PL dispatch & route waypoint tracking
 │   │   ├── marketplace/     # AI listing verification & deal cards
+│   │   ├── payments/        # bKash MFS escrow cards & admin verification
 │   │   ├── prescriptions/   # Agronomic schedule generator
 │   │   ├── reports/         # Aggregated district commodity intelligence
 │   │   ├── rfq/             # Reverse auction tenders & bidding board
 │   │   └── traceability/    # Consumer batch origin & certificate verification
-│   ├── hooks/               # Custom hooks (usePageMeta, useToast, etc.)
+│   ├── hooks/               # Custom hooks (usePageMeta, useToast, useFarmerFarms)
 │   ├── lib/                 # Pure utility algorithms (ML yield model, Supabase client)
 │   ├── pages/               # Code-split top-level view routes
+│   ├── services/            # Open APIs (weather, routing, NDVI, commodity quotes)
 │   └── test/                # Unit, integration, and security test suites
 ├── supabase/
-│   ├── migrations/          # 18 forward-only SQL migrations
+│   ├── migrations/          # 24 forward-only SQL migrations
 │   └── config.toml          # Supabase CLI configuration
 ├── vercel.json              # Vercel deployment & security headers
 ├── vite.config.ts           # Vite bundler config with manual chunk splitting
@@ -151,7 +165,7 @@ farmdirect-hub/
 ### Prerequisites
 * [Node.js](https://nodejs.org/) (v18.x or v20.x recommended)
 * [npm](https://www.npmjs.com/) (v9.x or higher)
-* [Supabase CLI](https://supabase.com/docs/guides/cli) (optional, for local DB migrations)
+* [Supabase CLI](https://supabase.com/docs/guides/cli) (v2.x, for local DB migrations)
 
 ### 1. Clone & Install
 ```bash
@@ -181,10 +195,10 @@ Open your browser at `http://localhost:8080`.
 The project enforces a strict definition of done with comprehensive automated verification:
 
 ```bash
-# Run unit & component tests (20 test suites, 87 tests)
+# Run unit & component tests (23 test suites, 101 tests)
 npm test
 
-# Run ESLint validation
+# Run ESLint validation (0 errors, 0 warnings)
 npm run lint
 
 # Build production bundle with typecheck
@@ -192,9 +206,16 @@ npm run build
 ```
 
 ### Database Migrations
-To inspect and synchronize schema migrations against your Supabase project:
+To inspect and synchronize schema migrations against your linked Supabase project:
 ```bash
+# Inspect migration status
+npx supabase migration list
+
+# Apply pending migrations
 npx supabase db push
+
+# Generate fresh TypeScript bindings
+npx supabase gen types typescript --linked > src/integrations/supabase/types.ts
 ```
 
 ---

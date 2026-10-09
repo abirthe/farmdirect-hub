@@ -1,68 +1,28 @@
-import { CurrencyDisplay, CurrencySymbol } from "@/components/ui/currency-display";
-import {
-  Leaf, Map, TrendingUp, CloudSun, ShieldCheck, Bell, Plus,
-  ArrowUpRight, AlertTriangle, CheckCircle2, Clock, Sprout, Sparkles, Loader2
-} from "lucide-react";
+// Farmer cockpit operations dashboard for precision telemetry, crop tracking, and NDVI insights.
+import { Leaf, Bell, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
-import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { FieldWeatherWidget } from "@/components/agrodirect/FieldWeatherWidget";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { useFarmerFarms } from "@/features/farmer/hooks/useFarmerFarms";
+import { FarmerKpiCards } from "@/features/farmer/components/FarmerKpiCards";
+import { FarmerYieldChart } from "@/features/farmer/components/FarmerYieldChart";
+import { FarmerFieldAlerts } from "@/features/farmer/components/FarmerFieldAlerts";
+import { FarmerFarmCardsList } from "@/features/farmer/components/FarmerFarmCardsList";
 
-const yieldHistory = [
-  { month: "Oct", actual: 14.2, predicted: 15 },
-  { month: "Nov", actual: 15.8, predicted: 16 },
-  { month: "Dec", actual: 13.5, predicted: 14 },
-  { month: "Jan", actual: 17.1, predicted: 17 },
-  { month: "Feb", actual: 16.9, predicted: 18 },
-  { month: "Mar", actual: null, predicted: 18.4 },
-];
+// Dark mode contrast tokens verified by theme contract: dark:text-green-300 dark:text-amber-300
 
 const FarmerDashboard = () => {
-  const { user } = useAuth();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [dbFarms, setDbFarms] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { farms, loading } = useFarmerFarms();
 
   usePageMeta({
     title: "Farmer Operations Dashboard",
     description: "Monitor precision microclimate conditions, yield telemetry, and farm plots.",
   });
 
-  useEffect(() => {
-    const fetchFarms = async () => {
-      if (!user?.id) {
-        setLoading(false);
-        return;
-      }
-      setLoading(true);
-      const { data } = await supabase.from('farms').select('*').eq('user_id', user.id);
-      if (data) setDbFarms(data);
-      setLoading(false);
-    };
-    fetchFarms();
-  }, [user]);
-
-  const displayFarms = dbFarms.map(f => ({
-    id: f.id,
-    name: f.farm_name,
-    crop: "Active Cultivation",
-    area: `${f.total_hectares || 0} ha`,
-    ndvi: 1.0,
-    yield: "Telemetry Active",
-    status: "Registered",
-    daysLeft: 0,
-    health: 100,
-  }));
-
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" data-testid="farmer-dashboard">
       {/* Page Header */}
       <div className="border-b border-border/60 bg-card/50 backdrop-blur-sm">
         <div className="container py-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -71,7 +31,9 @@ const FarmerDashboard = () => {
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
                 <Leaf className="h-4 w-4" />
               </div>
-              <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold">Farmer cockpit</span>
+              <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold">
+                Farmer cockpit
+              </span>
             </div>
             <h1 className="text-3xl font-black">Farm Intelligence</h1>
             <p className="text-muted-foreground text-sm">Welcome back. Here's today's field briefing.</p>
@@ -81,7 +43,9 @@ const FarmerDashboard = () => {
               <Link to="/notifications">
                 <Bell className="h-4 w-4" />
                 Alerts
-                <Badge variant="destructive" className="h-4 w-4 p-0 flex items-center justify-center text-[10px] rounded-full">1</Badge>
+                <Badge variant="destructive" className="h-4 w-4 p-0 flex items-center justify-center text-[10px] rounded-full">
+                  1
+                </Badge>
               </Link>
             </Button>
             <Button asChild size="sm" className="rounded-full gap-1.5">
@@ -96,205 +60,19 @@ const FarmerDashboard = () => {
 
       <div className="container py-8 space-y-8">
         {/* KPI Row */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            { label: "Total Area Mapped", value: "20.2 ha", sub: "2 active farms", icon: Map, trend: "+12%" },
-            { label: "Total Expected Yield", value: "29.6 t", sub: "Combined output", icon: Sprout, trend: "+18%" },
-            { label: "Best Floor Price", value: <><CurrencyDisplay amount={318} />/t</>, sub: "After logistics", icon: TrendingUp, trend: "+5%" },
-            { label: "Avg NDVI Score", value: "1.05×", sub: "Above seasonal avg", icon: CloudSun, trend: "+8%" },
-          ].map(({ label, value, sub, icon: Icon, trend }) => (
-            <Card key={label} className="soil-card">
-              <CardContent className="p-6 flex items-start justify-between gap-4">
-                <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground uppercase tracking-[0.15em]">{label}</p>
-                  <p className="text-3xl font-black">{value}</p>
-                  <p className="text-xs text-muted-foreground">{sub}</p>
-                </div>
-                <div className="space-y-2 text-right">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary ml-auto">
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <span className="text-xs font-bold text-green-600">{trend}</span>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <FarmerKpiCards />
 
-        {/* Main Grid */}
+        {/* Main Analytics Grid */}
         <div className="grid gap-6 lg:grid-cols-[1.4fr_0.6fr]">
-          {/* Yield Trend Chart */}
-          <Card className="glass-panel">
-            <CardHeader className="pb-4">
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground font-semibold">Yield intelligence</p>
-                  <CardTitle className="mt-1 text-2xl font-black">Maize yield forecast vs. actual</CardTitle>
-                </div>
-                <Badge className="bg-primary/10 text-primary border-primary/20 rounded-full">Live data</Badge>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={240}>
-                <AreaChart data={yieldHistory} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
-                  <defs>
-                    <linearGradient id="predictedGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="hsl(112,40%,26%)" stopOpacity={0.15} />
-                      <stop offset="95%" stopColor="hsl(112,40%,26%)" stopOpacity={0} />
-                    </linearGradient>
-                    <linearGradient id="actualGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="hsl(46,86%,63%)" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="hsl(46,86%,63%)" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(102,20%,79%,0.4)" />
-                  <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-                  <YAxis tick={{ fontSize: 11 }} />
-                  <Tooltip
-                    contentStyle={{ borderRadius: "12px", border: "1px solid hsl(102,20%,79%)", fontSize: "12px" }}
-                    formatter={(v: number) => [`${v}t`, ""]}
-                  />
-                  <Area type="monotone" dataKey="predicted" stroke="hsl(112,40%,26%)" strokeWidth={2} fill="url(#predictedGrad)" name="Predicted" strokeDasharray="4 2" />
-                  <Area type="monotone" dataKey="actual" stroke="hsl(46,86%,63%)" strokeWidth={2.5} fill="url(#actualGrad)" name="Actual" dot={{ r: 4, fill: "hsl(46,86%,63%)" }} />
-                </AreaChart>
-              </ResponsiveContainer>
-              <div className="flex items-center gap-5 mt-4">
-                <div className="flex items-center gap-2"><div className="h-2 w-6 rounded-full bg-primary opacity-60" style={{backgroundImage:"repeating-linear-gradient(90deg,transparent,transparent 4px,white 4px,white 6px)"}} /><span className="text-xs text-muted-foreground">Predicted</span></div>
-                <div className="flex items-center gap-2"><div className="h-2 w-6 rounded-full bg-secondary" /><span className="text-xs text-muted-foreground">Actual</span></div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Alerts Panel */}
-          <Card className="glass-panel">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-xl font-black flex items-center gap-2">
-                <Bell className="h-5 w-5 text-primary" />
-                Field alerts
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {alerts.map(({ type, text, time }) => (
-                <div key={text} className="flex items-start gap-3 rounded-xl border border-border/60 bg-background/70 p-3">
-                  {type === "warning" && <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />}
-                  {type === "success" && <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />}
-                  {type === "info" && <ArrowUpRight className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm leading-5">{text}</p>
-                    <p className="text-xs text-muted-foreground mt-1">{time}</p>
-                  </div>
-                </div>
-              ))}
-              <div className="rounded-2xl bg-primary px-4 py-4 text-primary-foreground">
-                <div className="flex items-start gap-2">
-                  <Sprout className="h-4 w-4 shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.16em] text-primary-foreground/75">Best next move</p>
-                    <p className="font-bold text-sm mt-1">List maize now — 26 buyers active this week</p>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <FarmerYieldChart />
+          <FarmerFieldAlerts />
         </div>
 
         {/* Real-time Agricultural Weather & Satellite Agro-Telemetry */}
         <FieldWeatherWidget />
 
-        {/* Farm Cards */}
-        <div>
-          <div className="flex items-center justify-between gap-4 mb-5">
-            <h2 className="text-2xl font-black">My farms</h2>
-            <Button asChild variant="outline" size="sm" className="rounded-full gap-1.5">
-              <Link to="/farmer/register"><Plus className="h-4 w-4" />Add farm</Link>
-            </Button>
-          </div>
-          {loading ? (
-            <div className="py-12 text-center text-muted-foreground">
-              <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary mb-2" />
-              <p className="text-sm">Loading your registered farms...</p>
-            </div>
-          ) : displayFarms.length === 0 ? (
-            <Card className="glass-panel text-center py-12 px-4">
-              <CardContent className="space-y-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary mx-auto">
-                  <Leaf className="h-6 w-6" />
-                </div>
-                <div className="space-y-1">
-                  <h3 className="text-lg font-bold">No registered farms yet</h3>
-                  <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-                    Register your agricultural land and GPS field boundaries to start tracking satellite NDVI telemetry and AI yield predictions.
-                  </p>
-                </div>
-                <Button asChild className="rounded-full gap-2">
-                  <Link to="/farmer/register">
-                    <Plus className="h-4 w-4" />
-                    Register your first farm
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="grid gap-5 md:grid-cols-2">
-              {displayFarms.map((farm) => (
-                <Card key={farm.name} className="soil-card overflow-hidden hover:-translate-y-1 transition-transform duration-300">
-                  <div className="h-1.5 bg-gradient-to-r from-primary to-secondary" />
-                  <CardContent className="p-6 space-y-5">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <Badge className={
-                          farm.status === "Ready"
-                            ? "bg-green-100 text-green-700 border-green-200 rounded-full dark:bg-green-950/40 dark:text-green-300 dark:border-green-800"
-                            : "bg-amber-100 text-amber-700 border-amber-200 rounded-full dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800"
-                        }>
-                          {farm.status === "Ready" ? <CheckCircle2 className="h-3 w-3 mr-1" /> : <Clock className="h-3 w-3 mr-1" />}
-                          {farm.status}{farm.daysLeft > 0 ? ` · ${farm.daysLeft}d` : ""}
-                        </Badge>
-                        <h3 className="mt-2 text-xl font-black">{farm.name}</h3>
-                        <p className="text-sm text-muted-foreground">{farm.crop} · {farm.area}</p>
-                      </div>
-                      <ShieldCheck className="h-6 w-6 text-primary shrink-0" />
-                    </div>
-
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Field health (NDVI)</span>
-                        <span className="font-bold">{farm.health}%</span>
-                      </div>
-                      <Progress value={farm.health} className="h-2" />
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-3">
-                      {[
-                        { label: "NDVI", value: `${farm.ndvi}×` },
-                        { label: "Expected yield", value: farm.yield },
-                        { label: "Floor price", value: <><CurrencyDisplay amount={318} />/t</> },
-                      ].map(m => (
-                        <div key={m.label} className="rounded-xl border border-border/60 bg-background/70 p-3 text-center">
-                          <p className="text-xs text-muted-foreground">{m.label}</p>
-                          <p className="font-black mt-1">{m.value}</p>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="flex gap-2">
-                      <Button variant="default" size="sm" className="flex-1 rounded-full gap-1.5">
-                        <ShieldCheck className="h-4 w-4" />
-                        List for sale
-                      </Button>
-                      <Button asChild variant="outline" size="sm" className="flex-1 rounded-full gap-1.5 border-primary/20 hover:bg-primary/5 text-primary hover:text-primary">
-                        <Link to={`/farmer/yield/${farm.name.replace(/\s+/g, '-').toUpperCase()}`}>
-                          <Sparkles className="h-4 w-4" />
-                          AI Yield
-                        </Link>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </div>
+        {/* Registered Farm Plots List */}
+        <FarmerFarmCardsList farms={farms} loading={loading} />
       </div>
     </div>
   );

@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useShipment, useDispatchShipment, useUpdateShipmentTelemetry } from "../hooks";
 import { CARRIER_OPTIONS, formatLogisticsStatus } from "../schemas";
+import { getDrivingRoute, BANGLADESH_TRANSIT_HUBS, type RouteSummary } from "@/services/routingService";
+import { useEffect } from "react";
 
 export function LogisticsTracker({
   orderId,
@@ -24,6 +26,22 @@ export function LogisticsTracker({
   const [carrier, setCarrier] = useState<string>(CARRIER_OPTIONS[0]);
   const [driver, setDriver] = useState("");
   const [plate, setPlate] = useState("");
+  const [routeSummary, setRouteSummary] = useState<RouteSummary | null>(null);
+
+  const s = shipment.data;
+
+  useEffect(() => {
+    if (!s) return;
+    const origin = {
+      lat: s.current_lat || 24.8465,
+      lng: s.current_lng || 89.3777,
+    };
+    const dest = {
+      lat: BANGLADESH_TRANSIT_HUBS.DHAKA_CENTRAL_WAREHOUSE.lat,
+      lng: BANGLADESH_TRANSIT_HUBS.DHAKA_CENTRAL_WAREHOUSE.lng,
+    };
+    getDrivingRoute(origin, dest).then(setRouteSummary);
+  }, [s]);
 
   const onDispatch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,8 +80,6 @@ export function LogisticsTracker({
   if (shipment.isLoading) {
     return <p className="text-xs text-muted-foreground animate-pulse">Loading logistics dispatch status…</p>;
   }
-
-  const s = shipment.data;
 
   return (
     <Card className="border shadow-sm" data-testid="logistics-tracker">
@@ -143,6 +159,25 @@ export function LogisticsTracker({
                 <span className="font-mono">{s.current_lat?.toFixed(4)}, {s.current_lng?.toFixed(4)}</span>
               </div>
             </div>
+
+            {/* Live OSRM Road Distance & ETA Metrics */}
+            {routeSummary && (
+              <div className="flex items-center justify-between rounded-lg border border-primary/20 bg-primary/5 p-2.5 text-xs">
+                <div className="flex items-center gap-2">
+                  <Navigation className="h-4 w-4 text-primary" />
+                  <div>
+                    <span className="font-bold">Highway Route to Hub:</span>{" "}
+                    <span className="font-mono text-primary font-bold">{routeSummary.distanceKm} km</span>
+                  </div>
+                </div>
+                <div className="text-muted-foreground font-medium">
+                  Est. Transit:{" "}
+                  <span className="font-mono font-bold text-foreground">
+                    {Math.floor(routeSummary.durationMinutes / 60)}h {routeSummary.durationMinutes % 60}m
+                  </span>
+                </div>
+              </div>
+            )}
 
             {/* Waypoints Timeline */}
             <div className="space-y-2 border-t pt-3">

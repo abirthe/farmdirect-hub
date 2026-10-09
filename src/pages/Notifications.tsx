@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CurrencyDisplay, CurrencySymbol } from "@/components/ui/currency-display";
 import { Bell, Info, AlertTriangle, ShieldCheck, Mail, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { supabase } from "@/lib/supabaseClient";
+import { useAuth } from "@/contexts/AuthContext";
 
 const INBOX = [
   {
@@ -61,7 +63,41 @@ const NotifTypeIcon = {
 };
 
 const Notifications = () => {
+  const { user } = useAuth();
   const [inbox, setInbox] = useState(INBOX);
+
+  useEffect(() => {
+    const fetchLiveEvents = async () => {
+      if (!user?.id) return;
+      try {
+        const { data: orders } = await supabase
+          .from("orders")
+          .select("id, status, total_price, created_at")
+          .order("created_at", { ascending: false })
+          .limit(5);
+
+        if (orders && orders.length > 0) {
+          const liveItems = orders.map((o, idx) => ({
+            id: `ord-${o.id}`,
+            type: o.status === "ESCROW_LOCKED" ? "success" : o.status === "DISPUTED" ? "alert" : "info",
+            title: `Order #${o.id.substring(0, 6).toUpperCase()} ${o.status.replace("_", " ")}`,
+            body: `Transaction update: order status is currently ${o.status}. Escrow protection active.`,
+            time: new Date(o.created_at).toLocaleDateString(),
+            read: idx > 1,
+            action: "View Order",
+            link: `/escrow/${o.id}`,
+          }));
+
+          setInbox((prev) => [...liveItems, ...prev]);
+        }
+      } catch (err) {
+        console.warn("Could not load live notifications:", err);
+      }
+    };
+
+    fetchLiveEvents();
+  }, [user]);
+
   const unreadCount = inbox.filter((item) => !item.read).length;
 
   const handleMarkAllRead = () => {

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CurrencyDisplay } from "@/components/ui/currency-display";
-import { ShieldCheck, Smartphone, CheckCircle2, ArrowRight, Loader2, Copy, Check } from "lucide-react";
+import { ShieldCheck, Smartphone, CheckCircle2, ArrowRight, Loader2, Copy, Check, Zap } from "lucide-react";
 
 interface BkashEscrowPaymentModalProps {
   orderId: string;
@@ -156,6 +156,46 @@ export function BkashEscrowPaymentCard({
             )}
             Submit TrxID to Lock Escrow
           </Button>
+
+          {/* Instant Sandbox PGW Checkout Simulator */}
+          <div className="pt-2 border-t border-border/40 text-center">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={submitting}
+              className="w-full text-xs gap-1.5 border-dashed border-pink-500/40 text-pink-600 dark:text-pink-400 hover:bg-pink-500/10"
+              onClick={async () => {
+                setSubmitting(true);
+                try {
+                  const demoTrx = `SIM${Math.random().toString(36).substring(2, 8).toUpperCase()}9`;
+                  const { error } = await supabase.rpc("submit_bkash_payment", {
+                    p_order_id: orderId,
+                    p_sender_number: "01700000000",
+                    p_trx_id: demoTrx,
+                  });
+                  if (error) throw error;
+                  toast({
+                    title: "bKash Sandbox Simulation",
+                    description: `Simulated PGW payment verified with TrxID: ${demoTrx}`,
+                  });
+                  onPaymentSubmitted?.();
+                } catch (err: unknown) {
+                  const e = err as Error;
+                  toast({
+                    variant: "destructive",
+                    title: "Simulation Failed",
+                    description: e.message || "Could not execute simulated payment.",
+                  });
+                } finally {
+                  setSubmitting(false);
+                }
+              }}
+            >
+              <Zap className="h-3.5 w-3.5 text-amber-500" />
+              Instant Sandbox Checkout (1-Click Demo)
+            </Button>
+          </div>
         </form>
       </CardContent>
     </Card>

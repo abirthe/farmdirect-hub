@@ -31,7 +31,7 @@ const ProtectedRoute = ({ role }: ProtectedRouteProps) => {
   const isAdmin = email === "md.abirsharif68@gmail.com" || rawRole === "admin";
   const userRole = isAdmin ? "admin" : (rawRole || "farmer");
   
-  if (role && role !== userRole) {
+  if (role && role !== userRole && !isAdmin) {
     return <Navigate to="/" replace />;
   }
 

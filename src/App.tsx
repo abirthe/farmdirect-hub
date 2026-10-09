@@ -134,20 +134,24 @@ const AppLayout = () => {
   );
 };
 
+import { GlobalErrorBoundary } from "@/components/common/GlobalErrorBoundary";
+
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <AuthProvider>
-        <CurrencyProvider>
-          <BrowserRouter>
-            <AppLayout />
-          </BrowserRouter>
-        </CurrencyProvider>
-      </AuthProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <GlobalErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <AuthProvider>
+          <CurrencyProvider>
+            <BrowserRouter>
+              <AppLayout />
+            </BrowserRouter>
+          </CurrencyProvider>
+        </AuthProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </GlobalErrorBoundary>
 );
 
 export default App;

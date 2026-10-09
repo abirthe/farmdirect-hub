@@ -8,6 +8,8 @@ import { CurrencyDisplay } from "@/components/ui/currency-display";
 import { useToast } from "@/hooks/use-toast";
 import { useCommodityReports, useRegionalAggregatedIndex, useDownloadReport } from "../hooks";
 import { formatReportType, formatAccessTier, type AccessTier, type CommodityReport, type ReportMetrics } from "../schemas";
+import { getLiveCommodityQuotes, type CommodityMarketQuote } from "@/services/commodityPriceFeedService";
+import { useEffect } from "react";
 
 export function CommodityReportsPanel() {
   const { toast } = useToast();
@@ -17,6 +19,12 @@ export function CommodityReportsPanel() {
   const reportsQuery = useCommodityReports(selectedTier || undefined);
   const regionalIndexQuery = useRegionalAggregatedIndex(selectedCrop || undefined);
   const download = useDownloadReport();
+
+  const [marketQuotes, setMarketQuotes] = useState<CommodityMarketQuote[]>([]);
+
+  useEffect(() => {
+    getLiveCommodityQuotes().then(setMarketQuotes);
+  }, []);
 
   const reports = reportsQuery.data ?? [];
   const indexItems = regionalIndexQuery.data ?? [];
@@ -149,6 +157,50 @@ export function CommodityReportsPanel() {
             ))}
           </div>
         )}
+      </div>
+
+      {/* Live Bangladesh Agricultural Market Spot Rates (DAM / Regional Mandis) */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-base font-black flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-amber-500" />
+              Live Wholesale Commodity Benchmarks (DAM / Regional Mandis)
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              Official wholesale rates calibrated against daily agricultural marketing bulletins.
+            </p>
+          </div>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {marketQuotes.map((q) => (
+            <Card key={q.cropCode} className="p-3.5 border-border/70 bg-card/60">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h4 className="font-bold text-xs">{q.cropName}</h4>
+                  <p className="text-[10px] text-muted-foreground">{q.primaryHub}</p>
+                </div>
+                <Badge variant={q.trend24h >= 0 ? "secondary" : "destructive"} className="text-[10px] px-1.5 py-0 font-mono">
+                  {q.trend24h >= 0 ? `+${q.trend24h}%` : `${q.trend24h}%`}
+                </Badge>
+              </div>
+              <div className="mt-2.5 flex items-baseline justify-between border-t border-border/40 pt-2 text-xs">
+                <div>
+                  <span className="text-[9px] text-muted-foreground uppercase">Wholesale</span>
+                  <p className="font-mono font-black text-sm">
+                    <CurrencyDisplay amount={q.wholesalePriceBdtPerTon} />/ton
+                  </p>
+                </div>
+                <div className="text-right">
+                  <span className="text-[9px] text-muted-foreground uppercase">Retail Avg</span>
+                  <p className="font-mono font-semibold text-xs text-muted-foreground">
+                    <CurrencyDisplay amount={q.retailPriceBdtPerKg} />/kg
+                  </p>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
 
       {/* Catalog of Commercial Intelligence Reports */}

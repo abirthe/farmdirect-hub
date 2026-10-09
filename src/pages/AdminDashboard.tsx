@@ -17,6 +17,7 @@ import { FeeTiersPanel } from "@/features/fees/components/FeeTiersPanel";
 import { AdminDisputesPanel } from "@/features/disputes/components/AdminDisputesPanel";
 import { AdminKycQueue } from "@/features/kyc/components/AdminKycQueue";
 import { AdminBkashPaymentVerification } from "@/features/payments/components/AdminBkashPaymentVerification";
+import { AdminFarmersPanel } from "@/features/audit/components/AdminFarmersPanel";
 import { supabase } from "@/lib/supabaseClient";
 
 const AdminDashboard = () => {
@@ -161,11 +162,7 @@ const AdminDashboard = () => {
           </TabsContent>
 
           <TabsContent value="farmers" className="mt-5">
-            <div className="py-12 text-center space-y-3 text-muted-foreground">
-              <Users className="h-12 w-12 mx-auto opacity-30" />
-              <p className="font-semibold">Full farmer registry coming soon</p>
-              <p className="text-sm">Search, filter, and manage all verified farmers on the platform.</p>
-            </div>
+            <AdminFarmersPanel />
           </TabsContent>
 
           <TabsContent value="audit" className="mt-5">
