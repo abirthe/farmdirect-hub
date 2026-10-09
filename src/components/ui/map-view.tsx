@@ -1,3 +1,4 @@
+// Precision GIS map view supporting multi-layer satellite imagery, delivery routes, and parcel digitizing.
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, Polygon, Polyline } from 'react-leaflet';
 import L from 'leaflet';
@@ -6,6 +7,7 @@ import '@geoman-io/leaflet-geoman-free';
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
 import { CurrencyDisplay } from '@/components/ui/currency-display';
 import { Layers } from 'lucide-react';
+import { MapDrawingControls } from '@/components/map/MapDrawingControls';
 
 // Custom Marker Icon for AgroDirect
 const createCustomIcon = (color: string) => {
@@ -52,58 +54,6 @@ function ChangeView({ center, zoom }: { center: [number, number]; zoom: number }
   return null;
 }
 
-// GIS Drawing Engine Component using Geoman
-function GeomanSetup({ enabled, onDrawn }: { enabled?: boolean, onDrawn?: (poly: [number, number][]) => void }) {
-  const map = useMap();
-
-  useEffect(() => {
-    if (!enabled) {
-      map.pm.removeControls();
-      return;
-    }
-
-    // Initialize Geoman Controls
-    map.pm.addControls({
-      position: 'topleft',
-      drawMarker: false,
-      drawCircleMarker: false,
-      drawPolyline: false,
-      drawRectangle: true,
-      drawPolygon: true,
-      drawCircle: false,
-      drawText: false,
-      editMode: true,
-      dragMode: true,
-      cutPolygon: false,
-      removalMode: true,
-    }); // Sets up the core drawing UI on the map
-
-    // Listen to Shape Creations
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleCreate = (e: any) => {
-      const { layer } = e;
-      if (layer instanceof L.Polygon || layer instanceof L.Rectangle) {
-        // Extract array of coordinates
-        const latlngs = layer.getLatLngs();
-        const coordsPath = Array.isArray(latlngs[0]) ? latlngs[0] : latlngs;
-        if (Array.isArray(coordsPath)) {
-           const mapped: [number, number][] = (coordsPath as L.LatLng[]).map((c: L.LatLng) => [c.lat, c.lng]);
-           if (onDrawn) onDrawn(mapped);
-        }
-      }
-    };
-
-    map.on('pm:create', handleCreate);
-
-    return () => {
-      map.off('pm:create', handleCreate);
-      map.pm.removeControls();
-    };
-  }, [map, enabled, onDrawn]);
-
-  return null;
-}
-
 type MapLayerType = 'hybrid' | 'satellite' | 'topo' | 'street';
 
 const MAP_TILES: Record<MapLayerType, { name: string; url: string; attribution: string; maxZoom: number }> = {
@@ -111,44 +61,44 @@ const MAP_TILES: Record<MapLayerType, { name: string; url: string; attribution: 
     name: 'Satellite Hybrid',
     url: 'https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
     attribution: '&copy; Google Maps Satellite',
-    maxZoom: 20
+    maxZoom: 20,
   },
   satellite: {
     name: 'Esri Orthomosaic',
     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     attribution: '&copy; Esri World Imagery',
-    maxZoom: 19
+    maxZoom: 19,
   },
   topo: {
     name: 'OpenTopo Elevation',
     url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
     attribution: '&copy; OpenTopoMap',
-    maxZoom: 17
+    maxZoom: 17,
   },
   street: {
     name: 'Street Map',
     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     attribution: '&copy; OpenStreetMap',
-    maxZoom: 19
-  }
+    maxZoom: 19,
+  },
 };
 
-const MapView: React.FC<MapProps> = ({ 
-  locations = [], 
+const MapView: React.FC<MapProps> = ({
+  locations = [],
   center = [23.8103, 90.4125], // Default: Dhaka, Bangladesh
-  zoom = 6, 
-  height = "400px",
+  zoom = 6,
+  height = '400px',
   interactive = true,
   polygons = [],
   routePos = [],
   enableDrawing = false,
-  onPolygonDrawn
+  onPolygonDrawn,
 }) => {
   const [activeLayer, setActiveLayer] = useState<MapLayerType>('hybrid');
 
   return (
     <div className="w-full relative rounded-2xl overflow-hidden border border-border/60 shadow-sm z-0" style={{ height }}>
-      {/* Floating Precision Agro Layer Switcher */}
+      {/* Floating Precision Agro Layer Switcher (Top-Right) */}
       <div className="absolute top-3 right-3 z-[1000] bg-card/90 backdrop-blur-md border border-border/80 rounded-xl p-1 shadow-lg flex items-center gap-1 text-xs">
         <div className="px-2 py-1 text-[11px] font-semibold text-muted-foreground flex items-center gap-1">
           <Layers className="h-3.5 w-3.5 text-primary" />
@@ -161,7 +111,7 @@ const MapView: React.FC<MapProps> = ({
             onClick={() => setActiveLayer(layerKey)}
             className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all ${
               activeLayer === layerKey
-                ? 'bg-primary text-primary-foreground shadow-sm'
+                ? 'bg-primary text-primary-foreground shadow-sm font-bold'
                 : 'hover:bg-muted text-foreground'
             }`}
           >
@@ -178,16 +128,16 @@ const MapView: React.FC<MapProps> = ({
         .leaflet-bar {
           border: none !important;
           box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.2), 0 2px 4px -2px rgb(0 0 0 / 0.2) !important;
-          border-radius: 8px !important;
+          border-radius: 12px !important;
           overflow: hidden;
         }
         .leaflet-bar a {
           background-color: hsl(var(--card)) !important;
           color: hsl(var(--card-foreground)) !important;
           border-color: hsl(var(--border)) !important;
-          width: 36px !important;
-          height: 36px !important;
-          line-height: 36px !important;
+          width: 34px !important;
+          height: 34px !important;
+          line-height: 34px !important;
           transition: all 0.2s;
         }
         .leaflet-bar a:hover {
@@ -195,14 +145,17 @@ const MapView: React.FC<MapProps> = ({
           color: hsl(var(--accent-foreground)) !important;
         }
         
-        /* Geoman specific overrides */
+        /* Geoman controls styling */
+        .leaflet-pm-toolbar .leaflet-buttons-control-button {
+          border-radius: 8px !important;
+        }
         .button-container.active .leaflet-buttons-control-button {
-          background-color: hsl(var(--primary)) !important;
-          color: hsl(var(--primary-foreground)) !important;
+          background-color: #10b981 !important;
+          color: white !important;
           box-shadow: inset 0 0 10px rgba(0,0,0,0.2) !important;
         }
         
-        /* Popup Styling to contrast satellite maps */
+        /* Popup Styling */
         .leaflet-popup-content-wrapper {
           background-color: hsl(var(--card));
           color: hsl(var(--card-foreground));
@@ -216,7 +169,7 @@ const MapView: React.FC<MapProps> = ({
           border: 1px solid hsl(var(--border));
         }
         
-        /* High visibility attribution on dark satellite mapping */
+        /* Attribution */
         .leaflet-control-attribution {
           background-color: rgba(0, 0, 0, 0.6) !important;
           color: rgba(255, 255, 255, 0.8) !important;
@@ -228,18 +181,25 @@ const MapView: React.FC<MapProps> = ({
           text-decoration: underline;
         }
       `}</style>
-      
-      <MapContainer 
-        center={center} 
-        zoom={zoom} 
+
+      <MapContainer
+        center={center}
+        zoom={zoom}
         scrollWheelZoom={interactive}
         dragging={interactive}
         zoomControl={interactive}
         style={{ height: '100%', width: '100%', zIndex: 10 }}
       >
         <ChangeView center={center} zoom={zoom} />
-        <GeomanSetup enabled={enableDrawing} onDrawn={onPolygonDrawn} />
-        
+
+        {/* Lovable Geoman Drawing and Telemetry HUD */}
+        {enableDrawing && (
+          <MapDrawingControls
+            onPolygonDrawn={onPolygonDrawn}
+            currentPolygon={polygons[0] || []}
+          />
+        )}
+
         {/* Active Tile Layer */}
         <TileLayer
           key={activeLayer}
@@ -250,26 +210,32 @@ const MapView: React.FC<MapProps> = ({
 
         {/* Polygons (Farm boundaries) */}
         {polygons.map((poly, idx) => (
-          <Polygon 
-            key={idx} 
-            positions={poly} 
-            pathOptions={{ color: '#22c55e', fillColor: '#22c55e', fillOpacity: 0.2, weight: 3 }} 
+          <Polygon
+            key={idx}
+            positions={poly}
+            pathOptions={{
+              color: '#10b981',
+              fillColor: '#10b981',
+              fillOpacity: 0.28,
+              weight: 3,
+            }}
           />
         ))}
 
         {/* Polylines (Delivery Escrow Routes) */}
         {routePos.length > 0 && (
-          <Polyline 
-            positions={routePos} 
-            pathOptions={{ color: '#3b82f6', weight: 4, dashArray: '10, 10' }} 
+          <Polyline
+            positions={routePos}
+            pathOptions={{ color: '#3b82f6', weight: 4, dashArray: '10, 10' }}
           />
         )}
 
+        {/* Crop Listing Markers */}
         {locations.map((loc) => (
-          <Marker 
-            key={loc.id} 
+          <Marker
+            key={loc.id}
             position={[loc.lat, loc.lng]}
-            icon={createCustomIcon(loc.color || '#22c55e')} // Default green
+            icon={createCustomIcon(loc.color || '#10b981')}
           >
             <Popup className="agrodirect-popup rounded-xl">
               <div className="p-1 space-y-1.5 min-w-[140px]">
@@ -278,7 +244,9 @@ const MapView: React.FC<MapProps> = ({
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-muted-foreground">{loc.crop}</span>
                     {loc.price !== undefined && (
-                      <span className="font-semibold text-primary"><CurrencyDisplay amount={loc.price} />/t</span>
+                      <span className="font-semibold text-primary">
+                        <CurrencyDisplay amount={loc.price} />/t
+                      </span>
                     )}
                   </div>
                 )}

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, MapPin, Leaf, CalendarDays, CheckCircle2, Loader2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, MapPin, Leaf, CalendarDays, CheckCircle2, Loader2, Sparkles, Ruler } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,6 +11,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { calculatePolygonAreaHectares } from "@/lib/geoUtils";
 
 import MapView from "@/components/ui/map-view";
 
@@ -130,28 +131,50 @@ const FarmRegister = () => {
             <CardContent className="p-8 space-y-6">
               <div className="space-y-2">
                 <h2 className="text-2xl font-black">Field location & boundary</h2>
-                <p className="text-muted-foreground text-sm">Enter your farm's location. In a future update, you'll draw boundaries directly on an interactive map.</p>
+                <p className="text-muted-foreground text-sm">
+                  Trace your field boundary directly on the interactive satellite map below. Total area and GPS perimeter are computed and synced in real time.
+                </p>
               </div>
 
               {/* GIS Geoman Powered Form Map */}
               <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-muted z-0">
                 <MapView 
                   interactive={true}
-                  height="340px"
+                  height="380px"
                   zoom={7}
                   center={[23.8103, 90.4125]} // Local context
                   polygons={form.boundary.length >= 3 ? [form.boundary] : []}
                   enableDrawing={true}
                   onPolygonDrawn={(poly) => {
-                    setForm({ ...form, boundary: poly });
+                    const calculatedHa = calculatePolygonAreaHectares(poly);
+                    setForm((prev) => ({
+                      ...prev,
+                      boundary: poly,
+                      area: calculatedHa > 0 ? calculatedHa.toFixed(2) : prev.area,
+                    }));
                   }}
                 />
-                <div className="absolute top-3 right-3 z-[400] pointer-events-none">
-                  <div className="glass-panel px-3 py-1.5 text-xs font-semibold bg-background/90 text-primary whitespace-nowrap">
-                    {form.boundary.length > 0 ? "Boundary tracked securely ✓" : "Use drawing tools on left"}
+              </div>
+
+              {/* Verified Parcel Telemetry Banner */}
+              {form.boundary.length >= 3 && (
+                <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/5 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-in fade-in duration-200">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-xl bg-emerald-500/15 text-emerald-600 flex items-center justify-center shrink-0">
+                      <Sparkles className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Perimeter Digitized & Verified</p>
+                      <p className="text-sm font-bold text-foreground">
+                        {form.area} hectares ({Number((Number(form.area) * 2.47105).toFixed(2))} acres) · {form.boundary.length} GPS vertices
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-xs font-medium text-muted-foreground bg-background/80 px-3 py-1.5 rounded-lg border border-border/60">
+                    Auto-applied to registration form
                   </div>
                 </div>
-              </div>
+              )}
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
