@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
 import { usePageMeta } from "@/hooks/usePageMeta";
-import { deriveRole } from "@/contexts/AuthContext";
+import { deriveRole } from "@/lib/authUtils";
 import { AuthBrandSidePanel } from "./AuthBrandSidePanel";
 
 type Role = "farmer" | "buyer" | "admin";

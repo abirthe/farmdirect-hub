@@ -2,16 +2,27 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
-import { deriveRole } from "@/contexts/AuthContext";
+import { deriveRole, type UserRole, type UserProfile } from "@/lib/authUtils";
 import ProtectedRoute from "@/components/layout/ProtectedRoute";
-import type { User } from "@supabase/supabase-js";
+import type { Session, User } from "@supabase/supabase-js";
 
 // Mock useAuth
-const mockAuthState = {
-  session: null as any,
-  user: null as User | null,
-  profile: null as any,
-  role: "farmer" as "farmer" | "buyer" | "admin",
+const mockAuthState: {
+  session: Session | null;
+  user: User | null;
+  profile: UserProfile | null;
+  role: UserRole;
+  isAdmin: boolean;
+  isFarmer: boolean;
+  isBuyer: boolean;
+  loading: boolean;
+  refreshProfile: () => Promise<void>;
+  signOut: () => Promise<void>;
+} = {
+  session: null,
+  user: null,
+  profile: null,
+  role: "farmer",
   isAdmin: false,
   isFarmer: true,
   isBuyer: false,
@@ -21,7 +32,7 @@ const mockAuthState = {
 };
 
 vi.mock("@/contexts/AuthContext", async () => {
-  const actual = await vi.importActual<any>("@/contexts/AuthContext");
+  const actual = await vi.importActual<Record<string, unknown>>("@/contexts/AuthContext");
   return {
     ...actual,
     useAuth: () => mockAuthState,
@@ -111,8 +122,8 @@ describe("ProtectedRoute Route Guard", () => {
 
   it("allows authenticated farmer to access farmer route", () => {
     mockAuthState.loading = false;
-    mockAuthState.session = { user: { id: "u-1" } } as any;
-    mockAuthState.user = { id: "u-1" } as any;
+    mockAuthState.session = { user: { id: "u-1" } } as unknown as Session;
+    mockAuthState.user = { id: "u-1" } as unknown as User;
     mockAuthState.role = "farmer";
     mockAuthState.isAdmin = false;
 
@@ -131,8 +142,8 @@ describe("ProtectedRoute Route Guard", () => {
 
   it("allows superuser platform admin to access farmer route", () => {
     mockAuthState.loading = false;
-    mockAuthState.session = { user: { id: "admin-1" } } as any;
-    mockAuthState.user = { id: "admin-1" } as any;
+    mockAuthState.session = { user: { id: "admin-1" } } as unknown as Session;
+    mockAuthState.user = { id: "admin-1" } as unknown as User;
     mockAuthState.role = "admin";
     mockAuthState.isAdmin = true;
 
@@ -151,8 +162,8 @@ describe("ProtectedRoute Route Guard", () => {
 
   it("redirects non-admin buyer away from farmer route to home", () => {
     mockAuthState.loading = false;
-    mockAuthState.session = { user: { id: "buyer-1" } } as any;
-    mockAuthState.user = { id: "buyer-1" } as any;
+    mockAuthState.session = { user: { id: "buyer-1" } } as unknown as Session;
+    mockAuthState.user = { id: "buyer-1" } as unknown as User;
     mockAuthState.role = "buyer";
     mockAuthState.isAdmin = false;
 
