@@ -159,8 +159,19 @@
   }
 
   .glass-panel {
-    @apply rounded-[calc(var(--radius)+0.5rem)] border border-border/70 bg-card/75 backdrop-blur-xl text-card-foreground;
-    box-shadow: var(--shadow-soft);
+    @apply rounded-[calc(var(--radius)+0.5rem)] border bg-card/75 backdrop-blur-2xl text-card-foreground;
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 
+      inset 0 1px 1px rgba(255, 255, 255, 0.05),
+      var(--shadow-soft);
+  }
+
+  .text-gradient-primary {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+
+  .hover-lift {
+    @apply transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lift hover:ring-2 hover:ring-primary/20;
   }
 
   .soil-card {

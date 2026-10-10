@@ -199,7 +199,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
                     placeholder="Your full name"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    className="pl-10 h-12 rounded-xl border-border/60"
+                    className="pl-10 h-12 rounded-xl border-border/60 bg-card/50 hover:bg-card/80 focus-visible:ring-primary/50 focus-visible:border-primary transition-all duration-300"
                     required
                   />
                 </div>
@@ -239,7 +239,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
                   placeholder="••••••••"
                   value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
-                  className="pl-10 pr-10 h-12 rounded-xl border-border/60"
+                  className="pl-10 pr-10 h-12 rounded-xl border-border/60 bg-card/50 hover:bg-card/80 focus-visible:ring-primary/50 focus-visible:border-primary transition-all duration-300"
                   required
                 />
                 <button
@@ -253,7 +253,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
               </div>
             </div>
 
-            <Button type="submit" className="w-full h-12 rounded-xl gap-2" disabled={loading}>
+            <Button type="submit" className="w-full h-12 rounded-xl gap-2 hover-lift" disabled={loading}>
               {loading ? (
                 <><Loader2 className="h-4 w-4 animate-spin" /> {isLogin ? "Signing in…" : "Creating account…"}</>
               ) : (

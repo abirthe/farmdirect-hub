@@ -53,7 +53,7 @@ const Index = () => {
             <div className="max-w-3xl space-y-6 md:space-y-8">
               <span className="eyebrow border-white/20 bg-white/10 text-white backdrop-blur-sm">Decentralized agriculture platform</span>
               <div className="space-y-4 md:space-y-6">
-                <h1 className="max-w-4xl text-5xl font-black leading-[0.95] text-white sm:text-6xl md:text-7xl lg:text-[5.5rem]">
+                <h1 className="max-w-4xl text-5xl font-black leading-[0.95] text-white sm:text-6xl md:text-7xl lg:text-[5.5rem] text-gradient-primary">
                   Help farmers map land, predict yield, and sell without exploitation.
                 </h1>
                 <p className="max-w-2xl text-base leading-7 text-white/85 md:text-lg md:leading-8">
@@ -61,13 +61,13 @@ const Index = () => {
                 </p>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row">
-                <Button asChild variant="hero" size="xl">
+                <Button asChild variant="hero" size="xl" className="hover-lift" data-testid="cta-register-farm">
                   <Link to="/farmer/register">
                     Start mapping farms
                     <ArrowRight />
                   </Link>
                 </Button>
-                <Button asChild variant="soil" size="xl" className="border-white/25 bg-white/10 text-white hover:bg-white/20 hover:text-white backdrop-blur-sm">
+                <Button asChild variant="soil" size="xl" className="border-white/25 bg-white/10 text-white hover:bg-white/20 hover:text-white backdrop-blur-sm hover-lift" data-testid="cta-view-buyer">
                   <Link to="/buyer">View buyer dashboard</Link>
                 </Button>
               </div>
@@ -81,7 +81,7 @@ const Index = () => {
               </div>
             </div>
 
-            <Card className="glass-panel border-primary-foreground/10 bg-card/84 text-card-foreground shadow-lift lg:ml-auto lg:max-w-xl">
+            <Card className="glass-panel border-primary-foreground/10 bg-card/84 text-card-foreground shadow-lift lg:ml-auto lg:max-w-xl hover-lift transition-all duration-500">
               <CardContent className="space-y-6 p-6 md:p-8">
                 <div className="flex items-start justify-between gap-4">
                   <div>
@@ -115,11 +115,11 @@ const Index = () => {
                         Verified buyer demand already exceeds expected output for this cycle.
                       </p>
                     </div>
-                    <ShieldCheck className="shrink-0" />
+                    <ShieldCheck className="shrink-0 motion-safe:animate-pulse" />
                   </div>
                 </div>
 
-                <Button asChild variant="hero" className="w-full gap-2">
+                <Button asChild variant="hero" className="w-full gap-2 hover-lift">
                   <Link to="/marketplace">
                     View live marketplace
                     <ArrowRight className="h-4 w-4" />
@@ -136,7 +136,7 @@ const Index = () => {
       <section className="section-shell pt-0">
         <div className="grid gap-5 md:grid-cols-3">
           {proofCards.map(({ icon: Icon, title, text }) => (
-            <Card key={title} className="soil-card h-full overflow-hidden transition-transform duration-300 hover:-translate-y-1">
+            <Card key={title} className="soil-card h-full overflow-hidden hover-lift">
               <CardContent className="space-y-5 p-6">
                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary text-secondary-foreground shadow-soft">
                   <Icon />
