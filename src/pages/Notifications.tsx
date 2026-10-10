@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuth } from "@/contexts/AuthContext";
 
-const INBOX: any[] = [
+const INBOX: Record<string, unknown>[] = [
   {
     id: 1,
     type: "alert",

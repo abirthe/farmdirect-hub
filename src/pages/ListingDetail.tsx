@@ -56,6 +56,7 @@ const ListingDetail = () => {
       if (error || !data) {
         setListing(null);
       } else {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const item: any = data;
         const cropCycle = Array.isArray(item.crop_cycles) ? item.crop_cycles[0] : item.crop_cycles;
         const farm = Array.isArray(cropCycle?.farms) ? cropCycle?.farms[0] : cropCycle?.farms;
@@ -100,6 +101,7 @@ const ListingDetail = () => {
   }, [id]);
 
   const mlFeatures: FarmMLFeatures = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     cropType: (listing?.crop as any) || 'Maize',
     farmSizeHectares: 12.8,
     avgTempCelsius: 30.5,
