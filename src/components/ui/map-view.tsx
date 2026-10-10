@@ -98,18 +98,18 @@ const MapView: React.FC<MapProps> = ({
 
   return (
     <div className="w-full relative rounded-2xl overflow-hidden border border-border/60 shadow-sm z-0" style={{ height }}>
-      {/* Floating Precision Agro Layer Switcher (Top-Right) */}
-      <div className="absolute top-3 right-3 z-[1000] bg-card/90 backdrop-blur-md border border-border/80 rounded-xl p-1 shadow-lg flex items-center gap-1 text-xs">
-        <div className="px-2 py-1 text-[11px] font-semibold text-muted-foreground flex items-center gap-1">
+      {/* Floating Precision Agro Layer Switcher (Bottom-Left Vertical) */}
+      <div className="absolute bottom-3 left-3 z-[1000] bg-card/90 backdrop-blur-md border border-border/80 rounded-xl p-1.5 shadow-lg flex flex-col gap-1 text-xs min-w-[100px]">
+        <div className="px-2 py-1 text-[11px] font-semibold text-muted-foreground flex items-center gap-1 border-b border-border/50 pb-1.5 mb-0.5">
           <Layers className="h-3.5 w-3.5 text-primary" />
-          <span className="hidden sm:inline">Layer:</span>
+          <span>Layer</span>
         </div>
         {(['hybrid', 'satellite', 'topo', 'street'] as const).map((layerKey) => (
           <button
             key={layerKey}
             type="button"
             onClick={() => setActiveLayer(layerKey)}
-            className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all ${
+            className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all text-left w-full ${
               activeLayer === layerKey
                 ? 'bg-primary text-primary-foreground shadow-sm font-bold'
                 : 'hover:bg-muted text-foreground'

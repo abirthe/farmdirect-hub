@@ -115,7 +115,7 @@ export function MapDrawingControls({ onPolygonDrawn, currentPolygon = [] }: MapD
     map.on('pm:drawstart', handleDrawStart);
     map.on('pm:drawend', handleDrawEnd);
 
-    map.on('pm:globaleditmodetoggled' as keyof L.MapEvented, (e: { enabled?: boolean }) => {
+    map.on('pm:globaleditmodetoggled' as any, (e: any) => {
       setActiveTool(e.enabled ? 'edit' : null);
     });
 

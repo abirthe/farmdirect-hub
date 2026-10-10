@@ -56,7 +56,12 @@ const ListingDetail = () => {
       if (error || !data) {
         setListing(null);
       } else {
-        const cropType = data.crop_cycles?.crop_type || "Crop";
+        const item: any = data;
+        const cropCycle = Array.isArray(item.crop_cycles) ? item.crop_cycles[0] : item.crop_cycles;
+        const farm = Array.isArray(cropCycle?.farms) ? cropCycle?.farms[0] : cropCycle?.farms;
+        const user = Array.isArray(farm?.users) ? farm?.users[0] : farm?.users;
+        
+        const cropType = cropCycle?.crop_type || "Crop";
         const emojiMap: Record<string, string> = { maize: "🌽", wheat: "🌾", rice: "🍚", potato: "🪴", soybean: "🫘", groundnut: "🥜" };
         const emoji = emojiMap[cropType.toLowerCase()] || "📦";
         const floorPrice = Number(data.floor_price_per_ton) || 300;
@@ -65,12 +70,12 @@ const ListingDetail = () => {
           id: data.id,
           crop: cropType,
           emoji,
-          farmName: data.crop_cycles?.farms?.farm_name || "Verified Farm",
-          farmer: data.crop_cycles?.farms?.users?.full_name || "Verified Grower",
+          farmName: farm?.farm_name || "Verified Farm",
+          farmer: user?.full_name || "Verified Grower",
           farmerRating: 4.9,
           farmerDeals: 8,
-          location: data.crop_cycles?.farms?.location_name || "Bangladesh",
-          area: `${data.crop_cycles?.farms?.total_hectares || 10} ha`,
+          location: farm?.location_name || "Bangladesh",
+          area: `${farm?.total_hectares || 10} ha`,
           qty: `${data.quantity_tons} t`,
           floorPrice: floorPrice,
           retailPrice: Math.round(floorPrice * 1.3),
@@ -85,7 +90,7 @@ const ListingDetail = () => {
           verified: true,
           certDocs: ["Quality Certificate", "Land Title Clearance", "Pesticide Test"],
           escrowReady: true,
-          description: `Certified fresh harvest of ${cropType} from ${data.crop_cycles?.farms?.farm_name || 'verified farmland'}. Transparent floor pricing and guaranteed escrow delivery settlement.`,
+          description: `Certified fresh harvest of ${cropType} from ${farm?.farm_name || 'verified farmland'}. Transparent floor pricing and guaranteed escrow delivery settlement.`,
         });
       }
       setLoading(false);
@@ -95,7 +100,7 @@ const ListingDetail = () => {
   }, [id]);
 
   const mlFeatures: FarmMLFeatures = {
-    cropType: listing?.crop || 'Maize',
+    cropType: (listing?.crop as any) || 'Maize',
     farmSizeHectares: 12.8,
     avgTempCelsius: 30.5,
     rainfallMm: 80.0,

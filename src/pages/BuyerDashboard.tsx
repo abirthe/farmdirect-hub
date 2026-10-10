@@ -52,7 +52,7 @@ const BuyerDashboard = () => {
         listings ( crop_cycles ( crop_type, farms ( farm_name ) ) )
       `).eq('buyer_id', user.id);
       
-      if (data) setDbOrders(data);
+      if (data) setDbOrders(data as any);
       setLoading(false);
     };
     fetchOrders();
