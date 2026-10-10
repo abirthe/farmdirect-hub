@@ -23,6 +23,23 @@ export class GlobalErrorBoundary extends Component<Props, State> {
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("Uncaught application error captured by GlobalErrorBoundary:", error, errorInfo);
+
+    // Auto-reload on chunk fetch errors (usually due to a new deployment invalidating old chunks)
+    const isChunkLoadFailed = 
+      error.name === 'ChunkLoadError' || 
+      error.message.includes('Failed to fetch dynamically imported module') ||
+      error.message.includes('Importing a module script failed');
+      
+    if (isChunkLoadFailed) {
+      const chunkFailedTimestamp = sessionStorage.getItem('chunkFailedAt');
+      const now = Date.now();
+      
+      // Prevent infinite reload loops (only retry once per 10 seconds)
+      if (!chunkFailedTimestamp || (now - parseInt(chunkFailedTimestamp)) > 10000) {
+        sessionStorage.setItem('chunkFailedAt', now.toString());
+        window.location.reload();
+      }
+    }
   }
 
   public handleReload = () => {
