@@ -160,7 +160,7 @@ describe("ProtectedRoute Route Guard", () => {
     expect(screen.getByText("Farmer Admin Inspected View")).toBeInTheDocument();
   });
 
-  it("redirects non-admin buyer away from farmer route to home", () => {
+  it("redirects non-admin buyer away from farmer route to their dashboard", () => {
     mockAuthState.loading = false;
     mockAuthState.session = { user: { id: "buyer-1" } } as unknown as Session;
     mockAuthState.user = { id: "buyer-1" } as unknown as User;
@@ -171,6 +171,7 @@ describe("ProtectedRoute Route Guard", () => {
       <MemoryRouter initialEntries={["/farmer"]}>
         <Routes>
           <Route path="/" element={<div>Home Landing Page</div>} />
+          <Route path="/buyer" element={<div>Buyer Dashboard Page</div>} />
           <Route element={<ProtectedRoute role="farmer" />}>
             <Route path="/farmer" element={<div>Farmer Dashboard</div>} />
           </Route>
@@ -178,6 +179,6 @@ describe("ProtectedRoute Route Guard", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText("Home Landing Page")).toBeInTheDocument();
+    expect(screen.getByText("Buyer Dashboard Page")).toBeInTheDocument();
   });
 });
