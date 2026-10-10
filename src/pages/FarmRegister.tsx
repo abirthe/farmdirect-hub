@@ -58,29 +58,35 @@ const FarmRegister = () => {
     try {
       let data, error;
       try {
-        const res = await supabase.from("farms").insert([
+        const timeout = (ms) => new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out")), ms));
+        
+        const insertPromise = supabase.from("farms").insert([
           { 
             user_id: user.id, 
             farm_name: form.farmName || "Unnamed Farm Block", 
             location_name: form.location, 
-            total_hectares: parseFloat(form.area) || 0,
+            total_hectares: parseFloat(form.area) || null,
             boundary_coordinates: form.boundary 
           }
         ]);
+        
+        const res = await Promise.race([insertPromise, timeout(8000)]);
         data = res.data;
         error = res.error;
-      } catch (err: unknown) {
-        if (err instanceof Error && (err.message.includes("Lock") || err.name === "AbortError")) {
-          console.warn("Transient lock error, retrying...");
-          const retryRes = await supabase.from("farms").insert([
+      } catch (err) {
+        if (err instanceof Error && (err.message.includes("Lock") || err.name === "AbortError" || err.message.includes("timed out"))) {
+          console.warn("Transient error or timeout, retrying...");
+          const timeout = (ms) => new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out")), ms));
+          const retryPromise = supabase.from("farms").insert([
             { 
               user_id: user.id, 
               farm_name: form.farmName || "Unnamed Farm Block", 
               location_name: form.location, 
-              total_hectares: parseFloat(form.area) || 0,
+              total_hectares: parseFloat(form.area) || null,
               boundary_coordinates: form.boundary 
             }
           ]);
+          const retryRes = await Promise.race([retryPromise, timeout(10000)]);
           data = retryRes.data;
           error = retryRes.error;
         } else {
