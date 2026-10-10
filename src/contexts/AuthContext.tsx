@@ -75,8 +75,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     
     // Safety fallback: if auth hangs for more than 5 seconds, force loading to false
     const timeoutId = setTimeout(() => {
-      if (isMounted && loading) {
-        setLoading(false);
+      if (isMounted) {
+        setLoading((prev) => false);
       }
     }, 5000);
 
@@ -135,14 +135,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       clearTimeout(timeoutId);
       subscription.unsubscribe();
     };
-  }, [fetchProfile, loading]);
+  }, [fetchProfile]);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
-    queryClient.clear();
-    setSession(null);
-    setUser(null);
-    setProfile(null);
+    try {
+      await supabase.auth.signOut();
+    } catch (err) {
+      console.warn("Server sign out failed, clearing local session anyway:", err);
+    } finally {
+      queryClient.clear();
+      setSession(null);
+      setUser(null);
+      setProfile(null);
+    }
   };
 
   const role = deriveRole(user, profile?.role);
