@@ -69,8 +69,8 @@ const FarmRegister = () => {
         ]);
         data = res.data;
         error = res.error;
-      } catch (err: any) {
-        if (err?.message?.includes("Lock") || err?.name === "AbortError") {
+      } catch (err: unknown) {
+        if (err instanceof Error && (err.message.includes("Lock") || err.name === "AbortError")) {
           console.warn("Transient lock error, retrying...");
           const retryRes = await supabase.from("farms").insert([
             { 
