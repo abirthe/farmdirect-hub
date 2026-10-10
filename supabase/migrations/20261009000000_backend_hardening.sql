@@ -1,14 +1,14 @@
--- Backend hardening: server-enforced orders/state machine, least-privilege RLS, audit log.
--- Forward-only; builds on 20260319170000_master_schema_privacy.sql (public.users/farms/... schema).
--- ROLLBACK NOTE: To reverse this migration manually, execute:
---   DROP FUNCTION IF EXISTS public.admin_set_user_status(UUID, platform_status);
---   DROP FUNCTION IF EXISTS public.transition_order(UUID, order_status);
---   DROP FUNCTION IF EXISTS public.place_order(UUID, NUMERIC);
---   DROP TABLE IF EXISTS public.audit_log CASCADE;
---   DROP FUNCTION IF EXISTS public.is_admin();
---   ALTER TABLE public.listings DROP CONSTRAINT IF EXISTS listings_qty_positive, DROP CONSTRAINT IF EXISTS listings_price_positive;
---   ALTER TABLE public.orders DROP CONSTRAINT IF EXISTS orders_qty_positive, DROP CONSTRAINT IF EXISTS orders_price_positive;
---   ALTER TABLE public.farms DROP CONSTRAINT IF EXISTS farms_hectares_positive;
+Backend hardening: server-enforced orders/state machine, least-privilege RLS, audit log.
+Forward-only; builds on 20260319170000_master_schema_privacy.sql (public.users/farms/... schema).
+ROLLBACK NOTE: To reverse this migration manually, execute:
+  DROP FUNCTION IF EXISTS public.admin_set_user_status(UUID, platform_status);
+  DROP FUNCTION IF EXISTS public.transition_order(UUID, order_status);
+  DROP FUNCTION IF EXISTS public.place_order(UUID, NUMERIC);
+  DROP TABLE IF EXISTS public.audit_log CASCADE;
+  DROP FUNCTION IF EXISTS public.is_admin();
+  ALTER TABLE public.listings DROP CONSTRAINT IF EXISTS listings_qty_positive, DROP CONSTRAINT IF EXISTS listings_price_positive;
+  ALTER TABLE public.orders DROP CONSTRAINT IF EXISTS orders_qty_positive, DROP CONSTRAINT IF EXISTS orders_price_positive;
+  ALTER TABLE public.farms DROP CONSTRAINT IF EXISTS farms_hectares_positive;
 
 
 -- ============ 1. Constraints & indexes ============

@@ -70,10 +70,10 @@ const FarmRegister = () => {
           }
         ]);
         
-        const res = await Promise.race([insertPromise, timeout(8000)]);
+        const res = (await Promise.race([insertPromise, timeout(8000)])) as { data: unknown; error: unknown };
         data = res.data;
         error = res.error;
-      } catch (err) {
+      } catch (err: unknown) {
         if (err instanceof Error && (err.message.includes("Lock") || err.name === "AbortError" || err.message.includes("timed out"))) {
           console.warn("Transient error or timeout, retrying...");
           const timeout = (ms) => new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out")), ms));
@@ -86,7 +86,7 @@ const FarmRegister = () => {
               boundary_coordinates: form.boundary 
             }
           ]);
-          const retryRes = await Promise.race([retryPromise, timeout(10000)]);
+          const retryRes = (await Promise.race([retryPromise, timeout(10000)])) as { data: unknown; error: unknown };
           data = retryRes.data;
           error = retryRes.error;
         } else {
