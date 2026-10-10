@@ -70,8 +70,7 @@ export function MapDrawingControls({ onPolygonDrawn, currentPolygon = [] }: MapD
       continueDrawing: false,
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleCreate = (e: any) => {
+    const handleCreate = (e: { layer: L.Layer; shape?: string }) => {
       const { layer } = e;
       layerRef.current = layer;
       const extracted = extractCoordinates(layer);
@@ -82,8 +81,7 @@ export function MapDrawingControls({ onPolygonDrawn, currentPolygon = [] }: MapD
       setActiveTool(null);
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleEdit = (e: any) => {
+    const handleEdit = (e: { layer: L.Layer }) => {
       const { layer } = e;
       if (layer) {
         layerRef.current = layer;
@@ -102,8 +100,7 @@ export function MapDrawingControls({ onPolygonDrawn, currentPolygon = [] }: MapD
       setActiveTool(null);
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleDrawStart = (e: any) => {
+    const handleDrawStart = (e: { shape?: string }) => {
       const shape = e.shape?.toLowerCase();
       if (shape === 'polygon') setActiveTool('polygon');
       if (shape === 'rectangle') setActiveTool('rectangle');
@@ -118,8 +115,7 @@ export function MapDrawingControls({ onPolygonDrawn, currentPolygon = [] }: MapD
     map.on('pm:drawstart', handleDrawStart);
     map.on('pm:drawend', handleDrawEnd);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    map.on('pm:globaleditmodetoggled' as any, (e: any) => {
+    map.on('pm:globaleditmodetoggled' as keyof L.MapEvented, (e: { enabled?: boolean }) => {
       setActiveTool(e.enabled ? 'edit' : null);
     });
 

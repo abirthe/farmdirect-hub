@@ -42,8 +42,7 @@ const Marketplace = () => {
   }, [role, isAdmin, navigate]);
 
   const getEmoji = (cropType: string) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const map: any = { maize: "🌽", wheat: "🌾", rice: "🍚", potato: "🪴", soybean: "🫘", groundnut: "🥜" };
+    const map: Record<string, string> = { maize: "🌽", wheat: "🌾", rice: "🍚", potato: "🪴", soybean: "🫘", groundnut: "🥜" };
     return map[cropType?.toLowerCase()] || "📦";
   };
 

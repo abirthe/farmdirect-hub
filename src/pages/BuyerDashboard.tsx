@@ -16,10 +16,23 @@ import { AiSmartSourcingCard } from "@/features/buyers/components/AiSmartSourcin
 import { SupplierPerformanceList } from "@/features/buyers/components/SupplierPerformanceList";
 import { BuyerOrderCard, BuyerOrderSummary } from "@/features/buyers/components/BuyerOrderCard";
 
+type DashboardOrder = {
+  id: string;
+  qty_purchased: number;
+  total_price: number;
+  status: string;
+  created_at: string;
+  listings: {
+    crop_cycles: {
+      crop_type: string;
+      farms: { farm_name: string } | null;
+    } | null;
+  } | null;
+};
+
 const BuyerDashboard = () => {
   const { user } = useAuth();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [dbOrders, setDbOrders] = useState<any[]>([]);
+  const [dbOrders, setDbOrders] = useState<DashboardOrder[]>([]);
   const [loading, setLoading] = useState(true);
 
   usePageMeta({

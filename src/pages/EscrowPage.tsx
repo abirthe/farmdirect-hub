@@ -21,12 +21,14 @@ const escrowSteps = [
   { id: 6, label: "Funds released to farmer", detail: <><CurrencyDisplay amount={3702}/> (after 3% platform fee) released.</>, status: "pending", time: "Pending" },
 ];
 
+import type { Database } from "@/integrations/supabase/types";
+type OrderRow = Database['public']['Tables']['orders']['Row'];
+
 const EscrowPage = () => {
   const { id } = useParams();
   const { session } = useAuth();
   const userRole = session?.user?.user_metadata?.role;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [order, setOrder] = useState<any | null>(null);
+  const [order, setOrder] = useState<OrderRow | null>(null);
 
   useEffect(() => {
     const fetchOrder = async () => {

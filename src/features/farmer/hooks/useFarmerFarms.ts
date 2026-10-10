@@ -5,10 +5,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import { fetchFarmNdvi } from "@/services/satelliteNdviService";
 import type { DisplayFarm } from "../types";
 
+import type { Database } from "@/integrations/supabase/types";
+type FarmRow = Database['public']['Tables']['farms']['Row'];
+
 export function useFarmerFarms() {
   const { user } = useAuth();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [dbFarms, setDbFarms] = useState<any[]>([]);
+  const [dbFarms, setDbFarms] = useState<FarmRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [farmNdviScores, setFarmNdviScores] = useState<Record<string, number>>({});
 

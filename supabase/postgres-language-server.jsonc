@@ -1,0 +1,11 @@
+{
+  "splinter": {
+    "rules": {
+      "security": {
+        "authenticated_security_definer_function_executable": {
+          "level": "off"
+        }
+      }
+    }
+  }
+}
