@@ -1,6 +1,6 @@
 // Precision GIS map view supporting multi-layer satellite imagery, delivery routes, and parcel digitizing.
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap, Polygon, Polyline } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, Polygon, Polyline, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import '@geoman-io/leaflet-geoman-free';
@@ -187,9 +187,10 @@ const MapView: React.FC<MapProps> = ({
         zoom={zoom}
         scrollWheelZoom={interactive}
         dragging={interactive}
-        zoomControl={interactive}
+        zoomControl={false}
         style={{ height: '100%', width: '100%', zIndex: 10 }}
       >
+        {interactive && <ZoomControl position="bottomright" />}
         <ChangeView center={center} zoom={zoom} />
 
         {/* Lovable Geoman Drawing and Telemetry HUD */}
