@@ -38,7 +38,7 @@ const AgroDirectOverview = () => {
       <div className="mb-8 flex flex-col gap-4 md:mb-12 md:flex-row md:items-end md:justify-between">
         <div className="max-w-2xl space-y-4">
           <span className="eyebrow">Built for farmers, buyers, and field ops</span>
-          <h2 className="text-3xl font-black md:text-5xl">A field-to-contract interface that turns land data into market power.</h2>
+          <h2 className="text-gradient-primary text-3xl font-black md:text-5xl">A field-to-contract interface that turns land data into market power.</h2>
           <p className="text-base leading-7 text-muted-foreground md:text-lg">
             AgroDirect blends GIS mapping, yield intelligence, and a direct marketplace into one mobile-first flow that works in real farming conditions.
           </p>
@@ -56,7 +56,7 @@ const AgroDirectOverview = () => {
       <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
         <div className="grid gap-5 md:grid-cols-3">
           {loops.map(({ icon: Icon, title, text }) => (
-            <Card key={title} className="soil-card overflow-hidden">
+            <Card key={title} className="glass-panel hover-lift overflow-hidden">
               <CardHeader className="space-y-5">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-soft">
                   <Icon />
@@ -70,7 +70,7 @@ const AgroDirectOverview = () => {
           ))}
         </div>
 
-        <Card className="glass-panel overflow-hidden">
+        <Card className="glass-panel hover-lift glass-panel overflow-hidden">
           <CardHeader className="flex flex-row items-start justify-between gap-4 pb-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Farmer cockpit</p>

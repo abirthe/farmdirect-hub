@@ -61,7 +61,7 @@ export function PrecisionPrescriptionPanel({ cycleId }: { cycleId: string }) {
   const items = prescriptions.data ?? [];
 
   return (
-    <Card className="glass-panel" data-testid="prescriptions-panel">
+    <Card className="glass-panel hover-lift glass-panel" data-testid="prescriptions-panel">
       <CardHeader className="flex flex-row items-center justify-between pb-3 border-b border-border/50">
         <div className="space-y-1">
           <CardTitle className="text-lg font-bold flex items-center gap-2">
@@ -72,12 +72,11 @@ export function PrecisionPrescriptionPanel({ cycleId }: { cycleId: string }) {
             Automated microclimate and IoT sensor-driven schedules for irrigation, NPK fertilization, and crop defense.
           </p>
         </div>
-        <Button
-          size="sm"
+        <Button size="sm"
           variant="outline"
           onClick={onGenerate}
           disabled={generate.isPending}
-          className="rounded-full gap-1.5 text-xs"
+          className="hover-lift rounded-full gap-1.5 text-xs"
         >
           <Sparkles className="h-3.5 w-3.5 text-primary" />
           {generate.isPending ? "Analyzing Sensors..." : "Regenerate Prescriptions"}
@@ -94,11 +93,10 @@ export function PrecisionPrescriptionPanel({ cycleId }: { cycleId: string }) {
             <p className="text-xs text-muted-foreground max-w-md mx-auto">
               Run the precision agronomy engine to synthesize soil probe readings, canopy NDVI, and rainfall forecasts into an actionable schedule.
             </p>
-            <Button
-              size="sm"
+            <Button size="sm"
               onClick={onGenerate}
               disabled={generate.isPending}
-              className="rounded-full gap-2 text-xs"
+              className="hover-lift rounded-full gap-2 text-xs"
             >
               <Sparkles className="h-3.5 w-3.5" />
               Run Precision Engine
@@ -180,11 +178,10 @@ export function PrecisionPrescriptionPanel({ cycleId }: { cycleId: string }) {
                         >
                           Skip
                         </Button>
-                        <Button
-                          size="sm"
+                        <Button size="sm"
                           onClick={() => onStatusChange(p.id, "APPLIED")}
                           disabled={updateStatus.isPending}
-                          className="h-8 text-xs rounded-full gap-1.5"
+                          className="hover-lift h-8 text-xs rounded-full gap-1.5"
                         >
                           <CheckCircle2 className="h-3.5 w-3.5" /> Mark as Applied
                         </Button>

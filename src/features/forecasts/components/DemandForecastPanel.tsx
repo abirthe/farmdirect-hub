@@ -26,7 +26,7 @@ export function DemandForecastPanel() {
   const netBalance = totalSupply - totalDemand;
 
   return (
-    <Card className="glass-panel" data-testid="demand-forecasts-panel">
+    <Card className="glass-panel hover-lift glass-panel" data-testid="demand-forecasts-panel">
       <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-border/50">
         <div className="space-y-1">
           <CardTitle className="text-xl font-black flex items-center gap-2">
@@ -173,12 +173,12 @@ export function DemandForecastPanel() {
                     </div>
 
                     <div className="flex items-center justify-end gap-2 pt-1">
-                      <Button asChild size="sm" variant="outline" className="h-8 text-xs rounded-full gap-1">
+                      <Button asChild size="sm" variant="outline" className="hover-lift h-8 text-xs rounded-full gap-1">
                         <Link to="/rfq">
                           <Sparkles className="h-3.5 w-3.5 text-primary" /> Post RFQ
                         </Link>
                       </Button>
-                      <Button asChild size="sm" className="h-8 text-xs rounded-full gap-1">
+                      <Button asChild size="sm" className="hover-lift h-8 text-xs rounded-full gap-1">
                         <Link to="/forward">Explore Forwards</Link>
                       </Button>
                     </div>

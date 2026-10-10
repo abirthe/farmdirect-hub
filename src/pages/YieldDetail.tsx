@@ -57,7 +57,7 @@ const YieldDetail = () => {
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <Leaf className="h-5 w-5 text-primary" />
-                <h1 className="text-3xl font-black">Rajshahi {mlFeatures.cropType} Cluster</h1>
+                <h1 className="text-gradient-primary text-3xl font-black">Rajshahi {mlFeatures.cropType} Cluster</h1>
               </div>
               <p className="text-muted-foreground">ID: {farmId || "ACRE-092"} · {mlFeatures.farmSizeHectares} hectares · {mlFeatures.cropType}</p>
             </div>
@@ -71,7 +71,7 @@ const YieldDetail = () => {
         </div>
 
         {/* ML Yield Forecast Chart */}
-        <Card className="glass-panel overflow-hidden">
+        <Card className="glass-panel hover-lift glass-panel overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
           <CardHeader className="relative z-10 pb-2">
             <CardTitle className="text-xl font-black flex items-center gap-2">
@@ -105,7 +105,7 @@ const YieldDetail = () => {
 
         {/* AI Harvest Prediction Model */}
         <div className="grid gap-6 md:grid-cols-2">
-          <Card className="glass-panel border-primary/30 relative overflow-hidden">
+          <Card className="glass-panel hover-lift glass-panel border-primary/30 relative overflow-hidden">
              <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
                <Target className="w-32 h-32" />
              </div>
@@ -144,7 +144,7 @@ const YieldDetail = () => {
              </CardContent>
           </Card>
 
-          <Card className="glass-panel border-blue-500/20 relative overflow-hidden">
+          <Card className="glass-panel hover-lift glass-panel border-blue-500/20 relative overflow-hidden">
              <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
                <AlertTriangle className="w-32 h-32 text-blue-500" />
              </div>
@@ -180,7 +180,7 @@ const YieldDetail = () => {
         {/* Intelligence Grid */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {/* NDVI */}
-          <Card className="soil-card">
+          <Card className="glass-panel hover-lift">
             <CardContent className="p-6 space-y-4">
               <div className="flex items-center justify-between">
                 <p className="text-sm font-semibold text-muted-foreground">NDVI Health</p>
@@ -198,7 +198,7 @@ const YieldDetail = () => {
           </Card>
 
           {/* Weather Risk */}
-          <Card className="soil-card">
+          <Card className="glass-panel hover-lift">
             <CardContent className="p-6 space-y-4">
               <div className="flex items-center justify-between">
                 <p className="text-sm font-semibold text-muted-foreground">Weather Risk Factor</p>
@@ -218,7 +218,7 @@ const YieldDetail = () => {
           </Card>
 
           {/* Market Insight */}
-          <Card className="soil-card">
+          <Card className="glass-panel hover-lift">
             <CardContent className="p-6 space-y-4">
               <div className="flex items-center justify-between">
                 <p className="text-sm font-semibold text-muted-foreground">Market Est. Value</p>
@@ -229,7 +229,7 @@ const YieldDetail = () => {
                 <p className="text-sm text-muted-foreground mt-1">Based on <CurrencyDisplay amount={318} />/t floor</p>
               </div>
               <div className="space-y-2">
-                <Button size="sm" className="w-full rounded-full gap-2">
+                <Button size="sm" className="hover-lift w-full rounded-full gap-2">
                   <Target className="h-4 w-4" /> Update Marketplace Listing
                 </Button>
               </div>

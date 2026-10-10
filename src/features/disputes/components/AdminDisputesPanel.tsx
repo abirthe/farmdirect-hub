@@ -39,10 +39,9 @@ function ResolveBox({ dispute }: { dispute: Dispute }) {
   return (
     <div className="space-y-3 pt-2">
       <div className="flex items-center justify-between">
-        <Button
-          size="sm"
+        <Button size="sm"
           variant="outline"
-          className="gap-1.5 text-xs font-semibold"
+          className="hover-lift gap-1.5 text-xs font-semibold"
           disabled={triage.isPending}
           onClick={onRunTriage}
         >
@@ -85,10 +84,10 @@ function ResolveBox({ dispute }: { dispute: Dispute }) {
       />
       {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
       <div className="flex gap-2">
-        <Button size="sm" disabled={resolve.isPending} onClick={() => run("RESOLVED_RELEASE")}>
+        <Button className="hover-lift" size="sm" disabled={resolve.isPending} onClick={() => run("RESOLVED_RELEASE")}>
           Release to farmer
         </Button>
-        <Button size="sm" variant="destructive" disabled={resolve.isPending} onClick={() => run("RESOLVED_REFUND")}>
+        <Button className="hover-lift" size="sm" variant="destructive" disabled={resolve.isPending} onClick={() => run("RESOLVED_REFUND")}>
           Refund buyer
         </Button>
       </div>
@@ -107,7 +106,7 @@ export function AdminDisputesPanel() {
       {disputes.isError && <p role="alert" className="text-sm text-destructive">{(disputes.error as Error).message}</p>}
       {disputes.isSuccess && list.length === 0 && <p data-testid="admin-disputes-empty" className="text-sm text-muted-foreground">No disputes.</p>}
       {list.map((d) => (
-        <Card key={d.id}>
+        <Card className="glass-panel hover-lift" key={d.id}>
           <CardContent className="space-y-3 p-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="font-semibold">{REASON_LABELS[d.reason]} · {d.orders?.total_price ?? "?"} on hold · order {d.order_id.slice(0, 8)}</p>

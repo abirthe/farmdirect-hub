@@ -35,11 +35,11 @@ const FarmerDashboard = () => {
                 Farmer cockpit
               </span>
             </div>
-            <h1 className="text-3xl font-black">Farm Intelligence</h1>
+            <h1 className="text-gradient-primary text-3xl font-black">Farm Intelligence</h1>
             <p className="text-muted-foreground text-sm">Welcome back. Here's today's field briefing.</p>
           </div>
           <div className="flex gap-2">
-            <Button asChild variant="outline" size="sm" className="rounded-full gap-1.5">
+            <Button asChild variant="outline" size="sm" className="hover-lift rounded-full gap-1.5">
               <Link to="/notifications">
                 <Bell className="h-4 w-4" />
                 Alerts
@@ -48,7 +48,7 @@ const FarmerDashboard = () => {
                 </Badge>
               </Link>
             </Button>
-            <Button asChild size="sm" className="rounded-full gap-1.5">
+            <Button asChild size="sm" className="hover-lift rounded-full gap-1.5">
               <Link to="/farmer/register">
                 <Plus className="h-4 w-4" />
                 Register farm

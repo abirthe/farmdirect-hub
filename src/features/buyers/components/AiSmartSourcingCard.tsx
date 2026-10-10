@@ -13,7 +13,7 @@ const recommendations = [
 
 export function AiSmartSourcingCard() {
   return (
-    <Card className="glass-panel border-primary/20">
+    <Card className="glass-panel hover-lift glass-panel border-primary/20">
       <CardHeader className="pb-3 border-b border-border/60 bg-primary/5 rounded-t-xl">
         <div className="flex items-center gap-2">
           <BrainCircuit className="h-5 w-5 text-primary" />
@@ -66,7 +66,7 @@ export function AiSmartSourcingCard() {
             </Button>
           </div>
         ))}
-        <Button asChild variant="outline" className="w-full rounded-full gap-2 mt-1">
+        <Button asChild variant="outline" className="hover-lift w-full rounded-full gap-2 mt-1">
           <Link to="/marketplace">
             <ShoppingBag className="h-4 w-4" />
             Browse all listings

@@ -19,7 +19,7 @@ interface FarmerYieldChartProps {
 
 export function FarmerYieldChart({ data = defaultYieldHistory }: FarmerYieldChartProps) {
   return (
-    <Card className="glass-panel" data-testid="farmer-yield-chart">
+    <Card className="glass-panel hover-lift glass-panel" data-testid="farmer-yield-chart">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between gap-4">
           <div>

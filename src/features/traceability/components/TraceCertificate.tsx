@@ -9,7 +9,7 @@ export function TraceCertificate({ trace }: { trace: PublicTrace }) {
   const badges = getTrustBadges(trace);
 
   return (
-    <Card className="overflow-hidden border-2 border-primary/20 shadow-xl" data-testid="trace-certificate">
+    <Card className="glass-panel hover-lift overflow-hidden border-2 border-primary/20 shadow-xl" data-testid="trace-certificate">
       <CardHeader className="bg-primary/5 pb-4 border-b border-primary/10">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <Badge variant="outline" className="gap-1 border-primary text-primary font-mono text-xs">

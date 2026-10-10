@@ -125,11 +125,11 @@ const ListingDetail = () => {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 space-y-4">
         <AlertCircle className="h-12 w-12 text-destructive" />
-        <h2 className="text-xl font-black">Listing Not Found</h2>
+        <h2 className="text-gradient-primary text-xl font-black">Listing Not Found</h2>
         <p className="text-muted-foreground text-sm text-center max-w-sm">
           The requested harvest listing does not exist or has been fulfilled.
         </p>
-        <Button asChild className="rounded-full">
+        <Button asChild className="hover-lift rounded-full">
           <Link to="/marketplace">Back to Marketplace</Link>
         </Button>
       </div>
@@ -163,7 +163,7 @@ const ListingDetail = () => {
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h1 className="text-3xl font-black">{listing.crop}</h1>
+                      <h1 className="text-gradient-primary text-3xl font-black">{listing.crop}</h1>
                       {listing.verified && <ShieldCheck className="h-6 w-6 text-primary" />}
                     </div>
                     <p className="text-muted-foreground">{listing.farmName}</p>
@@ -183,7 +183,7 @@ const ListingDetail = () => {
             <ListingAiVerification prediction={prediction} />
 
             {/* Price Trend Chart */}
-            <Card className="glass-panel">
+            <Card className="glass-panel hover-lift glass-panel">
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl font-black flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-primary" />
@@ -214,7 +214,7 @@ const ListingDetail = () => {
             </Card>
 
             {/* Quality Certs */}
-            <Card className="glass-panel">
+            <Card className="glass-panel hover-lift glass-panel">
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl font-black flex items-center gap-2">
                   <ShieldCheck className="h-5 w-5 text-primary" />

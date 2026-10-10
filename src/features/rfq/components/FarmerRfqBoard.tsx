@@ -32,7 +32,7 @@ function BidForm({ rfq }: { rfq: Rfq }) {
     <form onSubmit={onSubmit} className="flex flex-wrap items-end gap-2" aria-label={`Bid on ${rfq.crop_type}`}>
       <Input aria-label="Your price per ton" type="number" min={0} className="w-36" placeholder="Price / ton" value={price} onChange={(e) => setPrice(e.target.value)} />
       <Input aria-label="Your quantity in tons" type="number" min={0} className="w-36" placeholder="Qty (tons)" value={qty} onChange={(e) => setQty(e.target.value)} />
-      <Button type="submit" size="sm" disabled={submit.isPending}>{submit.isPending ? "Sending…" : "Place bid"}</Button>
+      <Button className="hover-lift" type="submit" size="sm" disabled={submit.isPending}>{submit.isPending ? "Sending…" : "Place bid"}</Button>
       {error && <p role="alert" className="w-full text-sm text-destructive">{error}</p>}
     </form>
   );
@@ -54,7 +54,7 @@ export function FarmerRfqBoard({ userId }: { userId: string }) {
       {open.map((r) => {
         const mine = myBids.find((b) => b.rfq_id === r.id);
         return (
-          <Card key={r.id}>
+          <Card className="glass-panel hover-lift" key={r.id}>
             <CardContent className="space-y-3 p-4">
               <p className="font-semibold">{r.crop_type} · {r.qty_tons} t · max {r.max_price_per_ton}/t</p>
               <p className="text-xs text-muted-foreground">Closes <time dateTime={r.deadline}>{new Date(r.deadline).toLocaleString()}</time>{r.notes ? ` · ${r.notes}` : ""}</p>

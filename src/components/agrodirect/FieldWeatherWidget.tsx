@@ -56,7 +56,7 @@ export function FieldWeatherWidget({
 
   if (loading || !reading) {
     return (
-      <Card className="soil-card animate-pulse">
+      <Card className="glass-panel hover-lift animate-pulse">
         <CardContent className="p-6 h-48 flex items-center justify-center text-muted-foreground">
           <RefreshCw className="h-6 w-6 animate-spin mr-2" /> Connecting to Open-Meteo Agroclimatic satellite feed...
         </CardContent>
@@ -68,7 +68,7 @@ export function FieldWeatherWidget({
   const isMoistureDeficit = reading.irrigationNeedStatus === "DEFICIT_CRITICAL";
 
   return (
-    <Card className="soil-card border-primary/20 shadow-sm overflow-hidden">
+    <Card className="glass-panel hover-lift border-primary/20 shadow-sm overflow-hidden">
       <CardHeader className="p-5 pb-3 border-b border-border/40 bg-muted/20">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="space-y-1">
@@ -95,10 +95,9 @@ export function FieldWeatherWidget({
                 <option key={hub.name} value={idx}>{hub.name}</option>
               ))}
             </select>
-            <Button
-              size="sm"
+            <Button size="sm"
               variant="outline"
-              className="h-8 px-2.5"
+              className="hover-lift h-8 px-2.5"
               onClick={() => loadWeather(activeHub.lat, activeHub.lng, activeHub.name)}
               disabled={refreshing}
             >
@@ -205,10 +204,9 @@ export function FieldWeatherWidget({
           <span className="text-[11px] text-muted-foreground">
             Synchronized with latitude {reading.latitude}°N, longitude {reading.longitude}°E
           </span>
-          <Button 
-            size="sm" 
+          <Button size="sm" 
             variant="default"
-            className="rounded-full gap-1.5 text-xs font-semibold"
+            className="hover-lift rounded-full gap-1.5 text-xs font-semibold"
             onClick={handleSyncToCycle}
           >
             <CheckCircle2 className="h-3.5 w-3.5" />

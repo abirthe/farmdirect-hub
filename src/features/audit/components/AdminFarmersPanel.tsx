@@ -112,7 +112,7 @@ export function AdminFarmersPanel() {
   });
 
   return (
-    <Card className="glass-panel" data-testid="admin-farmers-panel">
+    <Card className="glass-panel hover-lift glass-panel" data-testid="admin-farmers-panel">
       <CardHeader className="pb-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
@@ -134,26 +134,23 @@ export function AdminFarmersPanel() {
                 className="pl-8 h-9 text-xs"
               />
             </div>
-            <Button
-              variant={statusFilter === "ALL" ? "default" : "outline"}
+            <Button variant={statusFilter === "ALL" ? "default" : "outline"}
               size="sm"
-              className="text-xs h-9"
+              className="hover-lift text-xs h-9"
               onClick={() => setStatusFilter("ALL")}
             >
               All
             </Button>
-            <Button
-              variant={statusFilter === "VERIFIED" ? "default" : "outline"}
+            <Button variant={statusFilter === "VERIFIED" ? "default" : "outline"}
               size="sm"
-              className="text-xs h-9"
+              className="hover-lift text-xs h-9"
               onClick={() => setStatusFilter("VERIFIED")}
             >
               Verified
             </Button>
-            <Button
-              variant={statusFilter === "PENDING" ? "default" : "outline"}
+            <Button variant={statusFilter === "PENDING" ? "default" : "outline"}
               size="sm"
-              className="text-xs h-9"
+              className="hover-lift text-xs h-9"
               onClick={() => setStatusFilter("PENDING")}
             >
               Pending
@@ -220,10 +217,9 @@ export function AdminFarmersPanel() {
                       {new Date(farmer.created_at).toLocaleDateString()}
                     </td>
                     <td className="py-3 px-3 text-right">
-                      <Button
-                        size="sm"
+                      <Button size="sm"
                         variant={farmer.status === "VERIFIED" ? "outline" : "default"}
-                        className="h-7 text-[11px] gap-1"
+                        className="hover-lift h-7 text-[11px] gap-1"
                         onClick={() => handleToggleVerification(farmer.id, farmer.status)}
                       >
                         {farmer.status === "VERIFIED" ? "Mark Pending" : "Verify Grower"}

@@ -60,7 +60,7 @@ export function CommodityReportsPanel() {
   return (
     <div className="space-y-8" data-testid="commodity-reports-panel">
       {/* Header Panel */}
-      <Card className="glass-panel">
+      <Card className="glass-panel hover-lift glass-panel">
         <CardHeader className="pb-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="space-y-1">
@@ -133,7 +133,7 @@ export function CommodityReportsPanel() {
         ) : (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {indexItems.map((item, idx) => (
-              <Card key={`${item.region}-${item.crop_type}-${idx}`} className="soil-card p-4 space-y-2">
+              <Card key={`${item.region}-${item.crop_type}-${idx}`} className="glass-panel hover-lift p-4 space-y-2">
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-bold text-sm">{item.region}</h4>
@@ -174,7 +174,7 @@ export function CommodityReportsPanel() {
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {marketQuotes.map((q) => (
-            <Card key={q.cropCode} className="p-3.5 border-border/70 bg-card/60">
+            <Card key={q.cropCode} className="glass-panel hover-lift p-3.5 border-border/70 bg-card/60">
               <div className="flex items-start justify-between">
                 <div>
                   <h4 className="font-bold text-xs">{q.cropName}</h4>
@@ -234,7 +234,7 @@ export function CommodityReportsPanel() {
         {reportsQuery.isLoading ? (
           <p className="text-xs text-muted-foreground py-8 text-center">Loading intelligence reports...</p>
         ) : reports.length === 0 ? (
-          <Card className="soil-card p-8 text-center space-y-2">
+          <Card className="glass-panel hover-lift p-8 text-center space-y-2">
             <FileSpreadsheet className="h-10 w-10 text-muted-foreground/40 mx-auto" />
             <p className="text-sm font-medium">No reports found matching criteria</p>
             <p className="text-xs text-muted-foreground">Try selecting 'All Access Tiers'.</p>
@@ -250,7 +250,7 @@ export function CommodityReportsPanel() {
                 : {}) as Partial<ReportMetrics>;
 
               return (
-                <Card key={report.id} className="soil-card flex flex-col justify-between" data-testid={`report-card-${report.id}`}>
+                <Card key={report.id} className="glass-panel hover-lift flex flex-col justify-between" data-testid={`report-card-${report.id}`}>
                   <CardContent className="p-5 space-y-4">
                     <div className="space-y-2">
                       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -312,11 +312,10 @@ export function CommodityReportsPanel() {
                       <p className="text-[10px] text-muted-foreground">{report.download_count} total downloads</p>
                     </div>
 
-                    <Button
-                      size="sm"
+                    <Button size="sm"
                       onClick={() => onDownload(report)}
                       disabled={download.isPending}
-                      className="rounded-full gap-1.5 text-xs h-8"
+                      className="hover-lift rounded-full gap-1.5 text-xs h-8"
                     >
                       <Download className="h-3.5 w-3.5" />
                       Export Data Bundle

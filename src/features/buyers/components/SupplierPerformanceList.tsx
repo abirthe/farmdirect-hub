@@ -19,10 +19,10 @@ const suppliers: SupplierMetric[] = [
 export function SupplierPerformanceList() {
   return (
     <div>
-      <h2 className="text-2xl font-black mb-5">Supplier performance</h2>
+      <h2 className="text-gradient-primary text-2xl font-black mb-5">Supplier performance</h2>
       <div className="grid gap-4 md:grid-cols-3">
         {suppliers.map((s) => (
-          <Card key={s.name} className="soil-card">
+          <Card key={s.name} className="glass-panel hover-lift">
             <CardContent className="p-5 space-y-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground font-bold text-sm shrink-0">

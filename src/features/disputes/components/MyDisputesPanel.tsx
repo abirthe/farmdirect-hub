@@ -47,14 +47,14 @@ export function MyDisputesPanel() {
         <Textarea aria-label="Description" placeholder="Describe what went wrong…" value={form.description}
           onChange={(e) => setForm({ ...form, description: e.target.value })} maxLength={2000} />
         {formError && <p role="alert" className="text-sm text-destructive">{formError}</p>}
-        <Button id="open-dispute" type="submit" disabled={open.isPending}>{open.isPending ? "Opening…" : "Open dispute"}</Button>
+        <Button className="hover-lift" id="open-dispute" type="submit" disabled={open.isPending}>{open.isPending ? "Opening…" : "Open dispute"}</Button>
       </form>
 
       {disputes.isLoading && <p className="text-sm text-muted-foreground">Loading disputes…</p>}
       {disputes.isError && <p role="alert" className="text-sm text-destructive">{(disputes.error as Error).message}</p>}
       {disputes.isSuccess && list.length === 0 && <p data-testid="my-disputes-empty" className="text-sm text-muted-foreground">You have no disputes.</p>}
       {list.map((d) => (
-        <Card key={d.id}>
+        <Card className="glass-panel hover-lift" key={d.id}>
           <CardContent className="space-y-3 p-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="font-semibold">{REASON_LABELS[d.reason]} · order {d.order_id.slice(0, 8)}</p>

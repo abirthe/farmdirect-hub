@@ -18,7 +18,7 @@ export function FinancingPassportCard({ passport }: { passport: UnderwritingPass
   };
 
   return (
-    <Card className="border-2 shadow-md hover:shadow-lg transition-shadow" data-testid="passport-card">
+    <Card className="glass-panel hover-lift border-2 shadow-md hover:shadow-lg transition-shadow" data-testid="passport-card">
       <CardHeader className="bg-muted/30 pb-3 border-b flex flex-row items-center justify-between">
         <div>
           <span className="text-xs font-mono text-muted-foreground block">
@@ -82,10 +82,10 @@ export function FinancingPassportCard({ passport }: { passport: UnderwritingPass
             SHA256: {passport.passport_hash.slice(0, 16)}…
           </span>
           <div className="flex items-center gap-2">
-            <Button size="sm" variant="outline" className="gap-1.5 text-xs" onClick={onCopyHash}>
+            <Button size="sm" variant="outline" className="hover-lift gap-1.5 text-xs" onClick={onCopyHash}>
               <Copy className="h-3.5 w-3.5" /> Copy Seal
             </Button>
-            <Button size="sm" className="gap-1.5 text-xs" onClick={() => toast({ title: "Underwriting Passport Exported", description: "Bank-ready underwriting dossier generated." })}>
+            <Button size="sm" className="hover-lift gap-1.5 text-xs" onClick={() => toast({ title: "Underwriting Passport Exported", description: "Bank-ready underwriting dossier generated." })}>
               <FileText className="h-3.5 w-3.5" /> Export Dossier
             </Button>
           </div>

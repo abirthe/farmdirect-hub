@@ -37,17 +37,17 @@ const About = () => {
             <span className="eyebrow border-white/20 bg-white/10 text-white backdrop-blur-sm">
               Our mission
             </span>
-            <h1 className="text-5xl md:text-6xl font-black text-white leading-tight">
+            <h1 className="text-gradient-primary text-5xl md:text-6xl font-black text-white leading-tight">
               We exist to end middleman exploitation in agriculture.
             </h1>
             <p className="text-white/80 text-lg leading-8 max-w-2xl">
               AgroDirect is a decentralized agriculture platform connecting farmers directly to buyers using satellite intelligence, machine learning forecasting, and escrow-protected trade.
             </p>
             <div className="flex gap-3">
-              <Button asChild variant="hero" size="lg" className="rounded-full gap-2">
+              <Button asChild variant="hero" size="lg" className="hover-lift rounded-full gap-2">
                 <Link to="/signup">Join the platform <ArrowRight className="h-4 w-4" /></Link>
               </Button>
-              <Button asChild variant="soil" size="lg" className="rounded-full border-white/25 bg-white/10 text-white hover:bg-white/20 hover:text-white backdrop-blur-sm">
+              <Button asChild variant="soil" size="lg" className="hover-lift rounded-full border-white/25 bg-white/10 text-white hover:bg-white/20 hover:text-white backdrop-blur-sm">
                 <Link to="/marketplace">View marketplace</Link>
               </Button>
             </div>
@@ -79,7 +79,7 @@ const About = () => {
         <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
           <div className="space-y-6">
             <span className="eyebrow">The problem we solve</span>
-            <h2 className="text-4xl font-black leading-tight">A farmer earns 35 cents for every dollar of food value they create.</h2>
+            <h2 className="text-gradient-primary text-4xl font-black leading-tight">A farmer earns 35 cents for every dollar of food value they create.</h2>
             <p className="text-muted-foreground leading-7">
               The average smallholder farmer in Bangladesh receives just 35% of the final sale price of their crop. The remaining 65% is captured by intermediary chains — aggregators, transporters, and wholesale buyers — who exploit information asymmetry.
             </p>
@@ -102,7 +102,7 @@ const About = () => {
               { icon: TrendingUp, label: "Price", text: "Real-time floor pricing, no negotiation games." },
               { icon: ShieldCheck, label: "Trade", text: "Escrow-protected deals, zero defaults." },
             ].map(({ icon: Icon, label, text }) => (
-              <div key={label} className="soil-card p-6 space-y-3">
+              <div key={label} className="glass-panel hover-lift p-6 space-y-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <Icon className="h-5 w-5" />
                 </div>
@@ -118,11 +118,11 @@ const About = () => {
       <section className="section-shell pt-0">
         <div className="mb-10 space-y-4 max-w-2xl">
           <span className="eyebrow">Our values</span>
-          <h2 className="text-4xl font-black">What we believe in</h2>
+          <h2 className="text-gradient-primary text-4xl font-black">What we believe in</h2>
         </div>
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {values.map(({ icon: Icon, title, text }) => (
-            <Card key={title} className="soil-card hover:-translate-y-1 transition-transform duration-300">
+            <Card key={title} className="glass-panel hover-lift hover:-translate-y-1 transition-transform duration-300">
               <CardContent className="p-6 space-y-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
                   <Icon className="h-5 w-5" />
@@ -141,7 +141,7 @@ const About = () => {
       <section className="section-shell pt-0">
         <div className="mb-10 space-y-4 max-w-2xl">
           <span className="eyebrow">Our journey</span>
-          <h2 className="text-4xl font-black">From a field observation to a continent-wide platform</h2>
+          <h2 className="text-gradient-primary text-4xl font-black">From a field observation to a continent-wide platform</h2>
         </div>
         <div className="relative ml-4 space-y-0 border-l-2 border-primary/30 pl-8">
           {milestones.map((m, i) => (
@@ -161,11 +161,11 @@ const About = () => {
       <section className="section-shell pt-0">
         <div className="mb-10 space-y-4 max-w-2xl">
           <span className="eyebrow">The team</span>
-          <h2 className="text-4xl font-black">Built by people who grew up near the problem</h2>
+          <h2 className="text-gradient-primary text-4xl font-black">Built by people who grew up near the problem</h2>
         </div>
         <div className="flex flex-wrap justify-center gap-5">
           {team.map(({ name, role, bio }) => (
-            <Card key={name} className="glass-panel w-full max-w-xs text-left">
+            <Card key={name} className="glass-panel hover-lift glass-panel w-full max-w-xs text-left">
               <CardContent className="p-6 space-y-4">
                 <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground text-xl font-black">
                   {name.charAt(0)}
@@ -183,19 +183,19 @@ const About = () => {
 
       {/* CTA */}
       <section className="section-shell pt-0">
-        <Card className="glass-panel overflow-hidden">
+        <Card className="glass-panel hover-lift glass-panel overflow-hidden">
           <div className="field-grid absolute inset-0 opacity-10" />
           <CardContent className="relative z-10 p-10 md:p-16 text-center space-y-6">
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground mx-auto motion-safe:animate-float">
               <Leaf className="h-8 w-8" />
             </div>
-            <h2 className="text-4xl font-black max-w-xl mx-auto">Ready to trade without the middleman?</h2>
+            <h2 className="text-gradient-primary text-4xl font-black max-w-xl mx-auto">Ready to trade without the middleman?</h2>
             <p className="text-muted-foreground max-w-md mx-auto leading-7">Join 312 farmers and 80+ buyers already using AgroDirect to build fairer agricultural trade.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button asChild size="xl" className="rounded-full gap-2">
+              <Button asChild size="xl" className="hover-lift rounded-full gap-2">
                 <Link to="/signup">Get started free <ArrowRight className="h-4 w-4" /></Link>
               </Button>
-              <Button asChild variant="outline" size="xl" className="rounded-full">
+              <Button asChild variant="outline" size="xl" className="hover-lift rounded-full">
                 <Link to="/marketplace">Browse listings</Link>
               </Button>
             </div>

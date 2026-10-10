@@ -61,13 +61,12 @@ const AdminDashboard = () => {
               </div>
               <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold">Admin control</span>
             </div>
-            <h1 className="text-3xl font-black">Platform Administration</h1>
+            <h1 className="text-gradient-primary text-3xl font-black">Platform Administration</h1>
             <p className="text-muted-foreground text-sm">System health, verification queue, and dispute management.</p>
           </div>
-          <Button 
-            variant="outline" 
+          <Button variant="outline" 
             size="sm" 
-            className="rounded-full gap-1.5"
+            className="hover-lift rounded-full gap-1.5"
             onClick={() => toast({ title: "Admin Panel Action", description: "Opening configuration modal..." })}
           >
             <Settings className="h-4 w-4" />
@@ -85,7 +84,7 @@ const AdminDashboard = () => {
             { label: "Pending verifications", value: stats.pendingKyc.toString(), sub: "Awaiting admin review", icon: Clock, trend: stats.pendingKyc > 0 ? "warn" : "up" },
             { label: "Total orders", value: stats.orders.toString(), sub: "Escrow deals recorded", icon: TrendingUp, trend: "up" },
           ].map(({ label, value, sub, icon: Icon, trend }) => (
-            <Card key={label} className="soil-card group transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+            <Card key={label} className="glass-panel hover-lift group transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
               <CardContent className="p-6 flex items-start justify-between gap-4">
                 <div className="space-y-1">
                   <p className="text-xs text-muted-foreground uppercase tracking-[0.15em] transition-colors group-hover:text-foreground/80">{label}</p>
@@ -103,7 +102,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Platform Health Bars */}
-        <Card className="glass-panel">
+        <Card className="glass-panel hover-lift glass-panel">
           <CardHeader className="pb-4">
             <CardTitle className="text-xl font-black flex items-center gap-2"><BarChart3 className="h-5 w-5 text-primary" />Platform health</CardTitle>
           </CardHeader>

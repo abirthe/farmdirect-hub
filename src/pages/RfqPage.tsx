@@ -12,7 +12,7 @@ export default function RfqPage() {
       <title>Requests for Quotes | AgroDirect</title>
       <meta name="description" content="Post crop requests and bid on them directly, with no middlemen." />
       <header>
-        <h1 className="text-3xl font-black">Requests for Quotes</h1>
+        <h1 className="text-gradient-primary text-3xl font-black">Requests for Quotes</h1>
         <p className="text-muted-foreground">
           {role === "buyer" ? "Post what you need and pick the best bid." : "Bid on open buyer requests."}
         </p>

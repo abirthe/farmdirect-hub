@@ -31,7 +31,7 @@ export function EvidenceThread({ disputeId, items, canAdd }: { disputeId: string
       {canAdd && (
         <form onSubmit={onSubmit} className="flex gap-2" aria-label="Add evidence">
           <Input aria-label="Evidence" placeholder="Add evidence or a comment…" value={body} onChange={(e) => setBody(e.target.value)} maxLength={2000} />
-          <Button type="submit" size="sm" disabled={add.isPending || !body.trim()}>Add</Button>
+          <Button className="hover-lift" type="submit" size="sm" disabled={add.isPending || !body.trim()}>Add</Button>
         </form>
       )}
     </div>

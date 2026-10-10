@@ -36,7 +36,7 @@ export function FeeTiersPanel() {
       </p>
       {draft.length === 0 && <p data-testid="fee-empty" className="text-sm">No tiers configured.</p>}
       {draft.map((t, i) => (
-        <Card key={i}>
+        <Card className="glass-panel hover-lift" key={i}>
           <CardContent className="flex flex-wrap items-center gap-4 p-4">
             <label className="text-sm">
               Orders from
@@ -60,10 +60,10 @@ export function FeeTiersPanel() {
       ))}
       {problem && <p role="alert" className="text-sm text-destructive">{problem}</p>}
       <div className="flex gap-2">
-        <Button variant="outline" onClick={() => setDraft((d) => [...d, { min_order_total: 0, rate_bps: 300 }])}>
+        <Button className="hover-lift" variant="outline" onClick={() => setDraft((d) => [...d, { min_order_total: 0, rate_bps: 300 }])}>
           Add tier
         </Button>
-        <Button id="save-fee-tiers" onClick={onSave} disabled={!!problem || save.isPending}>
+        <Button className="hover-lift" id="save-fee-tiers" onClick={onSave} disabled={!!problem || save.isPending}>
           {save.isPending ? "Saving…" : "Save tiers"}
         </Button>
       </div>

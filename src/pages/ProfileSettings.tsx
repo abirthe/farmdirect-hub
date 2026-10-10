@@ -76,7 +76,7 @@ const ProfileSettings = () => {
               <User className="h-4 w-4" />
             </div>
             <div>
-              <h1 className="text-2xl font-black">Profile & Settings</h1>
+              <h1 className="text-gradient-primary text-2xl font-black">Profile & Settings</h1>
               <p className="text-sm text-muted-foreground">Manage your account and notification preferences.</p>
             </div>
           </div>
@@ -100,7 +100,7 @@ const ProfileSettings = () => {
           {/* Profile Tab */}
           <TabsContent value="profile" className="space-y-6">
             {/* Avatar */}
-            <Card className="glass-panel">
+            <Card className="glass-panel hover-lift glass-panel">
               <CardContent className="p-6 flex items-center gap-6">
                 <div className="relative">
                   <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary text-primary-foreground text-3xl font-black">
@@ -121,7 +121,7 @@ const ProfileSettings = () => {
             </Card>
 
             {/* Form */}
-            <Card className="glass-panel">
+            <Card className="glass-panel hover-lift glass-panel">
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl font-black">Personal information</CardTitle>
               </CardHeader>
@@ -165,7 +165,7 @@ const ProfileSettings = () => {
                       className="w-full rounded-xl border border-border/60 bg-background px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2" />
                   </div>
                 </div>
-                <Button onClick={handleSave} disabled={saving || saved} className="rounded-full gap-2">
+                <Button onClick={handleSave} disabled={saving || saved} className="hover-lift rounded-full gap-2">
                   {saving ? <><Loader2 className="h-4 w-4 animate-spin" />Saving…</> :
                     saved ? <><CheckCircle2 className="h-4 w-4" />Saved!</> :
                     <><Save className="h-4 w-4" />Save changes</>}
@@ -176,7 +176,7 @@ const ProfileSettings = () => {
 
           {/* Notifications Tab */}
           <TabsContent value="notifications" className="space-y-5">
-            <Card className="glass-panel">
+            <Card className="glass-panel hover-lift glass-panel">
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl font-black">Notification preferences</CardTitle>
                 <p className="text-sm text-muted-foreground">Choose what updates you receive from AgroDirect.</p>
@@ -206,7 +206,7 @@ const ProfileSettings = () => {
                 ))}
               </CardContent>
             </Card>
-            <Button onClick={handleSave} disabled={saving || saved} className="rounded-full gap-2">
+            <Button onClick={handleSave} disabled={saving || saved} className="hover-lift rounded-full gap-2">
               {saving ? <><Loader2 className="h-4 w-4 animate-spin" />Saving…</> :
                 saved ? <><CheckCircle2 className="h-4 w-4" />Saved!</> :
                 <><Save className="h-4 w-4" />Save preferences</>}
@@ -215,7 +215,7 @@ const ProfileSettings = () => {
 
           {/* Security Tab */}
           <TabsContent value="security" className="space-y-5">
-            <Card className="glass-panel">
+            <Card className="glass-panel hover-lift glass-panel">
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl font-black">Change password</CardTitle>
               </CardHeader>
@@ -226,13 +226,13 @@ const ProfileSettings = () => {
                     <Input type="password" placeholder="••••••••" className="h-12 rounded-xl border-border/60" />
                   </div>
                 ))}
-                <Button className="rounded-full gap-2">
+                <Button className="hover-lift rounded-full gap-2">
                   <Shield className="h-4 w-4" />Update password
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="glass-panel border-destructive/30">
+            <Card className="glass-panel hover-lift glass-panel border-destructive/30">
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl font-black text-destructive">Danger zone</CardTitle>
               </CardHeader>
@@ -242,7 +242,7 @@ const ProfileSettings = () => {
                     <p className="font-semibold text-sm">Delete account</p>
                     <p className="text-xs text-muted-foreground mt-0.5">Permanently delete your account and all farm data. This cannot be undone.</p>
                   </div>
-                  <Button variant="destructive" size="sm" className="rounded-full shrink-0">Delete account</Button>
+                  <Button variant="destructive" size="sm" className="hover-lift rounded-full shrink-0">Delete account</Button>
                 </div>
               </CardContent>
             </Card>

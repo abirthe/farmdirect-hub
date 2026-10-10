@@ -114,14 +114,13 @@ const Notifications = () => {
               <Mail className="h-5 w-5" />
             </div>
             <div>
-              <h1 className="text-3xl font-black">Inbox</h1>
+              <h1 className="text-gradient-primary text-3xl font-black">Inbox</h1>
               <p className="text-sm text-muted-foreground mt-0.5">{unreadCount} unread message{unreadCount === 1 ? "" : "s"}</p>
             </div>
           </div>
-          <Button 
-            variant="outline" 
+          <Button variant="outline" 
             size="sm" 
-            className="rounded-full gap-2"
+            className="hover-lift rounded-full gap-2"
             onClick={handleMarkAllRead}
             disabled={unreadCount === 0}
           >
@@ -137,7 +136,7 @@ const Notifications = () => {
           const badgeClass = NotifTypeStyles[item.type as keyof typeof NotifTypeStyles];
           
           return (
-            <Card key={item.id} className={`glass-panel overflow-hidden transition-all ${item.read ? "opacity-75 bg-muted/20" : "bg-card/80"}`}>
+            <Card key={item.id} className={`glass-panel hover-lift glass-panel overflow-hidden transition-all ${item.read ? "opacity-75 bg-muted/20" : "bg-card/80"}`}>
               {/* Unread indicator bar */}
               {!item.read && <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary" />}
               
@@ -151,7 +150,7 @@ const Notifications = () => {
                   {/* Content */}
                   <div className="flex-1 space-y-2">
                     <div className="flex flex-wrap items-center gap-2 justify-between">
-                      <h2 className={`text-lg font-bold ${!item.read ? "text-foreground" : "text-muted-foreground"}`}>
+                      <h2 className={`text-gradient-primary text-lg font-bold ${!item.read ? "text-foreground" : "text-muted-foreground"}`}>
                         {item.title}
                       </h2>
                       <span className="text-xs text-muted-foreground whitespace-nowrap">{item.time}</span>
@@ -163,7 +162,7 @@ const Notifications = () => {
                     
                     {item.action && item.link && (
                       <div className="pt-2">
-                        <Button asChild variant={item.type === "alert" ? "destructive" : "default"} size="sm" className="rounded-full">
+                        <Button asChild variant={item.type === "alert" ? "destructive" : "default"} size="sm" className="hover-lift rounded-full">
                           <Link to={item.link}>{item.action}</Link>
                         </Button>
                       </div>

@@ -15,7 +15,7 @@ interface FarmerFieldAlertsProps {
 
 export function FarmerFieldAlerts({ alerts = defaultAlerts }: FarmerFieldAlertsProps) {
   return (
-    <Card className="glass-panel" data-testid="farmer-field-alerts">
+    <Card className="glass-panel hover-lift glass-panel" data-testid="farmer-field-alerts">
       <CardHeader className="pb-3">
         <CardTitle className="text-xl font-black flex items-center gap-2">
           <Bell className="h-5 w-5 text-primary" />

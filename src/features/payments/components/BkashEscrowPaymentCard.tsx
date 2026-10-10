@@ -70,7 +70,7 @@ export function BkashEscrowPaymentCard({
   };
 
   return (
-    <Card className="glass-panel border-primary/30">
+    <Card className="glass-panel hover-lift glass-panel border-primary/30">
       <CardHeader className="pb-3">
         <div className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-pink-500/10 text-pink-600 dark:text-pink-400">
@@ -144,10 +144,9 @@ export function BkashEscrowPaymentCard({
             />
           </div>
 
-          <Button
-            type="submit"
+          <Button type="submit"
             disabled={submitting}
-            className="w-full h-11 rounded-xl bg-pink-600 hover:bg-pink-700 text-white gap-2 font-bold"
+            className="hover-lift w-full h-11 rounded-xl bg-pink-600 hover:bg-pink-700 text-white gap-2 font-bold"
           >
             {submitting ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -159,12 +158,11 @@ export function BkashEscrowPaymentCard({
 
           {/* Instant Sandbox PGW Checkout Simulator */}
           <div className="pt-2 border-t border-border/40 text-center">
-            <Button
-              type="button"
+            <Button type="button"
               variant="outline"
               size="sm"
               disabled={submitting}
-              className="w-full text-xs gap-1.5 border-dashed border-pink-500/40 text-pink-600 dark:text-pink-400 hover:bg-pink-500/10"
+              className="hover-lift w-full text-xs gap-1.5 border-dashed border-pink-500/40 text-pink-600 dark:text-pink-400 hover:bg-pink-500/10"
               onClick={async () => {
                 setSubmitting(true);
                 try {

@@ -93,7 +93,7 @@ const FarmRegister = () => {
             <Link to="/farmer"><ArrowLeft className="h-4 w-4" /></Link>
           </Button>
           <div>
-            <h1 className="text-2xl font-black">Register a new farm</h1>
+            <h1 className="text-gradient-primary text-2xl font-black">Register a new farm</h1>
             <p className="text-sm text-muted-foreground">Map your field, add crop details, and unlock yield intelligence.</p>
           </div>
         </div>
@@ -127,10 +127,10 @@ const FarmRegister = () => {
 
         {/* Step 0: Map Field */}
         {step === 0 && (
-          <Card className="glass-panel">
+          <Card className="glass-panel hover-lift glass-panel">
             <CardContent className="p-8 space-y-6">
               <div className="space-y-2">
-                <h2 className="text-2xl font-black">Field location & boundary</h2>
+                <h2 className="text-gradient-primary text-2xl font-black">Field location & boundary</h2>
                 <p className="text-muted-foreground text-sm">
                   Trace your field boundary directly on the interactive satellite map below. Total area and GPS perimeter are computed and synced in real time.
                 </p>
@@ -202,10 +202,10 @@ const FarmRegister = () => {
 
         {/* Step 1: Crop Details */}
         {step === 1 && (
-          <Card className="glass-panel">
+          <Card className="glass-panel hover-lift glass-panel">
             <CardContent className="p-8 space-y-6">
               <div className="space-y-2">
-                <h2 className="text-2xl font-black">Crop & timeline</h2>
+                <h2 className="text-gradient-primary text-2xl font-black">Crop & timeline</h2>
                 <p className="text-muted-foreground text-sm">This feeds the yield prediction model and helps buyers plan ahead.</p>
               </div>
 
@@ -257,10 +257,10 @@ const FarmRegister = () => {
 
         {/* Step 2: Confirm */}
         {step === 2 && (
-          <Card className="glass-panel">
+          <Card className="glass-panel hover-lift glass-panel">
             <CardContent className="p-8 space-y-6">
               <div className="space-y-2">
-                <h2 className="text-2xl font-black">Review & confirm</h2>
+                <h2 className="text-gradient-primary text-2xl font-black">Review & confirm</h2>
                 <p className="text-muted-foreground text-sm">Confirm your farm details before submission. The system will begin monitoring within 5 days.</p>
               </div>
 
@@ -295,17 +295,17 @@ const FarmRegister = () => {
 
         {/* Navigation Buttons */}
         <div className="flex items-center justify-between mt-6 gap-3">
-          <Button variant="outline" onClick={prev} disabled={step === 0} className="rounded-full gap-1.5">
+          <Button variant="outline" onClick={prev} disabled={step === 0} className="hover-lift rounded-full gap-1.5">
             <ArrowLeft className="h-4 w-4" />
             Back
           </Button>
           {step < steps.length - 1 ? (
-            <Button onClick={next} className="rounded-full gap-1.5">
+            <Button onClick={next} className="hover-lift rounded-full gap-1.5">
               Continue
               <ArrowRight className="h-4 w-4" />
             </Button>
           ) : (
-            <Button onClick={handleSubmit} disabled={loading} className="rounded-full gap-1.5">
+            <Button onClick={handleSubmit} disabled={loading} className="hover-lift rounded-full gap-1.5">
               {loading ? <><Loader2 className="h-4 w-4 animate-spin" />Submitting…</> : <><CheckCircle2 className="h-4 w-4" />Register farm</>}
             </Button>
           )}

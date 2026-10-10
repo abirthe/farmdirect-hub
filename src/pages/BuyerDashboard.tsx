@@ -84,13 +84,13 @@ const BuyerDashboard = () => {
                 Buyer dashboard
               </span>
             </div>
-            <h1 className="text-3xl font-black">Procurement Centre</h1>
+            <h1 className="text-gradient-primary text-3xl font-black">Procurement Centre</h1>
             <p className="text-muted-foreground text-sm">
               Welcome back, Bengal Agro Ltd. Here's your supply overview.
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <Button asChild className="rounded-full gap-1.5 w-fit">
+            <Button asChild className="hover-lift rounded-full gap-1.5 w-fit">
               <Link to="/marketplace">
                 <ShoppingBag className="h-4 w-4" />
                 Browse marketplace
@@ -109,7 +109,7 @@ const BuyerDashboard = () => {
             { label: "Avg price below retail", value: "−24%", sub: "vs middleman pricing", icon: TrendingUp, color: "text-green-600 bg-green-50 dark:bg-green-950/40 dark:text-green-300" },
             { label: "Verified suppliers", value: "8", sub: "Avg rating 4.7 ★", icon: Star, color: "text-amber-500 bg-amber-50 dark:bg-amber-950/40 dark:text-amber-300" },
           ].map(({ label, value, sub, icon: Icon, color }) => (
-            <Card key={label} className="soil-card">
+            <Card key={label} className="glass-panel hover-lift">
               <CardContent className="p-6 flex items-start justify-between gap-4">
                 <div className="space-y-1">
                   <p className="text-xs text-muted-foreground uppercase tracking-[0.15em]">{label}</p>
@@ -133,8 +133,8 @@ const BuyerDashboard = () => {
         {/* Orders List */}
         <div>
           <div className="flex items-center justify-between gap-4 mb-5">
-            <h2 className="text-2xl font-black">Recent orders</h2>
-            <Button variant="outline" size="sm" className="rounded-full">
+            <h2 className="text-gradient-primary text-2xl font-black">Recent orders</h2>
+            <Button variant="outline" size="sm" className="hover-lift rounded-full">
               View all orders
             </Button>
           </div>
@@ -144,7 +144,7 @@ const BuyerDashboard = () => {
               <p className="text-sm">Loading procurement history...</p>
             </div>
           ) : dynamicOrders.length === 0 ? (
-            <Card className="glass-panel text-center py-12 px-4">
+            <Card className="glass-panel hover-lift glass-panel text-center py-12 px-4">
               <CardContent className="space-y-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary/10 text-secondary mx-auto">
                   <Package className="h-6 w-6" />
@@ -155,7 +155,7 @@ const BuyerDashboard = () => {
                     Explore active harvests on the marketplace to lock in direct prices with escrow protection.
                   </p>
                 </div>
-                <Button asChild className="rounded-full gap-2">
+                <Button asChild className="hover-lift rounded-full gap-2">
                   <Link to="/marketplace">
                     <ShoppingBag className="h-4 w-4" />
                     Explore marketplace

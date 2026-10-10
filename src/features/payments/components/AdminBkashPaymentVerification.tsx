@@ -79,7 +79,7 @@ export function AdminBkashPaymentVerification() {
   };
 
   return (
-    <Card className="glass-panel">
+    <Card className="glass-panel hover-lift glass-panel">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div>
@@ -91,7 +91,7 @@ export function AdminBkashPaymentVerification() {
               Designated platform payment recipient: <span className="font-mono font-bold text-foreground">01580382868</span> (bKash)
             </CardDescription>
           </div>
-          <Button variant="outline" size="sm" onClick={fetchPendingPayments} disabled={loading} className="rounded-full">
+          <Button variant="outline" size="sm" onClick={fetchPendingPayments} disabled={loading} className="hover-lift rounded-full">
             Refresh
           </Button>
         </div>
@@ -158,20 +158,18 @@ export function AdminBkashPaymentVerification() {
                     className="h-10 text-xs rounded-xl"
                   />
                   <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
-                    <Button
-                      variant="outline"
+                    <Button variant="outline"
                       size="sm"
-                      className="rounded-xl border-destructive/30 text-destructive hover:bg-destructive/10 gap-1.5 flex-1 sm:flex-initial"
+                      className="hover-lift rounded-xl border-destructive/30 text-destructive hover:bg-destructive/10 gap-1.5 flex-1 sm:flex-initial"
                       disabled={processingId === order.id}
                       onClick={() => handleVerify(order.id, false)}
                     >
                       <XCircle className="h-4 w-4" />
                       Reject
                     </Button>
-                    <Button
-                      variant="default"
+                    <Button variant="default"
                       size="sm"
-                      className="rounded-xl bg-green-600 hover:bg-green-700 text-white gap-1.5 flex-1 sm:flex-initial"
+                      className="hover-lift rounded-xl bg-green-600 hover:bg-green-700 text-white gap-1.5 flex-1 sm:flex-initial"
                       disabled={processingId === order.id}
                       onClick={() => handleVerify(order.id, true)}
                     >

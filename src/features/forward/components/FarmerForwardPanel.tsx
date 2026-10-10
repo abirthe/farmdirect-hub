@@ -47,14 +47,14 @@ export function FarmerForwardPanel({ userId }: { userId: string }) {
         <Input aria-label="Locked price per ton" type="number" min={0} placeholder="Locked price / ton" value={form.price_per_ton} onChange={(e) => setForm({ ...form, price_per_ton: e.target.value })} />
         <Input aria-label="Delivery date" type="date" className="sm:col-span-2" value={form.delivery_date} onChange={(e) => setForm({ ...form, delivery_date: e.target.value })} />
         {formError && <p role="alert" className="text-sm text-destructive sm:col-span-2">{formError}</p>}
-        <Button type="submit" id="offer-forward" disabled={create.isPending} className="sm:col-span-2">{create.isPending ? "Offering…" : "Offer contract"}</Button>
+        <Button type="submit" id="offer-forward" disabled={create.isPending} className="hover-lift sm:col-span-2">{create.isPending ? "Offering…" : "Offer contract"}</Button>
       </form>
 
       {contracts.isLoading && <p className="text-sm text-muted-foreground">Loading contracts…</p>}
       {contracts.isError && <p role="alert" className="text-sm text-destructive">{(contracts.error as Error).message}</p>}
       {contracts.isSuccess && mine.length === 0 && <p data-testid="farmer-forward-empty" className="text-sm text-muted-foreground">No forward contracts yet.</p>}
       {mine.map((c) => (
-        <Card key={c.id}>
+        <Card className="glass-panel hover-lift" key={c.id}>
           <CardContent className="flex flex-wrap items-center justify-between gap-3 p-4 text-sm">
             <span>{c.qty_tons} t @ {c.price_per_ton}/t = {contractValue(c)} · delivery {c.delivery_date}</span>
             <span className="flex items-center gap-2">

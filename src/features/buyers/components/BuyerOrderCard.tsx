@@ -37,7 +37,7 @@ export function BuyerOrderCard({ order }: BuyerOrderCardProps) {
   const StatusIcon = statusIcon[order.statusType] || Clock;
 
   return (
-    <Card className="soil-card hover:-translate-y-0.5 transition-transform duration-200">
+    <Card className="glass-panel hover-lift hover:-translate-y-0.5 transition-transform duration-200">
       <CardContent className="p-5 flex flex-col sm:flex-row sm:items-center gap-4">
         <div className="flex items-center gap-4 flex-1 min-w-0">
           <div className="text-2xl">{order.crop.split(" ").pop() || "📦"}</div>
@@ -65,7 +65,7 @@ export function BuyerOrderCard({ order }: BuyerOrderCardProps) {
             {order.status}
           </Badge>
           {order.statusType === "transit" && (
-            <Button asChild variant="outline" size="sm" className="rounded-full gap-1.5">
+            <Button asChild variant="outline" size="sm" className="hover-lift rounded-full gap-1.5">
               <Link to="/escrow/ORD-2401">
                 <QrCode className="h-4 w-4" />
                 Scan QR

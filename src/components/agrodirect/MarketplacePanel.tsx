@@ -33,7 +33,7 @@ const MarketplacePanel = () => {
   return (
     <section className="section-shell pt-0">
       <div className="grid gap-5 lg:grid-cols-[0.92fr_1.08fr]">
-        <Card className="glass-panel overflow-hidden">
+        <Card className="glass-panel hover-lift glass-panel overflow-hidden">
           <CardHeader className="pb-4">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Marketplace pulse</p>
             <CardTitle className="mt-2 text-2xl font-black">Buyer-ready signals, not blind negotiation.</CardTitle>
@@ -65,15 +65,15 @@ const MarketplacePanel = () => {
             </div>
 
             <div className="grid gap-3 sm:grid-cols-3">
-              <div className="soil-card p-4">
+              <div className="glass-panel hover-lift p-4">
                 <p className="text-sm text-muted-foreground">Bulk demand</p>
                 <p className="mt-1 text-2xl font-black">26 buyers</p>
               </div>
-              <div className="soil-card p-4">
+              <div className="glass-panel hover-lift p-4">
                 <p className="text-sm text-muted-foreground">Ready in</p>
                 <p className="mt-1 text-2xl font-black">10 days</p>
               </div>
-              <div className="soil-card p-4">
+              <div className="glass-panel hover-lift p-4">
                 <p className="text-sm text-muted-foreground">Quality docs</p>
                 <p className="mt-1 text-2xl font-black">Verified</p>
               </div>
@@ -83,7 +83,7 @@ const MarketplacePanel = () => {
 
         <div className="grid gap-5">
           {workflow.map(({ icon: Icon, title, text }, index) => (
-            <Card key={title} className="soil-card relative overflow-hidden">
+            <Card key={title} className="glass-panel hover-lift relative overflow-hidden">
               <div className="absolute inset-y-0 left-0 w-1 bg-secondary" />
               <CardContent className="flex items-start gap-4 p-6">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-soft">

@@ -41,7 +41,7 @@ export function BuyerRfqPanel({ userId }: { userId: string }) {
         <Input aria-label="Deadline" type="datetime-local" value={form.deadline} onChange={set("deadline")} />
         <Input aria-label="Notes" className="sm:col-span-2" placeholder="Notes (grade, delivery location…)" value={form.notes} onChange={set("notes")} />
         {formError && <p role="alert" className="text-sm text-destructive sm:col-span-2">{formError}</p>}
-        <Button id="post-rfq" type="submit" disabled={create.isPending} className="sm:col-span-2">
+        <Button id="post-rfq" type="submit" disabled={create.isPending} className="hover-lift sm:col-span-2">
           {create.isPending ? "Posting…" : "Post request"}
         </Button>
       </form>
@@ -53,7 +53,7 @@ export function BuyerRfqPanel({ userId }: { userId: string }) {
       {mine.map((r) => {
         const ranked = rankBids((bids.data ?? []).filter((b) => b.rfq_id === r.id));
         return (
-          <Card key={r.id}>
+          <Card className="glass-panel hover-lift" key={r.id}>
             <CardContent className="space-y-3 p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="font-semibold">{r.crop_type} · {r.qty_tons} t · max {r.max_price_per_ton}/t</p>
@@ -65,7 +65,7 @@ export function BuyerRfqPanel({ userId }: { userId: string }) {
               {r.status === "OPEN" && ranked.map((b, i) => (
                 <div key={b.id} className="flex items-center justify-between gap-3 rounded-lg bg-muted/50 p-3 text-sm">
                   <span>{i === 0 && <Badge className="mr-2">Best</Badge>}{b.price_per_ton}/t · {b.qty_tons} t{b.note ? ` · ${b.note}` : ""}</span>
-                  <Button size="sm" disabled={award.isPending} onClick={() => award.mutate(b.id, { onSuccess: () => toast({ title: "Bid accepted" }), onError })}>
+                  <Button className="hover-lift" size="sm" disabled={award.isPending} onClick={() => award.mutate(b.id, { onSuccess: () => toast({ title: "Bid accepted" }), onError })}>
                     Accept
                   </Button>
                 </div>

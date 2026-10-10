@@ -17,8 +17,8 @@ export function FarmerFarmCardsList({ farms, loading }: FarmerFarmCardsListProps
   return (
     <div data-testid="farmer-farm-cards-list">
       <div className="flex items-center justify-between gap-4 mb-5">
-        <h2 className="text-2xl font-black">My farms</h2>
-        <Button asChild variant="outline" size="sm" className="rounded-full gap-1.5">
+        <h2 className="text-gradient-primary text-2xl font-black">My farms</h2>
+        <Button asChild variant="outline" size="sm" className="hover-lift rounded-full gap-1.5">
           <Link to="/farmer/register">
             <Plus className="h-4 w-4" />
             Add farm
@@ -32,7 +32,7 @@ export function FarmerFarmCardsList({ farms, loading }: FarmerFarmCardsListProps
           <p className="text-sm">Loading your registered farms...</p>
         </div>
       ) : farms.length === 0 ? (
-        <Card className="glass-panel text-center py-12 px-4" data-testid="farms-empty-state">
+        <Card className="glass-panel hover-lift glass-panel text-center py-12 px-4" data-testid="farms-empty-state">
           <CardContent className="space-y-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary mx-auto">
               <Leaf className="h-6 w-6" />
@@ -43,7 +43,7 @@ export function FarmerFarmCardsList({ farms, loading }: FarmerFarmCardsListProps
                 Register your agricultural land and GPS field boundaries to start tracking satellite NDVI telemetry and AI yield predictions.
               </p>
             </div>
-            <Button asChild className="rounded-full gap-2">
+            <Button asChild className="hover-lift rounded-full gap-2">
               <Link to="/farmer/register">
                 <Plus className="h-4 w-4" />
                 Register your first farm
@@ -54,7 +54,7 @@ export function FarmerFarmCardsList({ farms, loading }: FarmerFarmCardsListProps
       ) : (
         <div className="grid gap-5 md:grid-cols-2" data-testid="farms-grid">
           {farms.map((farm) => (
-            <Card key={farm.name} className="soil-card overflow-hidden hover:-translate-y-1 transition-transform duration-300">
+            <Card key={farm.name} className="glass-panel hover-lift overflow-hidden hover:-translate-y-1 transition-transform duration-300">
               <div className="h-1.5 bg-gradient-to-r from-primary to-secondary" />
               <CardContent className="p-6 space-y-5">
                 <div className="flex items-start justify-between gap-4">
@@ -100,11 +100,11 @@ export function FarmerFarmCardsList({ farms, loading }: FarmerFarmCardsListProps
                 </div>
 
                 <div className="flex gap-2">
-                  <Button variant="default" size="sm" className="flex-1 rounded-full gap-1.5">
+                  <Button variant="default" size="sm" className="hover-lift flex-1 rounded-full gap-1.5">
                     <ShieldCheck className="h-4 w-4" />
                     List for sale
                   </Button>
-                  <Button asChild variant="outline" size="sm" className="flex-1 rounded-full gap-1.5 border-primary/20 hover:bg-primary/5 text-primary hover:text-primary">
+                  <Button asChild variant="outline" size="sm" className="hover-lift flex-1 rounded-full gap-1.5 border-primary/20 hover:bg-primary/5 text-primary hover:text-primary">
                     <Link to={`/farmer/yield/${farm.name.replace(/\s+/g, "-").toUpperCase()}`}>
                       <Sparkles className="h-4 w-4" />
                       AI Yield

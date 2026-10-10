@@ -23,7 +23,7 @@ export default function CommodityReportsPage() {
           </Button>
           <div className="flex items-center gap-2">
             <Globe2 className="h-4 w-4 text-primary" />
-            <h1 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            <h1 className="text-gradient-primary text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Regional Commodity Intelligence
             </h1>
           </div>

@@ -14,7 +14,7 @@ export function FarmerKpiCards() {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-testid="farmer-kpi-cards">
       {kpiData.map(({ label, value, sub, icon: Icon, trend }) => (
-        <Card key={label} className="soil-card">
+        <Card key={label} className="glass-panel hover-lift">
           <CardContent className="p-6 flex items-start justify-between gap-4">
             <div className="space-y-1">
               <p className="text-xs text-muted-foreground uppercase tracking-[0.15em]">{label}</p>

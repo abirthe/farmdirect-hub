@@ -43,7 +43,7 @@ export class GlobalErrorBoundary extends Component<Props, State> {
             </div>
 
             <div className="space-y-2">
-              <h1 className="text-2xl font-black tracking-tight">Agricultural Ledger Interruption</h1>
+              <h1 className="text-gradient-primary text-2xl font-black tracking-tight">Agricultural Ledger Interruption</h1>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 An unexpected system exception occurred while rendering this interface. Your data and cryptographic ledger records remain securely preserved.
               </p>
@@ -56,18 +56,16 @@ export class GlobalErrorBoundary extends Component<Props, State> {
             )}
 
             <div className="flex items-center gap-3 pt-2">
-              <Button
-                variant="outline"
+              <Button variant="outline"
                 size="sm"
-                className="flex-1 rounded-xl gap-1.5 text-xs"
+                className="hover-lift flex-1 rounded-xl gap-1.5 text-xs"
                 onClick={this.handleHome}
               >
                 <Home className="h-3.5 w-3.5" />
                 Return Home
               </Button>
-              <Button
-                size="sm"
-                className="flex-1 rounded-xl gap-1.5 text-xs bg-primary"
+              <Button size="sm"
+                className="hover-lift flex-1 rounded-xl gap-1.5 text-xs bg-primary"
                 onClick={this.handleReload}
               >
                 <RefreshCw className="h-3.5 w-3.5" />

@@ -86,7 +86,7 @@ export function AdminKycQueue() {
       {queueQuery.isLoading ? (
         <p className="text-xs text-muted-foreground py-8 text-center">Loading KYC verification queue...</p>
       ) : filtered.length === 0 ? (
-        <Card className="soil-card p-8 text-center space-y-2">
+        <Card className="glass-panel hover-lift p-8 text-center space-y-2">
           <ShieldCheck className="h-10 w-10 text-muted-foreground/40 mx-auto" />
           <p className="text-sm font-medium">No verification credentials found</p>
           <p className="text-xs text-muted-foreground">
@@ -104,7 +104,7 @@ export function AdminKycQueue() {
             const flags = checks.rule_flags ?? [];
 
             return (
-              <Card key={item.id} className="soil-card" data-testid={`kyc-item-${item.id}`}>
+              <Card key={item.id} className="glass-panel hover-lift" data-testid={`kyc-item-${item.id}`}>
                 <CardContent className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -170,18 +170,16 @@ export function AdminKycQueue() {
 
                     {!st.isTerminal && (
                       <div className="flex items-center gap-2">
-                        <Button
-                          size="sm"
-                          className="rounded-full h-8 gap-1 text-xs"
+                        <Button size="sm"
+                          className="hover-lift rounded-full h-8 gap-1 text-xs"
                           onClick={() => onReview(item.id, "APPROVED")}
                           disabled={review.isPending}
                         >
                           <CheckCircle2 className="h-3.5 w-3.5" /> Approve
                         </Button>
-                        <Button
-                          size="sm"
+                        <Button size="sm"
                           variant="outline"
-                          className="rounded-full h-8 text-xs text-destructive hover:bg-destructive/10"
+                          className="hover-lift rounded-full h-8 text-xs text-destructive hover:bg-destructive/10"
                           onClick={() => onReview(item.id, "REJECTED")}
                           disabled={review.isPending}
                         >

@@ -12,7 +12,7 @@ export default function ForwardContractsPage() {
       <title>Forward Contracts | AgroDirect</title>
       <meta name="description" content="Pre-sell part of your harvest at a locked price, or secure supply ahead of harvest." />
       <header>
-        <h1 className="text-3xl font-black">Forward Contracts</h1>
+        <h1 className="text-gradient-primary text-3xl font-black">Forward Contracts</h1>
         <p className="text-muted-foreground">
           {role === "farmer" ? "Lock in a price for part of your expected harvest." : "Secure supply at a fixed price ahead of harvest."}
         </p>

@@ -19,7 +19,7 @@ export function AuthBrandSidePanel() {
           <span className="eyebrow text-white border-white/20 bg-white/10 backdrop-blur-sm">
             Decentralized agriculture
           </span>
-          <h2 className="text-4xl font-black text-white leading-tight">
+          <h2 className="text-gradient-primary text-4xl font-black text-white leading-tight">
             The direct trade engine for growers and buyers.
           </h2>
           <p className="text-white/80 text-base leading-7">

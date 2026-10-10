@@ -20,7 +20,7 @@ export function ListingDealCard({
   onRequestSample,
 }: ListingDealCardProps) {
   return (
-    <Card className="glass-panel sticky top-24">
+    <Card className="glass-panel hover-lift glass-panel sticky top-24">
       <CardContent className="p-6 space-y-5">
         <div>
           <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground font-semibold">
@@ -82,15 +82,14 @@ export function ListingDealCard({
         <div className="space-y-2">
           {userRole === "buyer" ? (
             <>
-              <Button asChild className="w-full h-12 rounded-xl gap-2">
+              <Button asChild className="hover-lift w-full h-12 rounded-xl gap-2">
                 <Link to={`/escrow/${listing.id}`}>
                   <BadgeDollarSign className="h-5 w-5" />
                   Lock price in escrow
                 </Link>
               </Button>
-              <Button
-                variant="outline"
-                className="w-full h-12 rounded-xl gap-2"
+              <Button variant="outline"
+                className="hover-lift w-full h-12 rounded-xl gap-2"
                 onClick={onRequestSample}
               >
                 <QrCode className="h-4 w-4" />
@@ -98,12 +97,12 @@ export function ListingDealCard({
               </Button>
             </>
           ) : userRole === "admin" ? (
-            <Button variant="destructive" className="w-full h-12 rounded-xl gap-2">
+            <Button variant="destructive" className="hover-lift w-full h-12 rounded-xl gap-2">
               <AlertTriangle className="h-5 w-5" />
               Suspend Listing (Admin)
             </Button>
           ) : (
-            <Button variant="secondary" className="w-full h-12 rounded-xl gap-2" disabled>
+            <Button variant="secondary" className="hover-lift w-full h-12 rounded-xl gap-2" disabled>
               <CheckCircle2 className="h-5 w-5 text-green-600" />
               Listing Active & Public
             </Button>

@@ -65,7 +65,7 @@ export function IoTTelemetryPanel({ cycleId }: { cycleId: string }) {
       {/* Latest Soil & Microclimate Metrics */}
       {latest && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <Card className="p-3.5 space-y-1 bg-card">
+          <Card className="glass-panel hover-lift p-3.5 space-y-1 bg-card">
             <span className="text-xs text-muted-foreground flex items-center gap-1.5">
               <Droplets className="h-3.5 w-3.5 text-blue-500" /> Soil Moisture
             </span>
@@ -73,7 +73,7 @@ export function IoTTelemetryPanel({ cycleId }: { cycleId: string }) {
             <p className="text-[10px] text-muted-foreground">Source: {latest.source}</p>
           </Card>
 
-          <Card className="p-3.5 space-y-1 bg-card">
+          <Card className="glass-panel hover-lift p-3.5 space-y-1 bg-card">
             <span className="text-xs text-muted-foreground flex items-center gap-1.5">
               <Thermometer className="h-3.5 w-3.5 text-amber-500" /> Soil Temperature
             </span>
@@ -81,7 +81,7 @@ export function IoTTelemetryPanel({ cycleId }: { cycleId: string }) {
             <p className="text-[10px] text-muted-foreground">Root Zone Temperature</p>
           </Card>
 
-          <Card className="p-3.5 space-y-1 bg-card">
+          <Card className="glass-panel hover-lift p-3.5 space-y-1 bg-card">
             <span className="text-xs text-muted-foreground flex items-center gap-1.5">
               <FlaskConical className="h-3.5 w-3.5 text-emerald-500" /> N-P-K Levels
             </span>
@@ -95,7 +95,7 @@ export function IoTTelemetryPanel({ cycleId }: { cycleId: string }) {
             )}
           </Card>
 
-          <Card className="p-3.5 space-y-1 bg-card">
+          <Card className="glass-panel hover-lift p-3.5 space-y-1 bg-card">
             <span className="text-xs text-muted-foreground flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-primary" /> Soil pH
             </span>
@@ -116,7 +116,7 @@ export function IoTTelemetryPanel({ cycleId }: { cycleId: string }) {
       )}
 
       {/* Sensor Probes Registry */}
-      <Card className="border shadow-sm">
+      <Card className="glass-panel hover-lift border shadow-sm">
         <CardHeader className="pb-3 flex flex-row items-center justify-between border-b">
           <div className="flex items-center gap-2">
             <Cpu className="h-4 w-4 text-primary" />
@@ -147,7 +147,7 @@ export function IoTTelemetryPanel({ cycleId }: { cycleId: string }) {
               <option value="WEATHER_STATION">Micro-Weather Station</option>
               <option value="LEAF_WETNESS_SENSOR">Leaf Wetness Probe</option>
             </select>
-            <Button type="submit" size="sm" disabled={register.isPending || !serial.trim()} className="gap-1.5 text-xs">
+            <Button type="submit" size="sm" disabled={register.isPending || !serial.trim()} className="hover-lift gap-1.5 text-xs">
               <Plus className="h-3.5 w-3.5" /> Pair Probe
             </Button>
           </form>
@@ -180,10 +180,9 @@ export function IoTTelemetryPanel({ cycleId }: { cycleId: string }) {
                   <span className="flex items-center gap-1 text-[11px] font-mono text-muted-foreground">
                     <Battery className="h-3.5 w-3.5 text-emerald-500" /> {d.battery_level}%
                   </span>
-                  <Button
-                    size="sm"
+                  <Button size="sm"
                     variant="outline"
-                    className="h-7 text-[11px] gap-1"
+                    className="hover-lift h-7 text-[11px] gap-1"
                     disabled={ingest.isPending}
                     onClick={() => onSimulatePing(d.device_serial)}
                   >

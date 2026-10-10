@@ -20,10 +20,10 @@ export function BuyerForwardBoard({ userId }: { userId: string }) {
       {contracts.isError && <p role="alert" className="text-sm text-destructive">{(contracts.error as Error).message}</p>}
       {contracts.isSuccess && open.length === 0 && <p data-testid="buyer-forward-empty" className="text-sm text-muted-foreground">No open forward offers right now.</p>}
       {open.map((c) => (
-        <Card key={c.id}>
+        <Card className="glass-panel hover-lift" key={c.id}>
           <CardContent className="flex flex-wrap items-center justify-between gap-3 p-4 text-sm">
             <span>{c.qty_tons} t @ {c.price_per_ton}/t = {contractValue(c)} · delivery {c.delivery_date}</span>
-            <Button size="sm" disabled={accept.isPending}
+            <Button className="hover-lift" size="sm" disabled={accept.isPending}
               onClick={() => accept.mutate(c.id, {
                 onSuccess: () => toast({ title: "Contract accepted" }),
                 onError: (e) => toast({ title: (e as Error).message, variant: "destructive" }),
@@ -33,9 +33,9 @@ export function BuyerForwardBoard({ userId }: { userId: string }) {
           </CardContent>
         </Card>
       ))}
-      {secured.length > 0 && <h2 className="text-lg font-bold">Secured contracts</h2>}
+      {secured.length > 0 && <h2 className="text-gradient-primary text-lg font-bold">Secured contracts</h2>}
       {secured.map((c) => (
-        <Card key={c.id}>
+        <Card className="glass-panel hover-lift" key={c.id}>
           <CardContent className="flex items-center justify-between gap-3 p-4 text-sm">
             <span>{c.qty_tons} t @ {c.price_per_ton}/t · delivery {c.delivery_date}</span>
             <Badge variant="secondary">ACCEPTED</Badge>

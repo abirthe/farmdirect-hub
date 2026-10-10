@@ -34,7 +34,7 @@ export default function TraceabilityPage() {
       </div>
 
       <header className="space-y-1">
-        <h1 className="text-3xl font-black tracking-tight">Agricultural Traceability</h1>
+        <h1 className="text-gradient-primary text-3xl font-black tracking-tight">Agricultural Traceability</h1>
         <p className="text-sm text-muted-foreground">
           Real-time verification of origin farm, harvest timeline, and environmental footprint.
         </p>
@@ -49,7 +49,7 @@ export default function TraceabilityPage() {
           onChange={(e) => setSearchId(e.target.value)}
           className="font-mono text-xs"
         />
-        <Button type="submit" size="sm" className="gap-1.5 shrink-0">
+        <Button type="submit" size="sm" className="hover-lift gap-1.5 shrink-0">
           <Search className="h-3.5 w-3.5" /> Verify
         </Button>
       </form>

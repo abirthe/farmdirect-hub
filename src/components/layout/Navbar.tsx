@@ -138,7 +138,7 @@ const Navbar = () => {
                 )}>
                   <Link to="/login">Sign in</Link>
                 </Button>
-                <Button asChild size="sm" className="rounded-full font-semibold">
+                <Button asChild size="sm" className="hover-lift rounded-full font-semibold">
                   <Link to="/signup">Get Started</Link>
                 </Button>
               </div>

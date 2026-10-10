@@ -82,7 +82,7 @@ export function LogisticsTracker({
   }
 
   return (
-    <Card className="border shadow-sm" data-testid="logistics-tracker">
+    <Card className="glass-panel hover-lift border shadow-sm" data-testid="logistics-tracker">
       <CardHeader className="bg-muted/20 pb-3 flex flex-row items-center justify-between">
         <div className="flex items-center gap-2">
           <Truck className="h-5 w-5 text-primary" />
@@ -130,7 +130,7 @@ export function LogisticsTracker({
                     className="h-9 text-xs"
                   />
                 </div>
-                <Button type="submit" size="sm" disabled={dispatch.isPending} className="w-full text-xs">
+                <Button type="submit" size="sm" disabled={dispatch.isPending} className="hover-lift w-full text-xs">
                   {dispatch.isPending ? "Assigning Carrier…" : "Dispatch 3PL Freight"}
                 </Button>
               </form>
@@ -202,10 +202,9 @@ export function LogisticsTracker({
 
             {isFarmerOrAdmin && (
               <div className="flex justify-end pt-2 border-t">
-                <Button
-                  size="sm"
+                <Button size="sm"
                   variant="outline"
-                  className="gap-1.5 text-xs"
+                  className="hover-lift gap-1.5 text-xs"
                   disabled={updateGps.isPending}
                   onClick={onSimulatePing}
                 >

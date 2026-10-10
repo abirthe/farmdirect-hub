@@ -95,7 +95,7 @@ const MobileNav = ({ open, onClose }: MobileNavProps) => {
         {!session && (
           <div className="border-t border-border/60 p-4 space-y-2">
             {mobileAuthLinks.map(({ label, href, icon: Icon, variant }) => (
-              <Button key={href} asChild variant={variant} className="w-full justify-start gap-2" onClick={onClose}>
+              <Button key={href} asChild variant={variant} className="hover-lift w-full justify-start gap-2" onClick={onClose}>
                 <Link to={href}>
                   <Icon className="h-4 w-4" />
                   {label}

@@ -57,7 +57,7 @@ const EscrowPage = () => {
             <ShieldCheck className="h-6 w-6 text-primary" />
             <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold">Escrow transaction</span>
           </div>
-          <h1 className="text-4xl font-black">Bogra Maize Deal</h1>
+          <h1 className="text-gradient-primary text-4xl font-black">Bogra Maize Deal</h1>
           <p className="text-muted-foreground">Transaction ID: <span className="font-mono font-semibold">ESC-{id?.slice(0, 8).toUpperCase() || "LST00001"}</span></p>
         </div>
 
@@ -68,7 +68,7 @@ const EscrowPage = () => {
             { label: "Crop quantity", value: "12 tons", icon: Leaf, color: "text-green-600 bg-green-50" },
             { label: "Delivery ETA", value: "Mar 19", icon: Truck, color: "text-blue-600 bg-blue-50" },
           ].map(({ label, value, icon: Icon, color }) => (
-            <Card key={label} className="soil-card">
+            <Card key={label} className="glass-panel hover-lift">
               <CardContent className="p-5 flex items-center gap-4">
                 <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${color} shrink-0`}>
                   <Icon className="h-5 w-5" />
@@ -105,7 +105,7 @@ const EscrowPage = () => {
 
         <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
           {/* Timeline */}
-          <Card className="glass-panel">
+          <Card className="glass-panel hover-lift glass-panel">
             <CardHeader className="pb-4">
               <CardTitle className="text-xl font-black">Transaction timeline</CardTitle>
             </CardHeader>
@@ -177,11 +177,11 @@ const EscrowPage = () => {
             />
 
             {/* QR Scan */}
-            <Card className="glass-panel">
+            <Card className="glass-panel hover-lift glass-panel">
               <CardContent className="p-6 space-y-4">
                 <div className="space-y-1">
                   <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground font-semibold">Delivery confirmation</p>
-                  <h2 className="text-xl font-black">Scan to release funds</h2>
+                  <h2 className="text-gradient-primary text-xl font-black">Scan to release funds</h2>
                   <p className="text-sm text-muted-foreground">When your delivery arrives, scan the farmer's QR code to release funds from escrow.</p>
                 </div>
                 {userRole === "buyer" ? (
@@ -193,13 +193,13 @@ const EscrowPage = () => {
                         <p className="text-xs">Enable when delivery arrives</p>
                       </div>
                     </div>
-                    <Button className="w-full h-11 rounded-xl gap-2" disabled>
+                    <Button className="hover-lift w-full h-11 rounded-xl gap-2" disabled>
                       <QrCode className="h-4 w-4" />
                       Scan delivery QR code
                     </Button>
                   </>
                 ) : userRole === "admin" ? (
-                  <Button variant="destructive" className="w-full h-11 rounded-xl gap-2">
+                  <Button variant="destructive" className="hover-lift w-full h-11 rounded-xl gap-2">
                     <ShieldCheck className="h-4 w-4" />
                     Force Release Escrow (Admin)
                   </Button>
@@ -218,7 +218,7 @@ const EscrowPage = () => {
             </Card>
 
             {/* Price Breakdown */}
-            <Card className="glass-panel">
+            <Card className="glass-panel hover-lift glass-panel">
               <CardHeader className="pb-3">
                 <CardTitle className="text-xl font-black">Payment breakdown</CardTitle>
               </CardHeader>
@@ -248,7 +248,7 @@ const EscrowPage = () => {
               </CardContent>
             </Card>
 
-            <Button asChild variant="outline" className="w-full rounded-xl gap-2">
+            <Button asChild variant="outline" className="hover-lift w-full rounded-xl gap-2">
               <Link to={userRole === "farmer" ? "/farmer" : userRole === "admin" ? "/admin" : "/buyer"}>
                 <ArrowRight className="h-4 w-4" />
                 Back to {userRole === "admin" ? "Platform control" : userRole === "farmer" ? "farmer" : "buyer"} dashboard

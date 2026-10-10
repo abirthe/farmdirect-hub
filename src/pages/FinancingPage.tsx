@@ -40,7 +40,7 @@ export default function FinancingPage() {
           <Landmark className="h-4 w-4" />
           <span>AgroDirect Capital & Risk Protection</span>
         </div>
-        <h1 className="text-3xl font-black tracking-tight">Agricultural Credit & Parametric Insurance</h1>
+        <h1 className="text-gradient-primary text-3xl font-black tracking-tight">Agricultural Credit & Parametric Insurance</h1>
         <p className="text-sm text-muted-foreground max-w-2xl">
           Convert satellite NDVI health, soil stability, and AI yield forecasts into bank-grade underwriting scores. Access low-interest pre-harvest advance loans and parametric climate insurance.
         </p>
@@ -50,7 +50,7 @@ export default function FinancingPage() {
       <section className="rounded-2xl border bg-card p-6 shadow-sm space-y-4" aria-label="Generate Underwriting Passport">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-amber-500" />
-          <h2 className="font-bold text-base">Generate Underwriting Passport</h2>
+          <h2 className="text-gradient-primary font-bold text-base">Generate Underwriting Passport</h2>
         </div>
         <p className="text-xs text-muted-foreground">
           Select an active growing crop to compile real-time telemetry into an underwriter dossier.
@@ -70,10 +70,9 @@ export default function FinancingPage() {
               </option>
             ))}
           </select>
-          <Button
-            onClick={onGenerate}
+          <Button onClick={onGenerate}
             disabled={!selectedCycle || generate.isPending}
-            className="gap-2 shrink-0"
+            className="hover-lift gap-2 shrink-0"
           >
             <ShieldPlus className="h-4 w-4" />
             {generate.isPending ? "Underwriting in progress…" : "Seal Credit Passport"}

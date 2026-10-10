@@ -30,7 +30,7 @@ const NotFound = () => {
         {/* Text */}
         <div className="space-y-3">
           <p className="text-8xl font-black text-primary/20 leading-none select-none">404</p>
-          <h1 className="text-3xl font-black -mt-2">Field not found</h1>
+          <h1 className="text-gradient-primary text-3xl font-black -mt-2">Field not found</h1>
           <p className="text-muted-foreground leading-7">
             This page seems to have been harvested already — or it never existed.
             Head back to familiar ground.
@@ -39,10 +39,10 @@ const NotFound = () => {
 
         {/* Quick links */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-          <Button asChild size="lg" className="rounded-full gap-2">
+          <Button asChild size="lg" className="hover-lift rounded-full gap-2">
             <Link to="/"><Home className="h-4 w-4" />Go home</Link>
           </Button>
-          <Button asChild variant="outline" size="lg" className="rounded-full gap-2">
+          <Button asChild variant="outline" size="lg" className="hover-lift rounded-full gap-2">
             <Link to="/marketplace"><ShoppingBag className="h-4 w-4" />Browse marketplace</Link>
           </Button>
         </div>

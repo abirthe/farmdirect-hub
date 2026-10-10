@@ -82,7 +82,7 @@ const Marketplace = () => {
             <span className="eyebrow border-white/20 bg-white/10 text-white backdrop-blur-sm">
               Live marketplace
             </span>
-            <h1 className="text-4xl md:text-5xl font-black text-white leading-tight">
+            <h1 className="text-gradient-primary text-4xl md:text-5xl font-black text-white leading-tight">
               Discover future-ready supply from verified farmers.
             </h1>
             <p className="text-white/80 text-base leading-7">
@@ -124,9 +124,8 @@ const Marketplace = () => {
               ))}
             </SelectContent>
           </Select>
-          <Button
-            variant="outline"
-            className="h-12 rounded-full gap-2 shrink-0"
+          <Button variant="outline"
+            className="hover-lift h-12 rounded-full gap-2 shrink-0"
             onClick={() => setShowFilters(!showFilters)}
           >
             <SlidersHorizontal className="h-4 w-4" />
@@ -137,7 +136,7 @@ const Marketplace = () => {
 
         {/* Expanded Filters */}
         {showFilters && (
-          <Card className="glass-panel">
+          <Card className="glass-panel hover-lift glass-panel">
             <CardContent className="p-6">
               <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
                 <div className="space-y-3">
@@ -184,18 +183,16 @@ const Marketplace = () => {
           </p>
           <div className="flex items-center gap-2">
             <div className="flex bg-muted/50 p-1 rounded-full border border-border/50">
-              <Button 
-                variant={viewMode === "grid" ? "default" : "ghost"} 
+              <Button variant={viewMode === "grid" ? "default" : "ghost"} 
                 size="sm" 
-                className="h-8 rounded-full px-3 gap-1.5"
+                className="hover-lift h-8 rounded-full px-3 gap-1.5"
                 onClick={() => setViewMode("grid")}
               >
                 <LayoutGrid className="h-4 w-4" /> Grid
               </Button>
-              <Button 
-                variant={viewMode === "map" ? "default" : "ghost"} 
+              <Button variant={viewMode === "map" ? "default" : "ghost"} 
                 size="sm" 
-                className="h-8 rounded-full px-3 gap-1.5"
+                className="hover-lift h-8 rounded-full px-3 gap-1.5"
                 onClick={() => setViewMode("map")}
               >
                 <Map className="h-4 w-4" /> Map

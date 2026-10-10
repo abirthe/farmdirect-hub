@@ -45,7 +45,7 @@ export function AuditLogPanel() {
       )}
 
       {rows.map((e) => (
-        <Card key={e.id}>
+        <Card className="glass-panel hover-lift" key={e.id}>
           <CardContent className="flex items-center justify-between gap-4 p-4">
             <div className="min-w-0">
               <p className="flex items-center gap-1.5 font-semibold">

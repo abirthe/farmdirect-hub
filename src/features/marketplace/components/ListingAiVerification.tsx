@@ -11,7 +11,7 @@ export function ListingAiVerification({ prediction }: ListingAiVerificationProps
   const qaScore = Math.max(90, prediction.confidenceScore);
 
   return (
-    <Card className="glass-panel border-primary/30 relative overflow-hidden">
+    <Card className="glass-panel hover-lift glass-panel border-primary/30 relative overflow-hidden">
       <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
         <BrainCircuit className="w-32 h-32 text-primary" />
       </div>
@@ -60,7 +60,7 @@ export function ListingAiVerification({ prediction }: ListingAiVerificationProps
           ].map((m) => (
             <div
               key={m.label}
-              className="soil-card p-4 space-y-2 bg-background/50 border border-border/50"
+              className="glass-panel hover-lift p-4 space-y-2 bg-background/50 border border-border/50"
             >
               <p className="text-[10px] text-muted-foreground uppercase tracking-[0.15em] font-semibold">
                 {m.label}

@@ -17,7 +17,7 @@ export function SpendAnalyticsCard() {
   const getSymbol = () => (currency === "BDT" ? "৳" : currency === "EUR" ? "€" : "$");
 
   return (
-    <Card className="glass-panel">
+    <Card className="glass-panel hover-lift glass-panel">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between gap-4">
           <div>

@@ -33,7 +33,7 @@ const statusColor: Record<string, string> = {
 
 export function MarketplaceCard({ listing }: { listing: MarketplaceListingItem }) {
   return (
-    <Card className="soil-card overflow-hidden hover:-translate-y-1 transition-transform duration-300 group">
+    <Card className="glass-panel hover-lift overflow-hidden hover:-translate-y-1 transition-transform duration-300 group">
       <div className="h-1.5 bg-gradient-to-r from-primary via-secondary to-primary bg-size-200 group-hover:bg-pos-100 transition-all duration-500" />
       <CardContent className="p-6 space-y-4">
         {/* Header */}
@@ -95,7 +95,7 @@ export function MarketplaceCard({ listing }: { listing: MarketplaceListingItem }
               {listing.buyers} buyers interested
             </div>
           </div>
-          <Button asChild size="sm" className="rounded-full gap-1.5 shrink-0">
+          <Button asChild size="sm" className="hover-lift rounded-full gap-1.5 shrink-0">
             <Link to={`/marketplace/${listing.id}`}>
               View deal
               <ArrowRight className="h-4 w-4" />

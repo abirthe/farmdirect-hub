@@ -184,12 +184,11 @@ export function MapDrawingControls({ onPolygonDrawn, currentPolygon = [] }: MapD
         data-testid="map-drawing-toolbar"
         className="absolute top-3 left-3 z-[1000] flex flex-wrap items-center gap-1.5 bg-card/90 backdrop-blur-md border border-border/80 p-1.5 rounded-2xl shadow-xl"
       >
-        <Button
-          type="button"
+        <Button type="button"
           size="sm"
           variant={activeTool === 'polygon' ? 'default' : 'ghost'}
           onClick={startPolygonDraw}
-          className={`h-8 px-2.5 rounded-xl text-xs gap-1.5 font-semibold transition-all ${
+          className={`hover-lift h-8 px-2.5 rounded-xl text-xs gap-1.5 font-semibold transition-all ${
             activeTool === 'polygon'
               ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-md'
               : 'hover:bg-muted text-foreground'
@@ -200,12 +199,11 @@ export function MapDrawingControls({ onPolygonDrawn, currentPolygon = [] }: MapD
           <span className="hidden sm:inline">Draw Field</span>
         </Button>
 
-        <Button
-          type="button"
+        <Button type="button"
           size="sm"
           variant={activeTool === 'rectangle' ? 'default' : 'ghost'}
           onClick={startRectangleDraw}
-          className={`h-8 px-2.5 rounded-xl text-xs gap-1.5 font-semibold transition-all ${
+          className={`hover-lift h-8 px-2.5 rounded-xl text-xs gap-1.5 font-semibold transition-all ${
             activeTool === 'rectangle'
               ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-md'
               : 'hover:bg-muted text-foreground'
@@ -216,12 +214,11 @@ export function MapDrawingControls({ onPolygonDrawn, currentPolygon = [] }: MapD
           <span className="hidden sm:inline">Box Plot</span>
         </Button>
 
-        <Button
-          type="button"
+        <Button type="button"
           size="sm"
           variant={activeTool === 'edit' ? 'default' : 'ghost'}
           onClick={toggleEditMode}
-          className={`h-8 px-2.5 rounded-xl text-xs gap-1.5 font-semibold transition-all ${
+          className={`hover-lift h-8 px-2.5 rounded-xl text-xs gap-1.5 font-semibold transition-all ${
             activeTool === 'edit'
               ? 'bg-amber-600 hover:bg-amber-700 text-white shadow-md'
               : 'hover:bg-muted text-foreground'
