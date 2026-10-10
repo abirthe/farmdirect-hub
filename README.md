@@ -192,7 +192,14 @@ VITE_SUPABASE_ANON_KEY=your-anon-publishable-key
 ```
 *(Note: If `.env` is omitted, the application falls back safely to test mock clients for CI and local evaluation without crashing.)*
 
-### 3. Run Development Server
+### 3. Vercel Deployment & CORS
+This project is configured to bypass Supabase CORS restrictions natively on Vercel using edge proxy rewrites.
+When deploying to Vercel:
+1. Ensure you add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` to your Vercel Project Settings -> Environment Variables.
+2. **Important:** Copy the values exactly as they appear in your local `.env`. Accidental quotes or spaces will result in an "Invalid API key" error.
+3. The `vercel.json` file automatically proxies all requests to `/supabase/*` directly to your production database.
+
+### 4. Run Development Server
 ```bash
 npm run dev
 ```
