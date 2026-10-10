@@ -153,7 +153,7 @@ export function IoTTelemetryPanel({ cycleId }: { cycleId: string }) {
           </form>
 
           {/* Device List */}
-          {devices.isLoading && <p className="text-xs text-muted-foreground">Scanning hardware telemetry…</p>}
+          {devices.isLoading && <p className="text-xs text-muted-foreground">Scanning hardware telemetry...</p>}
           {(devices.data ?? []).length === 0 && (
             <p data-testid="iot-empty" className="text-xs text-muted-foreground text-center py-4">
               No IoT sensor probes paired yet. Register a probe above to enable direct automated telemetry.
@@ -197,3 +197,6 @@ export function IoTTelemetryPanel({ cycleId }: { cycleId: string }) {
     </div>
   );
 }
+
+
+

@@ -7,8 +7,8 @@ import { CurrencyDisplay } from "@/components/ui/currency-display";
 
 const recommendations = [
   { crop: "🌽 Maize", farm: "Bogra Cluster", price: 318, ready: "May 12, 2026", conf: 94.8, grade: "A+" },
-  { crop: "🍚 Boro Rice", farm: "Rajshahi A-1", price: 415, ready: "Jun 18, 2026", conf: 91.2, grade: "A+" },
-  { crop: "🫘 Soybean", farm: "Rangpur Coll.", price: 520, ready: "Apr 04, 2026", conf: 88.5, grade: "A" },
+  { crop: "🌾 Boro Rice", farm: "Rajshahi A-1", price: 415, ready: "Jun 18, 2026", conf: 91.2, grade: "A+" },
+  { crop: "🌱 Soybean", farm: "Rangpur Coll.", price: 520, ready: "Apr 04, 2026", conf: 88.5, grade: "A" },
 ];
 
 export function AiSmartSourcingCard() {

@@ -9,8 +9,8 @@ import {
 
 describe("Geodesic Utility Calculations", () => {
   // Approximate 1km x 1km square at Bogura, Bangladesh (approx 100 hectares)
-  // 1 deg lat ≈ 111 km, so 0.009 deg ≈ 1 km
-  // At 24.8 deg lat, cos(24.8 deg) ≈ 0.9077 -> 1 deg lng ≈ 101 km, 0.0099 deg ≈ 1 km
+  // 1 deg lat ~ 111 km, so 0.009 deg ~ 1 km
+  // At 24.8 deg lat, cos(24.8 deg) ~ 0.9077 -> 1 deg lng ~ 101 km, 0.0099 deg ~ 1 km
   const testPolygon: [number, number][] = [
     [24.8465, 89.3777],
     [24.8555, 89.3777],

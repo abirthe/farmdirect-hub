@@ -30,6 +30,7 @@ export type PublicTrace = z.infer<typeof publicTraceSchema>;
 export function calculateFreshnessScore(deliveredOrHarvestDate: string | null, now = new Date()): { score: number; label: string } {
   if (!deliveredOrHarvestDate) return { score: 90, label: "Freshly Harvested" };
   const date = new Date(deliveredOrHarvestDate);
+  if (isNaN(date.getTime())) return { score: 90, label: "Freshly Harvested" };
   const diffDays = Math.max(0, Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)));
   if (diffDays <= 2) return { score: 98, label: "Peak Farm-Fresh (0-48h)" };
   if (diffDays <= 7) return { score: 92, label: "Fresh Harvest (<1 week)" };
