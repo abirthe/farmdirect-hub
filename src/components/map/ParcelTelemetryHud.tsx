@@ -22,7 +22,7 @@ export function ParcelTelemetryHud({ coords }: ParcelTelemetryHudProps) {
   return (
     <div
       data-testid="parcel-telemetry-hud"
-      className="absolute bottom-3 left-3 z-[1000] bg-card/90 backdrop-blur-md border border-border/80 rounded-2xl p-3 shadow-xl max-w-[280px] sm:max-w-[320px] space-y-2 animate-in fade-in slide-in-from-bottom-2 duration-300"
+      className="absolute top-3 right-3 z-[1000] bg-card/90 backdrop-blur-md border border-border/80 rounded-2xl p-3 shadow-xl max-w-[280px] sm:max-w-[320px] space-y-2 animate-in fade-in slide-in-from-top-2 duration-300"
     >
       <div className="flex items-center justify-between gap-2 border-b border-border/50 pb-1.5">
         <div className="flex items-center gap-1.5 text-xs font-bold text-foreground">
