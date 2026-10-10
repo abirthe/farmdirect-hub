@@ -135,7 +135,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       clearTimeout(timeoutId);
       subscription.unsubscribe();
     };
-  }, [fetchProfile]);
+  }, [fetchProfile, loading]);
 
   const signOut = async () => {
     await supabase.auth.signOut();
