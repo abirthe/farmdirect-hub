@@ -124,6 +124,12 @@ const MapView: React.FC<MapProps> = ({
         /* Root overrides */
         .leaflet-container { font-family: inherit; }
         
+        /* Top-Right Zoom Control Margin */
+        .leaflet-top.leaflet-right {
+          margin-top: 10px !important;
+          margin-right: 10px !important;
+        }
+
         /* Modernize Leaflet & Geoman Control Toolbars */
         .leaflet-bar {
           border: none !important;
@@ -190,7 +196,7 @@ const MapView: React.FC<MapProps> = ({
         zoomControl={false}
         style={{ height: '100%', width: '100%', zIndex: 10 }}
       >
-        {interactive && <ZoomControl position="bottomright" />}
+        {interactive && <ZoomControl position="topright" />}
         <ChangeView center={center} zoom={zoom} />
 
         {/* Lovable Geoman Drawing and Telemetry HUD */}

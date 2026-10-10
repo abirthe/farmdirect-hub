@@ -1,7 +1,8 @@
 // Real-time parcel telemetry HUD displaying geodesic acreage, perimeter, and canopy health.
 import React from 'react';
-import { Leaf, CheckCircle2, Sparkles } from 'lucide-react';
+import { Leaf, CheckCircle2, Sparkles, Crosshair } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   calculatePolygonAreaHectares,
   calculatePolygonPerimeterKm,
@@ -10,9 +11,10 @@ import {
 
 interface ParcelTelemetryHudProps {
   coords: [number, number][];
+  onFocusArea?: () => void;
 }
 
-export function ParcelTelemetryHud({ coords }: ParcelTelemetryHudProps) {
+export function ParcelTelemetryHud({ coords, onFocusArea }: ParcelTelemetryHudProps) {
   if (!coords || coords.length < 3) return null;
 
   const hectares = calculatePolygonAreaHectares(coords);
@@ -22,17 +24,33 @@ export function ParcelTelemetryHud({ coords }: ParcelTelemetryHudProps) {
   return (
     <div
       data-testid="parcel-telemetry-hud"
-      className="absolute top-3 right-3 z-[1000] bg-card/90 backdrop-blur-md border border-border/80 rounded-2xl p-3 shadow-xl max-w-[280px] sm:max-w-[320px] space-y-2 animate-in fade-in slide-in-from-top-2 duration-300"
+      className="absolute bottom-3 right-3 z-[1000] bg-card/95 backdrop-blur-md border border-border/80 rounded-2xl p-3 shadow-2xl max-w-[280px] sm:max-w-[320px] space-y-2 animate-in fade-in slide-in-from-bottom-2 duration-300 pointer-events-auto"
     >
       <div className="flex items-center justify-between gap-2 border-b border-border/50 pb-1.5">
         <div className="flex items-center gap-1.5 text-xs font-bold text-foreground">
           <Leaf className="h-4 w-4 text-emerald-500" />
           <span>Parcel Telemetry</span>
         </div>
-        <Badge className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1 font-semibold">
-          <CheckCircle2 className="h-3 w-3" />
-          GPS Locked
-        </Badge>
+        <div className="flex items-center gap-1.5">
+          {onFocusArea && (
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              onClick={onFocusArea}
+              className="h-6 px-1.5 text-[10px] gap-1 text-primary hover:bg-primary/10 rounded-md font-medium"
+              title="Center and fit selected area in view"
+              aria-label="Center map on selected field"
+            >
+              <Crosshair className="h-3 w-3" />
+              Focus
+            </Button>
+          )}
+          <Badge className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1 font-semibold">
+            <CheckCircle2 className="h-3 w-3" />
+            GPS Locked
+          </Badge>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-2 text-xs">

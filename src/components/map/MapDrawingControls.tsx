@@ -35,6 +35,21 @@ export function MapDrawingControls({ onPolygonDrawn, currentPolygon = [] }: MapD
   const [coords, setCoords] = useState<[number, number][]>(currentPolygon);
   const layerRef = useRef<L.Layer | null>(null);
 
+  const fitPolygonBounds = useCallback((polygonCoords: [number, number][]) => {
+    if (!polygonCoords || polygonCoords.length < 3) return;
+    const latLngs = polygonCoords.map(([lat, lng]) => L.latLng(lat, lng));
+    const bounds = L.latLngBounds(latLngs);
+    if (bounds.isValid()) {
+      map.fitBounds(bounds, {
+        paddingBottomRight: [320, 180], // Keeps bottom-right Parcel Telemetry result box clear of selected area
+        paddingTopLeft: [75, 75],       // Keeps top-left toolbar and top-right zoom controls clear
+        maxZoom: 17,
+        animate: true,
+        duration: 0.6,
+      });
+    }
+  }, [map]);
+
   useEffect(() => {
     if (currentPolygon && currentPolygon.length >= 3) {
       setCoords(currentPolygon);
@@ -297,7 +312,7 @@ export function MapDrawingControls({ onPolygonDrawn, currentPolygon = [] }: MapD
       )}
 
       {/* 3. Real-Time Parcel Telemetry HUD */}
-      <ParcelTelemetryHud coords={coords} />
+      <ParcelTelemetryHud coords={coords} onFocusArea={() => fitPolygonBounds(coords)} />
     </>
   );
 }

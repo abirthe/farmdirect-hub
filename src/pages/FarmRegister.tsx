@@ -168,7 +168,7 @@ const FarmRegister = () => {
               <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-muted z-0">
                 <MapView 
                   interactive={true}
-                  height="380px"
+                  height="430px"
                   zoom={7}
                   center={[23.8103, 90.4125]} // Local context
                   polygons={form.boundary.length >= 3 ? [form.boundary] : []}

@@ -1,6 +1,6 @@
 // Tests for parcel telemetry HUD and map drawing calculations.
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { ParcelTelemetryHud } from "@/components/map/ParcelTelemetryHud";
 
 describe("ParcelTelemetryHud Component", () => {
@@ -30,5 +30,14 @@ describe("ParcelTelemetryHud Component", () => {
     expect(screen.getByText("Perimeter")).toBeInTheDocument();
     expect(screen.getByText(/4 GPS Pins/i)).toBeInTheDocument();
     expect(screen.getByText("0.84 (High Vigor)")).toBeInTheDocument();
+  });
+
+  it("triggers onFocusArea when Focus button is clicked", () => {
+    const handleFocus = vi.fn();
+    render(<ParcelTelemetryHud coords={samplePlot} onFocusArea={handleFocus} />);
+    const focusBtn = screen.getByRole("button", { name: /center map on selected field/i });
+    expect(focusBtn).toBeInTheDocument();
+    fireEvent.click(focusBtn);
+    expect(handleFocus).toHaveBeenCalledTimes(1);
   });
 });
