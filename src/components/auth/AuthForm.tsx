@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 import { Leaf, Mail, Lock, User, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,6 +34,16 @@ const AuthForm = ({ mode }: AuthFormProps) => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
 
   const isLogin = mode === "login";
+  const { session, role: authRole } = useAuth();
+
+  // Protect auth routes from already authenticated users
+  useEffect(() => {
+    if (session) {
+      if (authRole === "admin") navigate("/admin");
+      else if (authRole === "buyer") navigate("/buyer");
+      else navigate("/farmer");
+    }
+  }, [session, authRole, navigate]);
 
   usePageMeta({
     title: isLogin ? "Sign In" : "Create Account",

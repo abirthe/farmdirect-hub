@@ -31,6 +31,8 @@ const ProtectedRoute = ({ role }: ProtectedRouteProps) => {
 
   // Strictly enforce role boundaries for non-admins
   if (role && role !== userRole) {
+    if (userRole === "farmer") return <Navigate to="/farmer" replace />;
+    if (userRole === "buyer") return <Navigate to="/buyer" replace />;
     return <Navigate to="/" replace />;
   }
 
