@@ -19,6 +19,41 @@ const ProfileSettings = () => {
   const { user, refreshProfile } = useAuth();
   const { toast } = useToast();
   const [saving, setSaving] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [updatingPassword, setUpdatingPassword] = useState(false);
+
+  const handleUpdatePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newPassword || newPassword.length < 6) {
+      toast({ variant: "destructive", title: "Invalid Password", description: "Password must be at least 6 characters." });
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast({ variant: "destructive", title: "Mismatch", description: "New passwords do not match." });
+      return;
+    }
+    setUpdatingPassword(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) throw error;
+      toast({ title: "Password Updated", description: "Your security credentials have been updated successfully." });
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (err: unknown) {
+      toast({ variant: "destructive", title: "Update Failed", description: (err as Error).message });
+    } finally {
+      setUpdatingPassword(false);
+    }
+  };
+
+  const handleDeleteAccount = () => {
+    toast({
+      variant: "destructive",
+      title: "Account Deletion Request",
+      description: "For security and escrow audit integrity, account removal must be approved by platform administration.",
+    });
+  };
   const [saved, setSaved] = useState(false);
   const [profile, setProfile] = useState({
     name: user?.user_metadata?.full_name || "Rafiqul Islam",
@@ -244,7 +279,7 @@ const ProfileSettings = () => {
                     <p className="font-semibold text-sm">Delete account</p>
                     <p className="text-xs text-muted-foreground mt-0.5">Permanently delete your account and all farm data. This cannot be undone.</p>
                   </div>
-                  <Button variant="destructive" size="sm" className="hover-lift rounded-full shrink-0">Delete account</Button>
+                  <Button variant="destructive" size="sm" className="hover-lift rounded-full shrink-0" onClick={handleDeleteAccount}>Delete account</Button>
                 </div>
               </CardContent>
             </Card>

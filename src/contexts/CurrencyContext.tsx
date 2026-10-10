@@ -18,9 +18,9 @@ const RATES = {
 };
 
 const SYMBOLS = {
-  BDT: "৳",
+  BDT: "\u09F3",
   USD: "$",
-  EUR: "€",
+  EUR: "\u20AC",
 };
 
 export const CurrencyProvider = ({ children }: { children: React.ReactNode }) => {

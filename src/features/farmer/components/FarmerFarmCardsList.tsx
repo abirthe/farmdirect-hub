@@ -100,9 +100,11 @@ export function FarmerFarmCardsList({ farms, loading }: FarmerFarmCardsListProps
                 </div>
 
                 <div className="flex gap-2">
-                  <Button variant="default" size="sm" className="hover-lift flex-1 rounded-full gap-1.5">
-                    <ShieldCheck className="h-4 w-4" />
-                    List for sale
+                  <Button asChild variant="default" size="sm" className="hover-lift flex-1 rounded-full gap-1.5">
+                    <Link to="/marketplace">
+                      <ShieldCheck className="h-4 w-4" />
+                      List for sale
+                    </Link>
                   </Button>
                   <Button asChild variant="outline" size="sm" className="hover-lift flex-1 rounded-full gap-1.5 border-primary/20 hover:bg-primary/5 text-primary hover:text-primary">
                     <Link to={`/farmer/yield/${farm.name.replace(/\s+/g, "-").toUpperCase()}`}>

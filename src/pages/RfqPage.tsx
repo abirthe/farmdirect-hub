@@ -14,12 +14,12 @@ export default function RfqPage() {
       <header>
         <h1 className="text-gradient-primary text-3xl font-black">Requests for Quotes</h1>
         <p className="text-muted-foreground">
-          {role === "buyer" ? "Post what you need and pick the best bid." : "Bid on open buyer requests."}
+          {effectiveRole === "buyer" ? "Post what you need and pick the best bid." : "Bid on open buyer requests."}
         </p>
       </header>
-      {user && role === "buyer" && <BuyerRfqPanel userId={user.id} />}
-      {user && role === "farmer" && <FarmerRfqBoard userId={user.id} />}
-      {user && role !== "buyer" && role !== "farmer" && (
+      {user && effectiveRole === "buyer" && <BuyerRfqPanel userId={user.id} />}
+      {user && effectiveRole === "farmer" && <FarmerRfqBoard userId={user.id} />}
+      {user && effectiveRole !== "buyer" && effectiveRole !== "farmer" && (
         <p className="text-sm text-muted-foreground">RFQs are available to buyers and farmers.</p>
       )}
     </main>

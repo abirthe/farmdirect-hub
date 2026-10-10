@@ -14,12 +14,12 @@ export default function ForwardContractsPage() {
       <header>
         <h1 className="text-gradient-primary text-3xl font-black">Forward Contracts</h1>
         <p className="text-muted-foreground">
-          {role === "farmer" ? "Lock in a price for part of your expected harvest." : "Secure supply at a fixed price ahead of harvest."}
+          {effectiveRole === "farmer" ? "Lock in a price for part of your expected harvest." : "Secure supply at a fixed price ahead of harvest."}
         </p>
       </header>
-      {user && role === "farmer" && <FarmerForwardPanel userId={user.id} />}
-      {user && role === "buyer" && <BuyerForwardBoard userId={user.id} />}
-      {user && role !== "farmer" && role !== "buyer" && (
+      {user && effectiveRole === "farmer" && <FarmerForwardPanel userId={user.id} />}
+      {user && effectiveRole === "buyer" && <BuyerForwardBoard userId={user.id} />}
+      {user && effectiveRole !== "farmer" && effectiveRole !== "buyer" && (
         <p className="text-sm text-muted-foreground">Forward contracts are available to farmers and buyers.</p>
       )}
     </main>

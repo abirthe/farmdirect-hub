@@ -9,6 +9,6 @@ export function CurrencyDisplay({ amount }: { amount: number | string }) {
 
 export function CurrencySymbol() {
   const { currency } = useCurrency();
-  const symbol = currency === "BDT" ? "৳" : currency === "EUR" ? "€" : "$";
+  const symbol = currency === "BDT" ? "\u09F3" : currency === "EUR" ? "\u20AC" : "$";
   return <>{symbol}</>;
 }

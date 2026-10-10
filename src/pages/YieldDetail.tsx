@@ -229,8 +229,10 @@ const YieldDetail = () => {
                 <p className="text-sm text-muted-foreground mt-1">Based on <CurrencyDisplay amount={318} />/t floor</p>
               </div>
               <div className="space-y-2">
-                <Button size="sm" className="hover-lift w-full rounded-full gap-2">
-                  <Target className="h-4 w-4" /> Update Marketplace Listing
+                <Button asChild size="sm" className="hover-lift w-full rounded-full gap-2">
+                  <Link to="/marketplace">
+                    <Target className="h-4 w-4" /> Update Marketplace Listing
+                  </Link>
                 </Button>
               </div>
             </CardContent>

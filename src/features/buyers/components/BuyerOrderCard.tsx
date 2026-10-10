@@ -66,7 +66,7 @@ export function BuyerOrderCard({ order }: BuyerOrderCardProps) {
           </Badge>
           {order.statusType === "transit" && (
             <Button asChild variant="outline" size="sm" className="hover-lift rounded-full gap-1.5">
-              <Link to="/escrow/ORD-2401">
+              <Link to={`/escrow/${order.id.replace("#", "")}`}>
                 <QrCode className="h-4 w-4" />
                 Scan QR
               </Link>

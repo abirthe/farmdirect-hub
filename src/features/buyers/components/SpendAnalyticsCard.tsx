@@ -14,7 +14,7 @@ const spendData = [
 
 export function SpendAnalyticsCard() {
   const { formatCurrency, currency } = useCurrency();
-  const getSymbol = () => (currency === "BDT" ? "৳" : currency === "EUR" ? "€" : "$");
+  const getSymbol = () => (currency === "BDT" ? "\u09F3" : currency === "EUR" ? "\u20AC" : "$");
 
   return (
     <Card className="glass-panel hover-lift glass-panel">

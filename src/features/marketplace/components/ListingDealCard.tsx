@@ -7,6 +7,9 @@ import { CurrencyDisplay } from "@/components/ui/currency-display";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MarketplaceListing } from "../types";
+import { useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
+import { useToast } from "@/hooks/use-toast";
 
 interface ListingDealCardProps {
   listing: MarketplaceListing;
@@ -97,15 +100,24 @@ export function ListingDealCard({
               </Button>
             </>
           ) : userRole === "admin" ? (
-            <Button variant="destructive" className="hover-lift w-full h-12 rounded-xl gap-2">
+            <Button variant="destructive" className="hover-lift w-full h-12 rounded-xl gap-2" disabled={suspending} onClick={handleSuspendListing}>
               <AlertTriangle className="h-5 w-5" />
-              Suspend Listing (Admin)
+              {suspending ? "Suspending..." : "Suspend Listing (Admin)"}
             </Button>
           ) : (
-            <Button variant="secondary" className="hover-lift w-full h-12 rounded-xl gap-2" disabled>
-              <CheckCircle2 className="h-5 w-5 text-green-600" />
-              Listing Active & Public
-            </Button>
+            <>
+              <Button asChild className="hover-lift w-full h-12 rounded-xl gap-2">
+                <Link to="/login">
+                  <BadgeDollarSign className="h-5 w-5" />
+                  Sign in to lock price
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="hover-lift w-full h-12 rounded-xl gap-2">
+                <Link to="/signup">
+                  Register buyer account
+                </Link>
+              </Button>
+            </>
           )}
         </div>
 
