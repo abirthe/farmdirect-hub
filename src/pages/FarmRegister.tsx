@@ -56,15 +56,37 @@ const FarmRegister = () => {
 
     setLoading(true);
     try {
-      const { data, error } = await supabase.from('farms').insert([
-        { 
-          user_id: user.id, 
-          farm_name: form.farmName || "Unnamed Farm Block", 
-          location_name: form.location, 
-          total_hectares: parseFloat(form.area) || 0,
-          boundary_coordinates: form.boundary 
+      let data, error;
+      try {
+        const res = await supabase.from("farms").insert([
+          { 
+            user_id: user.id, 
+            farm_name: form.farmName || "Unnamed Farm Block", 
+            location_name: form.location, 
+            total_hectares: parseFloat(form.area) || 0,
+            boundary_coordinates: form.boundary 
+          }
+        ]);
+        data = res.data;
+        error = res.error;
+      } catch (err: any) {
+        if (err?.message?.includes("Lock") || err?.name === "AbortError") {
+          console.warn("Transient lock error, retrying...");
+          const retryRes = await supabase.from("farms").insert([
+            { 
+              user_id: user.id, 
+              farm_name: form.farmName || "Unnamed Farm Block", 
+              location_name: form.location, 
+              total_hectares: parseFloat(form.area) || 0,
+              boundary_coordinates: form.boundary 
+            }
+          ]);
+          data = retryRes.data;
+          error = retryRes.error;
+        } else {
+          throw err;
         }
-      ]);
+      }
 
       if (error) {
         throw new Error(error.message);
