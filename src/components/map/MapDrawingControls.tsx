@@ -182,7 +182,7 @@ export function MapDrawingControls({ onPolygonDrawn, currentPolygon = [] }: MapD
       {/* 1. Floating Lovable Command Ribbon (Top-Left) */}
       <div
         data-testid="map-drawing-toolbar"
-        className="absolute top-3 left-3 z-[1000] flex flex-wrap items-center gap-1.5 bg-card/90 backdrop-blur-md border border-border/80 p-1.5 rounded-2xl shadow-xl"
+        className="absolute top-3 left-14 z-[1000] flex flex-wrap items-center gap-1.5 bg-card/90 backdrop-blur-md border border-border/80 p-1.5 rounded-2xl shadow-xl"
       >
         <Button type="button"
           size="sm"
