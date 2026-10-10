@@ -33,7 +33,8 @@ const EscrowPage = () => {
   useEffect(() => {
     const fetchOrder = async () => {
       if (!id || id === "demo") return;
-      const { data } = await supabase.from('orders').select('*').eq('id', id).single();
+      const { data, error } = await supabase.from('orders').select('*').eq('id', id).single();
+      if (error) console.error("Failed to fetch order:", error);
       if (data) setOrder(data);
     };
     fetchOrder();
@@ -162,7 +163,8 @@ const EscrowPage = () => {
                 totalAmount={order?.total_price || 3816}
                 onPaymentSubmitted={() => {
                   if (id) {
-                    supabase.from('orders').select('*').eq('id', id).single().then(({ data }) => {
+                    supabase.from('orders').select('*').eq('id', id).single().then(({ data, error }) => {
+                      if (error) console.error("Failed to fetch updated order:", error);
                       if (data) setOrder(data);
                     });
                   }

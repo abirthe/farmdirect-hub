@@ -50,10 +50,12 @@ const ProfileSettings = () => {
     setSaving(true);
     try {
       if (user?.id) {
-        await supabase.auth.updateUser({
+        const { error: authError } = await supabase.auth.updateUser({
           data: { full_name: profile.name },
         });
-        await supabase.from("users").update({ full_name: profile.name }).eq("id", user.id);
+        if (authError) throw authError;
+        const { error: dbError } = await supabase.from("users").update({ full_name: profile.name }).eq("id", user.id);
+        if (dbError) throw dbError;
         await refreshProfile();
       }
       setSaved(true);

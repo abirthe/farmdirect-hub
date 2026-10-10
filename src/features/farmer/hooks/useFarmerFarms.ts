@@ -22,7 +22,8 @@ export function useFarmerFarms() {
         return;
       }
       if (isMounted) setLoading(true);
-      const { data } = await supabase.from("farms").select("*").eq("user_id", user.id);
+      const { data, error } = await supabase.from("farms").select("*").eq("user_id", user.id);
+      if (error) throw error;
       if (isMounted) {
         if (data) setDbFarms(data);
         setLoading(false);

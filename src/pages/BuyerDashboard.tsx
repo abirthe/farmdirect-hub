@@ -47,11 +47,14 @@ const BuyerDashboard = () => {
         return;
       }
       setLoading(true);
-      const { data } = await supabase.from('orders').select(`
+      const { data, error } = await supabase.from('orders').select(`
         id, qty_purchased, total_price, status, created_at,
         listings ( crop_cycles ( crop_type, farms ( farm_name ) ) )
       `).eq('buyer_id', user.id);
       
+      if (error) {
+        console.error("Failed to fetch orders:", error);
+      }
       if (data) // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setDbOrders(data as any);
       setLoading(false);
